@@ -17,6 +17,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
     }
   })
 
+  // pauses/resumes game when menu is displayed, events broadcast from GameController
   scope.$on('pause', pauseGame)
   scope.$on('resume', resumeGame)
 

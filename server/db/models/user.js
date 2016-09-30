@@ -1,9 +1,11 @@
 'use strict'
-var crypto = require('crypto')
-var _ = require('lodash')
-var Sequelize = require('sequelize')
-var db = require('../_db')
-var GameState = require('./gamestate')
+const crypto = require('crypto')
+const _ = require('lodash')
+const Sequelize = require('sequelize')
+const db = require('../_db')
+const GameState = require('./gamestate')
+const Bunker = require('./bunker')
+const Promise = require('sequelize').Promise
 
 module.exports = db.define('user', {
   email: {
@@ -38,7 +40,7 @@ module.exports = db.define('user', {
       return crypto.randomBytes(16).toString('base64')
     },
     encryptPassword: function (plainText, salt) {
-      var hash = crypto.createHash('sha1')
+      const hash = crypto.createHash('sha1')
       hash.update(plainText)
       hash.update(salt)
       return hash.digest('hex')
@@ -52,8 +54,11 @@ module.exports = db.define('user', {
       }
     },
     afterCreate: function (user) {
-      return GameState.create({})
-        .then(defaultState => defaultState.setUser(user))
+      let defaultCreate = [GameState.create({}), Bunker.create({})]
+      return Promise.all(defaultCreate)
+        .spread((defaultGame, defaultBunker) => {
+          return Promise.all([defaultGame.setUser(user), defaultBunker.setUser(user)])
+        })
     }
   }
 })

@@ -5,7 +5,8 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
     templateUrl: 'js/common/directives/navbar/navbar.html',
     link: function (scope) {
       scope.items = [
-        {label: 'Game', state: 'master.navbar.game', auth: true},
+        {label: 'Bunker', state: 'master.navbar.game', auth: true},
+        {label: 'Wasteland', state: 'master.navbar.gamear', auth: true},
         {label: 'Account', state: 'master.navbar.signup-settings', auth: true}
       ]
 

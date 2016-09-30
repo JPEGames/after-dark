@@ -23,6 +23,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
 
   // TODO: destroys game instance on refresh...is this what we want??!?
   scope.$on('$destroy', () => {
+    console.log('I am destroy.')
     game.destroy()
   })
 
@@ -324,7 +325,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
           iCurRow.push(0)
         }
         if (uTile !== null) {
-          uCurRow.push(bgTile.index)
+          uCurRow.push(uTile.index)
           console.log('!!! U Tile Saved.')
         } else {
           uCurRow.push(0)

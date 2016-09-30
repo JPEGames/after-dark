@@ -53,7 +53,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
   // var tileUp = false
   var player
   var marker
-  var leftKey, rightKey, upKey, downKey, useKey, pauseKey
+  var leftKey, rightKey, upKey, downKey, useKey
   var useTimer = 0
   var totalFloor = 3
   var currentFloors = 1
@@ -163,7 +163,6 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A)
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D)
     useKey = game.input.keyboard.addKey(Phaser.Keyboard.E)
-    pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.P)
 
   // Alias keys - didnt work otherwise, dont ask.
   }
@@ -179,12 +178,6 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
 
     player.body.velocity.x = 0
     // Every 1/60 frame, reset x velocity
-
-    if (pauseKey.isDown) {
-      if (game.paused === false) {
-        pauseGame()
-      }
-    }
 
     if (player.body.y > 2900) {
       loadBunker(testSave)

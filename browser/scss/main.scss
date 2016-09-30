@@ -1,0 +1,20 @@
+* {
+  box-sizing: border-box;
+}
+
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@import 'directives/main';
+@import 'home/main';
+@import 'tutorial/main';
+@import 'login/main';
+@import 'master/main';
+@import 'signup/main';
+@import 'state-animations/main';
+@import 'game-view/main';

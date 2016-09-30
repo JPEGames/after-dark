@@ -1,0 +1,51 @@
+<nav class="navbar navbar-static-top">
+    <div class="container">
+        <div id="appName" class="row">
+            <div class="row">
+                <div class="col-xs-12">
+                    <a id="home-link" ui-sref="master.navbar.home"> <div> <h1 id="appNameText">After Dark</h1> </div> </a>
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-2">
+            </div>
+            <div class="col-xs-10 col-md-8">
+                <h3 id="appNameSubtext">Choose Your Fate</h3>
+            </div>
+            <div class="col-xs-1 col-md-2">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2 col-md-3">
+        </div>
+        <div class="col-xs-8 col-md-6">
+            <hr></hr>
+        </div>
+        <div class="col-xs-2 col-md-3">
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-1 col-md-3">
+            </div>
+            <div class="col-xs-5 col-md-3">
+                <ul class="nav navbar-nav">
+                    <li ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">
+                        <a ui-sref-active="active" ui-sref="{{ item.state }}">{{ item.label }}</a>
+                    </li>
+                    <li><a ng-click="showMenu()">Menu</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-5 col-md-3">
+                <button ng-show="!user" ui-sref="master.navbar.login" class="btn login-button" id="forceButtonChange">Login</button>
+                <button ng-show="!user" ui-sref="master.navbar.signup" class="btn signup-button" id="forceButtonChange">Sign-Up</button>
+                <div ng-show="user" class="welcome">
+                    <span id="login-status-text">{{ user.email }}</span>
+                    <a id="login-status-link" ng-click="logout()">Logout</a>
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-3">
+            </div>
+        </div>
+    </div>
+</nav>

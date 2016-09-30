@@ -1,0 +1,98 @@
+navbar {
+
+  display: block;
+  background-color: #263238;
+  border-bottom: 1px solid black;
+  box-shadow: 1px 1px 14px -3px black;
+
+  #login-status-text {
+    color: #4CAF50;
+  }
+
+  #login-status-link {
+      color: #FFB300;
+      cursor: pointer;
+      transition: color 0.2s;
+      &.active {
+        color: lighten(#FFC107, 10%);
+      }
+      &:hover {
+        background: none;
+        color: lighten(#FFC107, 5%);
+      }
+      &:focus {
+        background: none;
+      }
+  }
+
+  #appName {
+    margin: 0 auto;
+    text-align: center;
+    font-family: 'Bungee', sans-serif;
+  }
+
+  #appNameSubtext {
+    line-height: 175%;
+  }
+
+  .container {
+    width: 91%;
+    max-width: 1340px;
+    padding-top: 0px;
+  }
+
+  hr {
+    border-color: #FFB300;
+  }
+
+  a {
+    color: #FFB300;
+    font-size: 16px;
+  }
+
+  .nav > li > a {
+    cursor: pointer;
+    transition: color 0.2s;
+    &.active {
+      color: lighten(#FFC107, 10%);
+    }
+    &:hover {
+      background: none;
+      color: lighten(#FFC107, 5%);
+    }
+    &:focus {
+      background: none;
+    }
+  }
+
+  .login-button {
+    margin-left: 1em;
+    float: right;
+    border: 1px solid black;
+    margin-top: 10px;
+    background: none;
+    outline: none !important;
+  }
+
+  .signup-button {
+    float: right;
+    border: 1px solid black;
+    margin-top: 10px;
+    background: none;
+    outline: none !important;
+  }
+
+  .welcome {
+    float: right;
+    margin-top: 12px;
+    span {
+      color: black;
+      font-size: 16px;
+      margin-right: 5px;
+    }
+    a {
+      color: #f30046;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<div id="gameContainer">
+    <h3 id="gameTitle">You've returned to your bunker!</h3>
+    <!--TODO: have menu overlay game upon clicking the tile-->
+    <div class="btn-group-vertical" role="group" id="game-menu" ng-show="showMenu()">
+        <div id="gameMenuTitle">Game Menu</div>
+        <button class="btn btn-sm btn-default">View Resources</button>
+        <button class="btn btn-sm btn-default" ng-click="addFloor()">Add Floor</button>
+        <button class="btn btn-sm btn-default">Upgrade</button>
+        <button class="btn btn-sm btn-default">Save Game</button>
+    </div>
+    <game-canvas data="showGame"></game-canvas>
+</div>

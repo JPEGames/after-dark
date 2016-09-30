@@ -1,0 +1,12 @@
+{
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "app": true,
+    "_": true,
+    "angular": true,
+    "$": true,
+    "Phaser": true
+  }
+}

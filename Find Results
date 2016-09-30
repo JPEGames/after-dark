@@ -1,0 +1,39 @@
+Searching 161 files for "transition"
+
+/home/eliot/Stackstore/Master/stackstore/browser/scss/directives/cart.scss:
+   10    opacity: 0;
+   11    overflow: hidden;
+   12:   -webkit-transition: opacity .35s, height .35s, visibility .35s;
+   13:   transition: opacity .35s, height .35s, visibility .35s;
+   14    z-index: 1;
+   15    * {
+   ..
+  168  //   height: 1px;
+  169  //   background: #FFF;
+  170: //   -webkit-transition: .35s;
+  171: //   transition: .35s;
+  172  // }
+  173  
+
+/home/eliot/Stackstore/Master/stackstore/browser/scss/directives/navbar.scss:
+   33      .nav > li a {
+   34          cursor: pointer;
+   35:         transition: color 0.2s;
+   36  
+   37          &.active {
+
+/home/eliot/Stackstore/Master/stackstore/public/style.css:
+   51      opacity: 0;
+   52      overflow: hidden;
+   53:     -webkit-transition: opacity .35s, height .35s, visibility .35s;
+   54:     transition: opacity .35s, height .35s, visibility .35s;
+   55      z-index: 1; }
+   56      navbar .overlay * {
+   ..
+  139    navbar .nav > li a {
+  140      cursor: pointer;
+  141:     transition: color 0.2s; }
+  142      navbar .nav > li a.active {
+  143        color: #c80a0c; }
+
+8 matches across 3 files

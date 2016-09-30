@@ -1,0 +1,56 @@
+<div id="signUpDiv">
+    <h3 id="content-header">Signup</h3>
+    <hr id="content-hr"></hr>
+    <div class="row">
+        <div class="col-xs-3">
+        </div>
+        <div class="col-xs-6">
+            <form id="signup-form" name="signupForm" ng-model-options="{ updateOn: 'blur' }" ng-submit="signupForm.$valid && createUser(signup)">
+                <alert type="danger" ng-show="error">
+                    {{ error }}
+                </alert>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" name="email" ng-model="signup.email" class="form-control" id="email" placeholder="EMail" ng-minlength='1' ng-required='true'>
+                </div>
+                <alert type="danger" ng-show="!signupForm.email.$valid && signupForm.email.$dirty">
+                    <span ng-show="signupForm.email.$error.required">
+                        An email is required.
+                    </span>
+                    <span ng-show="signupForm.email.$error.email">
+                        Must enter an actual email address.
+                    </span>
+                </alert>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" name="password" ng-model="signup.password" class="form-control" id="signup-password" placeholder="Password" ng-minlength='1' equals="{{signup.verifypassword}}" ng-required='true'>
+                    <br>
+                    <input type="password" ng-model="signup.verifypassword" class="form-control" name="chkpassword" id="signup-verifypassword" placeholder="Re-Enter Password" ng-minlength='1' equals="{{signup.password}}" ng-required='true'>
+                </div>
+                <alert type="danger" ng-show="!signupForm.password.$valid && signupForm.password.$dirty">
+                    <span ng-show="signupForm.password.$error.required">
+                        A password is required.
+                    </span>
+                    <span ng-show="signupForm.password.$error.equals">
+                        Passwords must equal eachother!
+                    </span>
+                </alert>
+                <div class="form-group">
+                    <label for="phonenumber">Phone Number</label>
+                    <input type="number" name="phone" ng-model="signup.phone" class="form-control" id="phone" placeholder="10 Digit Phone #" ng-minlength='10' ng-maxlength='10' ng-required='true'>
+                </div>
+                <alert type="danger" ng-show="!signupForm.phone.$valid && signupForm.phone.$dirty">
+                    <span ng-show="signupForm.phone.$error.minlength">
+                        Phone #'s' must be 10 digits.
+                    </span>
+                    <span ng-show="signupForm.phone.$error.maxlength">
+                        Phone #'s' cannot be longer 10 digits.
+                    </span>
+                </alert>
+                <button id="submitForm" type="submit" class="btn btn-default" ng-disabled="signupForm.$invalid">Submit</button>
+            </form>
+        </div>
+        <div class="col-xs-3">
+        </div>
+    </div>
+</div>

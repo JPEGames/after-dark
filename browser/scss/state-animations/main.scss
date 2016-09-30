@@ -1,0 +1,46 @@
+/* Have to set height explicity on ui-view
+to prevent collapsing during animation*/
+.well[ui-view]{
+ height: 65px;
+}
+
+.ui-view-container {
+  position: relative;
+}
+
+//#uiViewChild {
+
+  [ui-view].ng-enter, [ui-view].ng-leave {
+    position: absolute;
+    left: 0;
+    right: 0;
+    -webkit-transition:all .2s ease-in-out;
+      -moz-transition:all .2s ease-in-out;
+      -o-transition:all .2s ease-in-out;
+      transition:all .2s ease-in-out;
+  }
+
+  [ui-view].ng-enter-active {
+    opacity: 0;
+  }
+
+  [ui-view].ng-enter {
+    opacity: 0;
+    -webkit-animation: slideIn 1s;
+  }
+
+  [ui-view].ng-leave-active {
+    -webkit-animation: slideDown 0.5s;
+  }
+
+  @keyframes slideDown {
+    0% {-webkit-transform: translateY(0); opacity: 1}
+    100% {-webkit-transform: translateY(10%); opacity: 0}
+  }
+
+  @keyframes slideIn {
+    0% {-webkit-transform: translateY(0); opacity: 0}
+    50% {-webkit-transform: translateY(0); opacity: 0}
+    100% {-webkit-transform: translateY(0); opacity: 1}
+  }
+//}

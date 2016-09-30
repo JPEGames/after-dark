@@ -1,0 +1,22 @@
+#gameContainer {
+  height: 1000px;
+  width: 100%;
+}
+
+#gameTitle {
+  text-align: center;
+}
+
+canvas {
+  margin: 0 auto;
+}
+
+#game-menu {
+  position: absolute;
+  margin: 0 0px 0 960px;
+}
+
+#gameMenuTitle {
+  text-align: center;
+  color: black;
+}

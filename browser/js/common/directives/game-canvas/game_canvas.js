@@ -17,6 +17,9 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
     }
   })
 
+  scope.$on('pause', pauseGame)
+  scope.$on('resume', resumeGame)
+
   // TODO: destroys game instance on refresh...is this what we want??!?
   scope.$on('$destroy', () => {
     game.destroy()
@@ -50,7 +53,8 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
   // var tileUp = false
   var player
   var marker
-  var leftKey, rightKey, upKey, downKey, useKey
+  var leftKey, rightKey, upKey, downKey, useKey, pauseKey
+  var useTimer = 0
   var totalFloor = 3
   var currentFloors = 1
   var builtFloor = false
@@ -159,16 +163,28 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A)
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D)
     useKey = game.input.keyboard.addKey(Phaser.Keyboard.E)
+    pauseKey = game.input.keyboard.addKey(Phaser.Keyboard.P)
+
   // Alias keys - didnt work otherwise, dont ask.
   }
 
   function update () {
+    if (useTimer < 180) {
+      useTimer++
+    }
+
     game.physics.arcade.collide(player, layer3)
     game.physics.arcade.collide(player, layer4)
     game.physics.arcade.collide(player, layer5)
 
     player.body.velocity.x = 0
     // Every 1/60 frame, reset x velocity
+
+    if (pauseKey.isDown) {
+      if (game.paused === false) {
+        pauseGame()
+      }
+    }
 
     if (player.body.y > 2900) {
       loadBunker(testSave)
@@ -227,7 +243,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
       buildAFloor(basicFloor)
     }
   }
-  // Experimental staircase function
+  // Move player down.
   function moveDown () {
     console.log('Attempting to teleport down!')
     if (player.body.x > (game.world.width / 2)) {
@@ -241,7 +257,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
     }
   }
 
-  //
+  // Move player up.
   function moveUp () {
     console.log('Attempting to teleport!')
     if (player.body.x > (game.world.width / 2)) {
@@ -253,6 +269,14 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
     if (player.body.y < (game.camera.y + 96)) {
       game.camera.y = player.body.y - game.camera.height / 2
     }
+  }
+
+  function pauseGame () {
+    game.paused = true
+  }
+
+  function resumeGame () {
+    game.paused = false
   }
 
   // Saves entire maps state.
@@ -569,19 +593,22 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
   }
 
   function compOne () {
-    if (useKey.isDown) {
+    if (useKey.isDown && useTimer > 30) {
+      useTimer = 0
       console.log('Computer One Activated.')
     }
   }
 
   function compTwo () {
-    if (useKey.isDown) {
+    if (useKey.isDown && useTimer > 30) {
+      useTimer = 0
       console.log('Computer Two Activited')
     }
   }
 
   function compThree () {
-    if (useKey.isDown) {
+    if (useKey.isDown && useTimer > 30) {
+      useTimer = 0
       console.log('Computer Three Activated')
     }
   }

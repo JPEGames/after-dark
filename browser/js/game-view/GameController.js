@@ -3,7 +3,15 @@ app.controller('GameController', function ($scope, $localStorage, showGame, Game
   $scope.showGame = showGame
 
   // show in-game menu on clicking Menu option in nav-bar
-  $scope.showMenu = () => GameViewFactory.getMenuView()
+  $scope.showMenu = () => {
+    let retVal = GameViewFactory.getMenuView()
+    if (!retVal) {
+      $scope.$broadcast('resume')
+    } else {
+      $scope.$broadcast('pause')
+    }
+    return retVal
+  }
 
   $scope.addFloor = () => {
     MenuFactory.addFloor()

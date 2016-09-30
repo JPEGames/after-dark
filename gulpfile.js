@@ -16,6 +16,12 @@ var mocha = require('gulp-mocha')
 var karma = require('karma').server
 var istanbul = require('gulp-istanbul')
 var notify = require('gulp-notify')
+var browserify = require('browserify')
+var source = require('vinyl-source-stream')
+var es = require('event-stream')
+var rename = require('gulp-rename')
+var glob = require('glob')
+// var transform = require(‘vinyl-transform’);
 
 // Development tasks
 // --------------------------------------------------------------
@@ -38,6 +44,25 @@ gulp.task('lintJS', function () {
     .pipe(eslint.format())
     .pipe(eslint.failOnError())
 })
+
+// TODO: Take care of browserify!!!
+// gulp.task('browserify', ['lintJS'], function () {
+//   glob('./browser/js/**/*.js', function (err, files) {
+//     if (err) done(err)
+//     // TODO: Do I need to browserify this??
+//     // files.push('./browser/js/app.js')
+//     var tasks = files.map(function (entry) {
+//       return browserify({ entries: [ entry ] })
+//         .bundle()
+//         .pipe(source(entry))
+//         .pipe(rename({
+//           extname: 'bundle.js'
+//         }))
+//         .pipe(gulp.dest('./public'))
+//     })
+//     return es.merge(tasks).on('end', done)
+//   })
+// })
 
 gulp.task('buildJS', ['lintJS'], function () {
   return gulp.src(['./browser/js/app.js', './browser/js/**/*.js'])

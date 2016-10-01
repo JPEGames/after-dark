@@ -21,7 +21,11 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory,
     if (saveBool) {
       scope.bunkerSave = saveBunker()
       console.log('SAVING BUNKER: ', scope.bunkerSave)
-      // TODO: make AJAX POST request here!!
+      // saves bunker phaser state to database
+      MenuFactory.saveBunker(scope.bunkerSave)
+      // makes it such that additional upgrades/saves will also save on next click
+      // turns saving bool to false
+      MenuFactory.toggleBunkerSave()
     }
   })
 
@@ -31,7 +35,6 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory,
 
   // TODO: destroys game instance on refresh...is this what we want??!?
   scope.$on('$destroy', () => {
-    console.log('I am destroy.')
     game.destroy()
   })
 

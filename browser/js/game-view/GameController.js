@@ -22,7 +22,7 @@ app.controller('GameController', function ($scope, $localStorage, showGame, Game
 
   // save bunker state from in-game menu
   $scope.saveBunker = () => {
-    MenuFactory.saveBunkerState()
+    MenuFactory.toggleBunkerSave()
   }
 
   // removes erroneous 'second' game view on page refresh

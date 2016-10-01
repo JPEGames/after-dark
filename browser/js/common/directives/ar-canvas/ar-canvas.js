@@ -9,9 +9,9 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     gameAR.destroy()
   })
 
-  var randCount = 0
+  var randCount = 180
   var randFrequency = 180
-  var randOn = false
+  var randOn = true
   var cloudArray = []
 
   function preload () {

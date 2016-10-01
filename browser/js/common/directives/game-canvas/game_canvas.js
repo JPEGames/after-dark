@@ -33,7 +33,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory,
   scope.$on('pause', pauseGame)
   scope.$on('resume', resumeGame)
 
-  // TODO: destroys game instance on refresh...is this what we want??!?
+  // destroys game instance on refresh...is this what we want??!?
   scope.$on('$destroy', () => {
     game.destroy()
   })
@@ -621,7 +621,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory,
 }
 
 // custom directive to link phaser object to angular
-app.directive('gameCanvas', function ($injector, $http, MenuFactory) {
+app.directive('gameCanvas', function ($injector, $http, MenuFactory, AuthService) {
   return {
     scope: {
       data: '=',

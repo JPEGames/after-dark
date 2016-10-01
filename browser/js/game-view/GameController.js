@@ -2,7 +2,7 @@ app.controller('GameController', function ($scope, $localStorage, showGame, Game
   // display game upon transition to game view
   $scope.showGame = showGame
 
-  // show in-game menu on clicking Menu option in nav-bar
+  // toggle value for showing in-game menu + game pause && vice-versa
   $scope.showMenu = () => {
     let retVal = GameViewFactory.getMenuView()
     if (!retVal) {
@@ -11,6 +11,11 @@ app.controller('GameController', function ($scope, $localStorage, showGame, Game
       $scope.$broadcast('pause')
     }
     return retVal
+  }
+
+  // toggles bunker menu
+  $scope.menuVisible = () => {
+    GameViewFactory.showMenu()
   }
 
   // add floors from in-game menu

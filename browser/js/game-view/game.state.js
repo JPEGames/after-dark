@@ -7,6 +7,9 @@ app.config(function ($stateProvider) {
       showGame: function () {
         return true
       }
+      // bunkerState: function () {
+      //   return
+      // }
     }
   })
 })

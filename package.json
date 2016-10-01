@@ -1,7 +1,7 @@
 {
-  "name": "Ritual",
-  "version": "1.0.0",
-  "description": "The Planner for Procrastinaters",
+  "name": "AfterDark",
+  "version": "0.0.1",
+  "description": "The Tale of the Teslanauts Return",
   "main": "server/main.js",
   "scripts": {
     "start": "nodemon --watch server -e js,html server/main.js",
@@ -14,6 +14,7 @@
     "angular": "^1.5.0-beta.0",
     "angular-animate": "^1.4.7",
     "angular-mocks": "^1.4.0",
+    "angular-simple-logger": "^0.1.7",
     "angular-ui-bootstrap": "^0.14.3",
     "angular-ui-router": "^0.2.15",
     "babel-preset-es2015": "^6.6.0",
@@ -57,6 +58,7 @@
     "karma-coverage": "^0.2.7",
     "karma-mocha": "^0.1.10",
     "karma-mocha-reporter": "^1.0.2",
+    "leaflet": "^1.0.1",
     "lodash": "^3.9.3",
     "moment": "^2.15.1",
     "ngstorage": "^0.3.11",
@@ -78,6 +80,7 @@
     "socket.io-client": "^1.3.5",
     "supertest": "^0.15.0",
     "twilio": "^3.0.0-rc.5",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "ui-leaflet": "^1.0.2"
   }
 }

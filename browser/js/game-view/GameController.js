@@ -13,11 +13,17 @@ app.controller('GameController', function ($scope, $localStorage, showGame, Game
     return retVal
   }
 
+  // add floors from in-game menu
   $scope.addFloor = () => {
     MenuFactory.addFloor()
   }
 
   $scope.totalFloors = () => MenuFactory.getFloors()
+
+  // save bunker state from in-game menu
+  $scope.saveBunker = () => {
+    MenuFactory.saveBunkerState()
+  }
 
   // removes erroneous 'second' game view on page refresh
   $scope.$on('$destroy', () => {

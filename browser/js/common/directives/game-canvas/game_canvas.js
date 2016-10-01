@@ -1,6 +1,6 @@
 // testing for phaser
 
-window.createGame = function (ele, scope, players, mapId, injector, MenuFactory) {
+window.createGame = function (ele, scope, players, mapId, injector, MenuFactory, http) {
   console.log('GETTING CALLED!')
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
@@ -14,6 +14,14 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
   scope.$watch(MenuFactory.getFloors, (floorVal) => {
     if (floorVal > 0) {
       tryBuild()
+    }
+  })
+
+  scope.$watch(MenuFactory.saving, (saveBool) => {
+    if (saveBool) {
+      scope.bunkerSave = saveBunker()
+      console.log('SAVING BUNKER: ', scope.bunkerSave)
+      // TODO: make AJAX POST request here!!
     }
   })
 
@@ -610,7 +618,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory)
 }
 
 // custom directive to link phaser object to angular
-app.directive('gameCanvas', function ($injector, MenuFactory) {
+app.directive('gameCanvas', function ($injector, $http, MenuFactory) {
   return {
     scope: {
       data: '=',
@@ -620,7 +628,7 @@ app.directive('gameCanvas', function ($injector, MenuFactory) {
     link: function (scope, ele, attrs) {
       // condition for state transition into game view
       if (scope.data) {
-        window.createGame(ele, scope, scope.players, scope.mapId, $injector, MenuFactory)
+        window.createGame(ele, scope, scope.players, scope.mapId, $injector, MenuFactory, $http)
       }
     }
   }

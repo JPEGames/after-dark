@@ -2,6 +2,11 @@ const Sequelize = require('sequelize')
 const db = require('../../_db')
 
 module.exports = db.define('bunker', {
+  savedBunkerState: {
+    type: Sequelize.JSONB,
+    allowNull: true,
+    defaultValue: {}
+  },
   money: {
     type: Sequelize.INTEGER,
     defaultValue: 0

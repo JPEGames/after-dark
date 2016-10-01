@@ -9,7 +9,9 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     gameAR.destroy()
   })
 
-  var emitter
+  var randCount = 0
+  var randFrequency = 180
+  var randOn = false
   var cloudArray = []
 
   function preload () {
@@ -18,28 +20,39 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
   function create () {
     gameAR.physics.startSystem(Phaser.Physics.ARCADE)
-    let cloudNum = 20
-    for (let i = 0; i < cloudNum; i++) {
-      let x = (gameAR.world.width / 5) + (gameAR.world.width - (Math.random() * 100) - 300) * Math.cos(2 * Math.PI * i / cloudNum)
-      let y = (gameAR.world.height / 10) - (gameAR.world.height - (Math.random() * 100) - 175) * Math.sin(2 * Math.PI * i / cloudNum)
-      createACloud(x, y)
-    }
   }
 
   function update () {
+    randCount++
+    if (randCount >= randFrequency && randOn) {
+      deleteClouds()
+      cloudRing()
+      randCount = 0
+    }
   }
 
   function render () {
   }
 
-  function createACloud (x, y) {
-    cloudArray.push(gameAR.add.sprite(x, y, 'cloud'))
+  function createACloud (x, y, width, height) {
+    let tempSprite = gameAR.add.sprite(x, y, 'cloud')
+    tempSprite.scale.setTo(width, height)
+    cloudArray.push(tempSprite)
   }
 
   function deleteClouds () {
     cloudArray.forEach(function (cloud) {
       cloud.destroy()
     })
+  }
+
+  function cloudRing (cloudNum = 20) {
+    for (let i = 0; i < cloudNum; i++) {
+      // If width and height are left out of createACloud - this will create a ring around the center.
+      let x = (gameAR.world.width / 5) + (gameAR.world.width - (Math.random() * 100) - 300) * Math.cos(2 * Math.PI * i / cloudNum)
+      let y = (gameAR.world.height / 10) - (gameAR.world.height - (Math.random() * 100) - 175) * Math.sin(2 * Math.PI * i / cloudNum)
+      createACloud(x, y, 1, 1)
+    }
   }
 }
 

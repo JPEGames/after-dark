@@ -33,6 +33,11 @@ app.controller('GameController', function ($scope, $localStorage, showGame, Game
     MenuFactory.toggleBunkerSave()
   }
 
+  // useful for testing save/load
+  $scope.clearBunker = () => {
+    $scope.$broadcast('clearing')
+  }
+
   // removes erroneous 'second' game view on page refresh
   $scope.$on('$destroy', () => {
     $scope.showGame = !$scope.showGame

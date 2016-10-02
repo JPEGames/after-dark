@@ -6,7 +6,11 @@ app.factory('MenuFactory', function ($http, AuthService) {
   // adds in-game floors - called in GameController
   // on pressing Add Floor option in menu
   MenuFactory.addFloor = () => {
-    floors++
+    floors += 1
+  }
+
+  MenuFactory.setFloors = (floorNum) => {
+    floors = 0
   }
 
   // getter for floors - used in phaser object under scope.$watch

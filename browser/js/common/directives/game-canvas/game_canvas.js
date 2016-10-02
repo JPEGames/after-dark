@@ -1,14 +1,9 @@
 // testing for phaser
 
 window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
-  console.log('GETTING CALLED!')
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
-  console.log('INSIDE DIRECTIVE: ', bunker)
   var game = new Phaser.Game(960, 600, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
-  if (game) {
-    console.log('hi theres a game!')
-  }
   // The walk through: Make new pseudo-iframe object. The world and camera have a width, height of 960, 600
   // My parent div is phaser-example
   // My preload function is titled preload, create: create, update: update, and render: render
@@ -16,6 +11,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // adds floors upon press of add floor option in game menu
   scope.$watch(MenuFactory.getFloors, (floorVal) => {
     if (floorVal > 0) {
+      console.log(MenuFactory.getFloors())
       tryBuild()
     }
   })
@@ -24,7 +20,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   scope.$watch(MenuFactory.saving, (saveBool) => {
     if (saveBool) {
       scope.bunkerSave = saveBunker()
-      console.log('SAVING BUNKER: ', scope.bunkerSave)
       // saves bunker phaser state to database
       MenuFactory.saveBunker(scope.bunkerSave)
       // makes it such that additional upgrades/saves will also save on next click
@@ -37,9 +32,16 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   scope.$on('pause', pauseGame)
   scope.$on('resume', resumeGame)
 
+  // testing purposes - clears/saves cleared bunker
+  scope.$on('clearing', function (event, data) {
+    clearBunker()
+    MenuFactory.saveBunker(saveBunker())
+  })
+
   // destroys game instance on refresh...is this what we want??!?
   scope.$on('$destroy', () => {
     console.log('DESTROYING!')
+    console.log('FLOORS BEFORE DESTROY: ', MenuFactory.getFloors())
     game.destroy()
   })
 
@@ -182,8 +184,11 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D)
     useKey = game.input.keyboard.addKey(Phaser.Keyboard.E)
 
+    // clearBunker()
     // load correct bunker state if upgrades have been placed!
+    // && bunker.savedBunkerState['bg'][0][0] > 0
     if (Object.keys(bunker.savedBunkerState).length > 1) {
+      console.log('loading previously saved bunker!')
       clearBunker()
       loadBunker(bunker.savedBunkerState)
     }
@@ -203,7 +208,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     // Every 1/60 frame, reset x velocity
 
     if (player.body.y > 2900) {
-      // loadBunker(testSave)
+      loadBunker(testSave)
       player.body.y = 280
     }
 
@@ -259,6 +264,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       buildAFloor(basicFloor)
     }
   }
+
   // Move player down.
   function moveDown () {
     console.log('Attempting to teleport down!')
@@ -303,7 +309,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       visual: [],
       collision: [],
       interactive: [],
-      upgrades: []
+      upgrades: [],
+      floors: currentFloors
     }
     // For height of map after sky.
     for (let curY = 4; curY < 95; curY++) {
@@ -327,27 +334,27 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 
         if (vTile !== null) {
           vCurRow.push(vTile.index)
-          console.log('V Tile Saved.')
+          // console.log('V Tile Saved.')
         } else {
           vCurRow.push(0)
         }
 
         if (cTile !== null) {
           cCurRow.push(cTile.index)
-          console.log('!!! C Tile Saved.')
+          // console.log('!!! C Tile Saved.')
         } else {
           cCurRow.push(0)
         }
 
         if (iTile !== null) {
           iCurRow.push(iTile.index)
-          console.log('!!! I Tile Saved.')
+          // console.log('!!! I Tile Saved.')
         } else {
           iCurRow.push(0)
         }
         if (uTile !== null) {
           uCurRow.push(uTile.index)
-          console.log('!!! U Tile Saved.')
+          // console.log('!!! U Tile Saved.')
         } else {
           uCurRow.push(0)
         }
@@ -358,13 +365,13 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       saveObj.interactive.push(iCurRow)
       saveObj.upgrades.push(uCurRow)
     }
-    console.log(saveObj)
+    // console.log(saveObj)
     return saveObj
   }
 
   // Delete all tiles.
   function clearBunker () {
-    // testSave = saveBunker()
+    testSave = saveBunker()
     for (let curY = 4; curY < 95; curY++) {
       for (let curX = 0; curX < 30; curX++) {
         if (map.getTile(curX, curY, layer) !== null) {
@@ -384,6 +391,10 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
         }
       }
     }
+
+    // sets floors to 0 in Menu Factory on clear to prevent conflicts in scope.$watch
+    // on state transition
+    MenuFactory.setFloors(0)
     console.log('Cleared Bunker!')
   }
 
@@ -412,6 +423,10 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
         }
       }
     }
+    if (saveData.floors) {
+      currentFloors = saveData.floors
+    }
+    console.log('SAVED FLOORS: ', currentFloors)
     console.log('Loaded Bunker!')
   }
 
@@ -639,6 +654,7 @@ app.directive('gameCanvas', function ($injector, $http, MenuFactory, AuthService
     },
     template: '<div id="game-canvas"></div>',
     link: function (scope, ele, attrs) {
+      console.log('SCOPE DATA: ', scope.data)
       // condition for state transition into game view
       if (scope.data) {
         window.createGame(ele, scope, scope.bunker, $injector, MenuFactory)

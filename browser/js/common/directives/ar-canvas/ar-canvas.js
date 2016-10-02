@@ -53,6 +53,14 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
       createACloud(x, y, 1, 1)
     }
   }
+
+  function pauseGame () {
+    gameAR.paused = true
+  }
+
+  function resumeGame () {
+    gameAR.paused = false
+  }
 }
 
 // custom directive to link phaser object to angular

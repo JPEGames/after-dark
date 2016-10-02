@@ -48,11 +48,11 @@ module.exports = db.define('gamestate', {
     defaultValue: 1
   },
   cpuUsage: {
-    type: Sequelize.DECIMAL,
+    type: Sequelize.FLOAT,
     defaultValue: 0
   },
   cpuAllocation: {
-    type: Sequelize.ARRAY(Sequelize.DECIMAL),
+    type: Sequelize.ARRAY(Sequelize.FLOAT),
     defaultValue: [0.25, 0.25, 0.25, 0.25]
   }
 })

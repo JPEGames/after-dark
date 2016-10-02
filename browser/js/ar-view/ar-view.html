@@ -7,10 +7,13 @@
         <button class="btn btn-sm btn-default">Inventory</button>
         <button class="btn btn-sm btn-default">Save Game</button>
     </div>
+
     <br>
     <div id="arInnerContainer" style="margin: 0 auto; width: 960px; position: relative">
         <div id="gMapContainer" style="max-width: 100%; margin: 0 auto">
-            <leaflet defaults="defaults" style="width: 960px; height: 600px; z-index: 1; position: absolute; margin: 0 auto"> </leaflet>
+            <!--PIERRE'S LEAFLET ON TOP-->
+            <leaflet lf-center="center" style="width: 960px; height: 600px; z-index: 1; position: absolute; margin: 0 auto"> </leaflet>
+            <!--<leaflet defaults="defaults" style="width: 960px; height: 600px; z-index: 1; position: absolute; margin: 0 auto"> </leaflet>-->
         </div>
         <ar-canvas data="showAR" style="position: absolute; z-index: 1000; margin: 0 auto;"></ar-canvas>
     </div>

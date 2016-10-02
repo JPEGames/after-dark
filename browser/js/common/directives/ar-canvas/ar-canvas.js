@@ -73,6 +73,12 @@ app.directive('arCanvas', function ($injector) {
     template: '<div id="ar-canvas"></div>',
     link: function (scope, ele, attrs) {
       // condition for state transition into ar view
+      scope.center = {
+        lat: 42,
+        lng: -71,
+        zoom: 12,
+        autodiscover: true
+      }
       if (scope.data) {
         window.createGameAR(ele, scope, scope.players, scope.mapId, $injector)
       }

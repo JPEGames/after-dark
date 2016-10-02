@@ -1,17 +1,11 @@
 app.factory('ArFactory', function ($window) {
   let ArFactory = {}
   let prevLoc
+  let sensitivity = -100
   function diff (loc, prev) {
     return prev
-      ? loc.coords.latitude - prev.coords.latitude > 0.0001 || loc.coords.longitude - prev.coords.longitude > 0.0001
+      ? loc.coords.latitude - prev.coords.latitude > sensitivity || loc.coords.longitude - prev.coords.longitude > sensitivity
       : true
-  }
-  function success (loc) {
-    if (diff(loc, prevLoc)) {
-      console.log('location changed!', loc)
-      ArFactory.coords = loc.coords
-      prevLoc = loc
-    }
   }
   ArFactory.getCurrentPosition = () => {
     return new Promise((resolve, reject) => {
@@ -24,6 +18,15 @@ app.factory('ArFactory', function ($window) {
       })
     })
   }
-  navigator.geolocation.watchPosition(success, console.warn, {enableHighAccuracy: true})
+  ArFactory.makeLocationWatcher = function (func) {
+    function success (loc) {
+      if (diff(loc, prevLoc)) {
+        func(loc)
+        ArFactory.coords = loc.coords
+        prevLoc = loc
+      }
+    }
+    navigator.geolocation.watchPosition(success, console.warn, {enableHighAccuracy: true})
+  }
   return ArFactory
 })

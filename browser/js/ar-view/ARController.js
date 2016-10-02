@@ -1,4 +1,4 @@
-app.controller('ARController', function ($scope, $localStorage, showAR, GameViewFactory, ArFactory) {
+app.controller('ARController', function ($scope, $localStorage, showAR, GameViewFactory, leafletData, ArFactory) {
   // display game upon transition to game view
   $scope.showAR = showAR
 
@@ -17,22 +17,20 @@ app.controller('ARController', function ($scope, $localStorage, showAR, GameView
   $scope.$on('$destroy', () => {
     $scope.showAR = !$scope.showAR
   })
-  let zoom = 6
-  ArFactory.getCurrentPosition().then(coords => {
-    $scope.playerLoc = {
-      lat: coords.latitude,
-      lng: coords.longitude,
-      zoom: zoom
-    }
-  })
-  $scope.initPos = {
-    lat: 42,
+
+  // map stuff
+  ArFactory.makeLocationWatcher(mapMover)
+  function mapMover (geoObj) {
+    leafletData.getMap()
+      .then(map => {
+        console.log('panning map')
+        map.panTo({lat: geoObj.coords.latitude, lng: geoObj.coords.longitude})
+      })
+  }
+  let zoom = 30
+  $scope.center = {
+    lat: 0,
     lng: -71,
     zoom: zoom
   }
-// $scope.playerLoc = {
-//   lat: ArFactory.coords.latitude,
-//   lng: ArFactory.coords.longitude,
-//   zoom: zoom
-// }
 })

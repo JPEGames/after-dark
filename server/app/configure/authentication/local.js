@@ -50,4 +50,26 @@ module.exports = function (app, db) {
 
     passport.authenticate('local', authCb)(req, res, next)
   })
+
+  app.post('/signup', function (req, res, next) {
+    User.find({
+      where: {
+        email: req.body.email
+      }
+    })
+      .then(userExists => {
+        if (!userExists) {
+          User.create({
+            email: req.body.email,
+            password: req.body.password
+          })
+            .then(createdUser => res.send(createdUser))
+        } else {
+          var error = new Error('That email is already being used.')
+          error.status = 401
+          return next(error)
+        }
+      })
+      .catch(next)
+  })
 }

@@ -49,6 +49,7 @@
 
   app.service('AuthService', function ($http, Session, $rootScope, AUTH_EVENTS, $q) {
     function onSuccessfulLogin (response) {
+      console.log('trying to login!')
       var data = response.data
       Session.create(data.id, data.user)
       $rootScope.$broadcast(AUTH_EVENTS.loginSuccess)
@@ -88,6 +89,12 @@
         .catch(function () {
           return $q.reject({ message: 'Invalid login credentials.' })
         })
+    }
+
+    this.signup = function (credentials) {
+      return $http.post('/signup', credentials)
+        .then(res => res.data)
+        .catch(() => $q.reject({ message: 'That email is being used.' }))
     }
 
     this.logout = function () {

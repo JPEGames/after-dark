@@ -3,6 +3,7 @@ var router = require('express').Router()
 module.exports = router
 
 router.use('/gamestate', require('./gamestate'))
+router.use('/bunkerstate', require('./bunkerstate'))
 // router.use('/members', require('./members'))
 
 // Make sure this is after all of

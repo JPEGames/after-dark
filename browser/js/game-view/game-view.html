@@ -1,12 +1,18 @@
+<!--BUNKER VIEW + BUNKER MENU-->
 <div id="gameContainer">
     <h3 id="gameTitle">You've returned to your bunker!</h3>
-    <!--TODO: have menu overlay game upon clicking the tile-->
+    <button id="bunkerBtn" class="btn btn-sm btn-default" ng-click="menuVisible()">Bunker Menu</button>
+
+    <!--BUNKER MENU-->
     <div class="btn-group-vertical" role="group" id="game-menu" ng-show="showMenu()">
         <div id="gameMenuTitle">Game Menu</div>
         <button class="btn btn-sm btn-default">View Resources</button>
         <button class="btn btn-sm btn-default" ng-click="addFloor()">Add Floor</button>
-        <button class="btn btn-sm btn-default">Upgrade</button>
-        <button class="btn btn-sm btn-default">Save Game</button>
+        <button class="btn btn-sm btn-default" ng-click="saveBunker()">Upgrade</button>
+        <button class="btn btn-sm btn-default" ng-click="saveBunker()">Save Game</button>
+        <button class="btn btn-sm btn-default" ng-click="clearBunker()">Clear Bunker</button>
     </div>
-    <game-canvas data="showGame"></game-canvas>
+
+    <!--DIRECTIVE THAT BUNKER PHASER GAME ATTACHES TO-->
+    <game-canvas data="showGame" bunker="bunkerState"></game-canvas>
 </div>

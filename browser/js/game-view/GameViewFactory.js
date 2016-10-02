@@ -31,5 +31,11 @@ app.factory('GameViewFactory', function ($http) {
   // return boolean to show/hide in-game menu - used in GameController
   GameViewFactory.getMenuView = () => showMenu
 
+  // loads previously saved bunker state
+  GameViewFactory.getBunkerState = (userId) => {
+    return $http.get(`/api/bunkerstate/${userId}`)
+      .then(res => res.data)
+  }
+
   return GameViewFactory
 })

@@ -9,8 +9,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // My preload function is titled preload, create: create, update: update, and render: render
 
   // adds floors upon press of add floor option in game menu
-  scope.$watch(MenuFactory.getFloors, (floorVal) => {
-    if (floorVal > 0) {
+  scope.$watch(MenuFactory.getFloors, (floorVal, oldVal) => {
+    if (floorVal > 0 && floorVal > oldVal) {
       buildAFloor(basicFloor)
     }
   })

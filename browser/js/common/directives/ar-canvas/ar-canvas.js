@@ -1,5 +1,4 @@
 window.createGameAR = function (ele, scope, players, mapId, injector) {
-  console.log('AR GETTING CALLED!')
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
 

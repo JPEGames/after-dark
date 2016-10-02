@@ -13,6 +13,9 @@
         <button class="btn btn-sm btn-default" ng-click="clearBunker()">Clear Bunker</button>
     </div>
 
+    <!--PAUSE MESSAGE-->
+    <h1 id="gamePauseMsg" ng-show="showMenu()">GAME PAUSED</h1>
+
     <!--DIRECTIVE THAT BUNKER PHASER GAME ATTACHES TO-->
     <game-canvas data="showGame" bunker="bunkerState"></game-canvas>
 </div>

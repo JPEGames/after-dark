@@ -1,9 +1,10 @@
 <div id="arContainer">
     <h3 id="gameTitle">Welcome to the Wasteland</h3>
-    <!--TODO: have menu overlay game upon clicking the tile-->
+    <button id="arMenuBtn" class="btn btn-sm btn-default" ng-click="menuVisible()">AR Menu</button>
+
     <div class="btn-group-vertical" role="group" id="game-menu" ng-show="showMenu()">
         <div id="gameMenuTitle">Game Menu</div>
-        <button class="btn btn-sm btn-default">Return to Bunker</button>
+        <button class="btn btn-sm btn-default" ng-click="backToBunker()">Return to Bunker</button>
         <button class="btn btn-sm btn-default">Inventory</button>
         <button class="btn btn-sm btn-default">Save Game</button>
     </div>

@@ -1,6 +1,8 @@
-app.controller('GameController', function ($scope, $localStorage, showGame, GameViewFactory, MenuFactory) {
+app.controller('GameController', function ($scope, $localStorage, showGame, GameViewFactory, MenuFactory, bunkerState) {
   // display game upon transition to game view
   $scope.showGame = showGame
+
+  $scope.bunkerState = bunkerState
 
   // toggle value for showing in-game menu + game pause && vice-versa
   $scope.showMenu = () => {
@@ -21,6 +23,7 @@ app.controller('GameController', function ($scope, $localStorage, showGame, Game
   // add floors from in-game menu
   $scope.addFloor = () => {
     MenuFactory.addFloor()
+    MenuFactory.toggleBunkerSave()
   }
 
   $scope.totalFloors = () => MenuFactory.getFloors()

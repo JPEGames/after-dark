@@ -14,6 +14,7 @@ router.param('id', function (req, res, next, id) {
     })
 })
 
+// for loading previously saved bunker state
 router.get('/:id', function (req, res, next) {
   Bunker.findOne({
     where: {

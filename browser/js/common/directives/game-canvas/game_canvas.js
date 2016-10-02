@@ -1,11 +1,14 @@
 // testing for phaser
 
-window.createGame = function (ele, scope, players, mapId, injector, MenuFactory, http) {
+window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   console.log('GETTING CALLED!')
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
-
+  console.log('INSIDE DIRECTIVE: ', bunker)
   var game = new Phaser.Game(960, 600, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
+  if (game) {
+    console.log('hi theres a game!')
+  }
   // The walk through: Make new pseudo-iframe object. The world and camera have a width, height of 960, 600
   // My parent div is phaser-example
   // My preload function is titled preload, create: create, update: update, and render: render
@@ -17,6 +20,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory,
     }
   })
 
+  // saves bunker state from in-game menu
   scope.$watch(MenuFactory.saving, (saveBool) => {
     if (saveBool) {
       scope.bunkerSave = saveBunker()
@@ -35,6 +39,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory,
 
   // destroys game instance on refresh...is this what we want??!?
   scope.$on('$destroy', () => {
+    console.log('DESTROYING!')
     game.destroy()
   })
 
@@ -177,6 +182,11 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory,
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D)
     useKey = game.input.keyboard.addKey(Phaser.Keyboard.E)
 
+    // load correct bunker state if upgrades have been placed!
+    if (Object.keys(bunker.savedBunkerState).length > 1) {
+      clearBunker()
+      loadBunker(bunker.savedBunkerState)
+    }
   // Alias keys - didnt work otherwise, dont ask.
   }
 
@@ -193,7 +203,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory,
     // Every 1/60 frame, reset x velocity
 
     if (player.body.y > 2900) {
-      loadBunker(testSave)
+      // loadBunker(testSave)
       player.body.y = 280
     }
 
@@ -354,7 +364,7 @@ window.createGame = function (ele, scope, players, mapId, injector, MenuFactory,
 
   // Delete all tiles.
   function clearBunker () {
-    testSave = saveBunker()
+    // testSave = saveBunker()
     for (let curY = 4; curY < 95; curY++) {
       for (let curX = 0; curX < 30; curX++) {
         if (map.getTile(curX, curY, layer) !== null) {
@@ -625,13 +635,13 @@ app.directive('gameCanvas', function ($injector, $http, MenuFactory, AuthService
   return {
     scope: {
       data: '=',
-      mapId: '='
+      bunker: '='
     },
     template: '<div id="game-canvas"></div>',
     link: function (scope, ele, attrs) {
       // condition for state transition into game view
       if (scope.data) {
-        window.createGame(ele, scope, scope.players, scope.mapId, $injector, MenuFactory, $http)
+        window.createGame(ele, scope, scope.bunker, $injector, MenuFactory)
       }
     }
   }

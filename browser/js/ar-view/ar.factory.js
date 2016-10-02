@@ -2,6 +2,13 @@ app.factory('ArFactory', function ($window) {
   let ArFactory = {}
   let prevLoc
   let sensitivity = -100
+  let showMenu = false
+
+  ArFactory.showMenu = () => {
+    showMenu = !showMenu
+  }
+
+  ArFactory.getMenuView = () => showMenu
   function diff (loc, prev) {
     return prev
       ? loc.coords.latitude - prev.coords.latitude > sensitivity || loc.coords.longitude - prev.coords.longitude > sensitivity

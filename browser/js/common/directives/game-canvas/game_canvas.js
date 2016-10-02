@@ -562,11 +562,16 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     tile = map.getTile(x, y, layer5)
     // Grab tile objects based on these
     console.log(tile)
-    log = tile.index
     // Set semi-glob to this
-    console.log({x: x, y: y, index: tile.index})
-    // Return object with pertinent data
-    return {x: x, y: y, index: tile.index}
+
+    if (tile === null) {
+      map.putTile(95, x, y, layer5)
+      console.log('Placed tile.')
+    } else {
+      log = tile.index
+      console.log({x: x, y: y, index: tile.index})
+      return {x: x, y: y, index: tile.index}
+    }
   }
 
   // Not worth getting too into - essentially the physics of moving camera via mouse.

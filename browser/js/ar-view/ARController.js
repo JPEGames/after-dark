@@ -1,4 +1,4 @@
-app.controller('ARController', function ($scope, $localStorage, showAR, GameViewFactory) {
+app.controller('ARController', function ($scope, $localStorage, showAR, GameViewFactory, ArFactory) {
   // display game upon transition to game view
   $scope.showAR = showAR
 
@@ -17,4 +17,22 @@ app.controller('ARController', function ($scope, $localStorage, showAR, GameView
   $scope.$on('$destroy', () => {
     $scope.showAR = !$scope.showAR
   })
+  let zoom = 6
+  ArFactory.getCurrentPosition().then(coords => {
+    $scope.playerLoc = {
+      lat: coords.latitude,
+      lng: coords.longitude,
+      zoom: zoom
+    }
+  })
+  $scope.initPos = {
+    lat: 42,
+    lng: -71,
+    zoom: zoom
+  }
+// $scope.playerLoc = {
+//   lat: ArFactory.coords.latitude,
+//   lng: ArFactory.coords.longitude,
+//   zoom: zoom
+// }
 })

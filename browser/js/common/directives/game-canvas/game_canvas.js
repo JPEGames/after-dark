@@ -9,9 +9,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // My preload function is titled preload, create: create, update: update, and render: render
 
   // adds floors upon press of add floor option in game menu
-
   scope.$watch(MenuFactory.getFloors, (floorVal) => {
-    if (floorVal > 0 && floorVal <= totalFloor) {
+    if (floorVal > 0) {
       buildAFloor(basicFloor)
     }
   })
@@ -181,7 +180,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D)
     useKey = game.input.keyboard.addKey(Phaser.Keyboard.E)
 
-    // clearBunker()
     // load correct bunker state if upgrades have been placed!
     // && bunker.savedBunkerState['bg'][0][0] > 0
     if (Object.keys(bunker.savedBunkerState).length > 1) {
@@ -301,7 +299,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       collision: [],
       interactive: [],
       upgrades: [],
-      floors: currentFloors
+      floors: currentFloors,
+      doorSwitch: doorSwitch
     }
     // For height of map after sky.
     for (let curY = 4; curY < 95; curY++) {
@@ -362,6 +361,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 
   // Delete all tiles.
   function clearBunker () {
+    // TODO: this saves CURRENT BUNKER STATE, not default...
     testSave = saveBunker()
     for (let curY = 4; curY < 95; curY++) {
       for (let curX = 0; curX < 30; curX++) {
@@ -410,8 +410,11 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
         }
       }
     }
+    // if saved bunker state, re-assign current floors to saved value
+    // do same with 'doorSwitch' such that added floors have correct door orientation
     if (saveData.floors) {
       currentFloors = saveData.floors
+      doorSwitch = saveData.doorSwitch
     }
     console.log('Loaded Bunker!')
   }

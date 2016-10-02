@@ -6,6 +6,12 @@ app.config(function ($stateProvider) {
     resolve: {
       showGame: function () {
         return true
+      },
+      bunkerState: function (AuthService, GameViewFactory) {
+        return AuthService.getLoggedInUser()
+          .then(currentUser => {
+            return GameViewFactory.getBunkerState(currentUser.id)
+          })
       }
     }
   })

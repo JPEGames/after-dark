@@ -4,7 +4,7 @@ app.controller('ARController', function ($scope, $localStorage, $state, showAR, 
 
   // show AR menu
   $scope.showMenu = () => {
-    let retVal = ARFactory.getMenuView()
+    let retVal = ArFactory.getMenuView()
     if (!retVal) {
       $scope.$broadcast('resume')
     } else {
@@ -30,7 +30,7 @@ app.controller('ARController', function ($scope, $localStorage, $state, showAR, 
 
   // toggles AR menu
   $scope.menuVisible = () => {
-    ARFactory.showMenu()
+    ArFactory.showMenu()
   }
 
   // takes player back to bunker view

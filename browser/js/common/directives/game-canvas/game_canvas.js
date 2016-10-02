@@ -10,8 +10,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 
   // adds floors upon press of add floor option in game menu
   scope.$watch(MenuFactory.getFloors, (floorVal) => {
-    if (floorVal > 0) {
-      console.log(MenuFactory.getFloors())
+    if (floorVal > 0 && floorVal <= totalFloor) {
       tryBuild()
     }
   })
@@ -19,9 +18,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // saves bunker state from in-game menu
   scope.$watch(MenuFactory.saving, (saveBool) => {
     if (saveBool) {
-      scope.bunkerSave = saveBunker()
       // saves bunker phaser state to database
-      MenuFactory.saveBunker(scope.bunkerSave)
+      MenuFactory.saveBunker(saveBunker())
       // makes it such that additional upgrades/saves will also save on next click
       // turns saving bool to false
       MenuFactory.toggleBunkerSave()
@@ -40,8 +38,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 
   // destroys game instance on refresh...is this what we want??!?
   scope.$on('$destroy', () => {
-    console.log('DESTROYING!')
-    console.log('FLOORS BEFORE DESTROY: ', MenuFactory.getFloors())
     game.destroy()
   })
 
@@ -391,10 +387,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
         }
       }
     }
-
-    // sets floors to 0 in Menu Factory on clear to prevent conflicts in scope.$watch
-    // on state transition
-    MenuFactory.setFloors(0)
     console.log('Cleared Bunker!')
   }
 
@@ -426,7 +418,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     if (saveData.floors) {
       currentFloors = saveData.floors
     }
-    console.log('SAVED FLOORS: ', currentFloors)
     console.log('Loaded Bunker!')
   }
 
@@ -654,7 +645,6 @@ app.directive('gameCanvas', function ($injector, $http, MenuFactory, AuthService
     },
     template: '<div id="game-canvas"></div>',
     link: function (scope, ele, attrs) {
-      console.log('SCOPE DATA: ', scope.data)
       // condition for state transition into game view
       if (scope.data) {
         window.createGame(ele, scope, scope.bunker, $injector, MenuFactory)

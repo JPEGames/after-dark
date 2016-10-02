@@ -1,6 +1,6 @@
 app.factory('MenuFactory', function ($http, AuthService) {
   let MenuFactory = {}
-  let floors = 0
+  let floors = 1
   let savingBunker = false
 
   // adds in-game floors - called in GameController
@@ -10,7 +10,7 @@ app.factory('MenuFactory', function ($http, AuthService) {
   }
 
   MenuFactory.setFloors = (floorNum) => {
-    floors = 0
+    floors = floorNum
   }
 
   // getter for floors - used in phaser object under scope.$watch

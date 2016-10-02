@@ -4,7 +4,7 @@
     <button id="bunkerBtn" class="btn btn-sm btn-default" ng-click="menuVisible()">Bunker Menu</button>
 
     <!--BUNKER MENU-->
-    <div class="btn-group-vertical" role="group" id="game-menu" ng-show="showMenu()">
+    <div class="btn-group-vertical" role="group" id="game-menu" ng-show="showMenu()" style="margin-top: 2em">
         <div id="gameMenuTitle">Game Menu</div>
         <button class="btn btn-sm btn-default">View Resources</button>
         <button class="btn btn-sm btn-default" ng-click="addFloor()">Add Floor</button>
@@ -12,6 +12,7 @@
         <button class="btn btn-sm btn-default" ng-click="saveBunker()">Save Game</button>
         <button class="btn btn-sm btn-default" ng-click="clearBunker()">Clear Bunker</button>
     </div>
+    <br>
 
     <!--PAUSE MESSAGE-->
     <h1 id="gamePauseMsg" ng-show="showMenu()">GAME PAUSED</h1>

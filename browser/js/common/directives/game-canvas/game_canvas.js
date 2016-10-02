@@ -9,9 +9,10 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // My preload function is titled preload, create: create, update: update, and render: render
 
   // adds floors upon press of add floor option in game menu
+
   scope.$watch(MenuFactory.getFloors, (floorVal) => {
     if (floorVal > 0 && floorVal <= totalFloor) {
-      tryBuild()
+      buildAFloor(basicFloor)
     }
   })
 
@@ -255,12 +256,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // Show selected tile
   }
 
-  function tryBuild (aFloor) {
-    if (!builtFloor) {
-      buildAFloor(basicFloor)
-    }
-  }
-
   // Move player down.
   function moveDown () {
     console.log('Attempting to teleport down!')
@@ -330,27 +325,27 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 
         if (vTile !== null) {
           vCurRow.push(vTile.index)
-          // console.log('V Tile Saved.')
+        // console.log('V Tile Saved.')
         } else {
           vCurRow.push(0)
         }
 
         if (cTile !== null) {
           cCurRow.push(cTile.index)
-          // console.log('!!! C Tile Saved.')
+        // console.log('!!! C Tile Saved.')
         } else {
           cCurRow.push(0)
         }
 
         if (iTile !== null) {
           iCurRow.push(iTile.index)
-          // console.log('!!! I Tile Saved.')
+        // console.log('!!! I Tile Saved.')
         } else {
           iCurRow.push(0)
         }
         if (uTile !== null) {
           uCurRow.push(uTile.index)
-          // console.log('!!! U Tile Saved.')
+        // console.log('!!! U Tile Saved.')
         } else {
           uCurRow.push(0)
         }

@@ -117,6 +117,9 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     map.setTileIndexCallback(94, compTwo, this, layer5)
     map.setTileIndexCallback(95, compThree, this, layer5)
 
+    // Exit Collision
+    map.setTileIndexCallback(82, exitBunker, this, layer3)
+
     // OKAY understandably confusing if you are not familiar with game design.
     // The engine is running a collision engine. The TLDR is that velocity is set to 0 upon interaction with above.
     // 55 is the EXACT tile this applies to.
@@ -288,6 +291,13 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 
   function resumeGame () {
     game.paused = false
+  }
+
+  function exitBunker () {
+    if (useKey.isDown && useTimer > 30) {
+      useTimer = 0
+      console.log('Attempting to exit vault.')
+    }
   }
 
   // Saves entire maps state.

@@ -26,6 +26,7 @@ app.controller('GameController', function ($scope, $localStorage, showGame, Game
     MenuFactory.toggleBunkerSave()
   }
 
+  // TODO: not being used right now!
   $scope.totalFloors = () => MenuFactory.getFloors()
 
   // save bunker state from in-game menu

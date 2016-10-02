@@ -13,7 +13,7 @@ canvas {
 
 #game-menu {
   position: absolute;
-  margin: 0 0px 0 960px;
+  margin: 0 0 0 960px;
 }
 
 #gameMenuTitle {
@@ -24,4 +24,12 @@ canvas {
 #bunkerBtn {
   margin: auto;
   display: block;
+}
+
+#gamePauseMsg {
+  position: absolute;
+  margin: 50px 500px 0 500px;
+  font-family: Bungee;
+  font-weight: 300;
+  color: darkred;
 }

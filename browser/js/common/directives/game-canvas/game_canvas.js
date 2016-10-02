@@ -9,9 +9,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // My preload function is titled preload, create: create, update: update, and render: render
 
   // adds floors upon press of add floor option in game menu
-
-  scope.$watch(MenuFactory.getFloors, (floorVal) => {
-    if (floorVal > 0 && floorVal <= totalFloor) {
+  scope.$watch(MenuFactory.getFloors, (floorVal, oldVal) => {
+    if (floorVal > 0 && floorVal > oldVal) {
       buildAFloor(basicFloor)
     }
   })
@@ -118,6 +117,9 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     map.setTileIndexCallback(94, compTwo, this, layer5)
     map.setTileIndexCallback(95, compThree, this, layer5)
 
+    // Exit Collision
+    map.setTileIndexCallback(82, exitBunker, this, layer3)
+
     // OKAY understandably confusing if you are not familiar with game design.
     // The engine is running a collision engine. The TLDR is that velocity is set to 0 upon interaction with above.
     // 55 is the EXACT tile this applies to.
@@ -181,7 +183,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D)
     useKey = game.input.keyboard.addKey(Phaser.Keyboard.E)
 
-    // clearBunker()
     // load correct bunker state if upgrades have been placed!
     // && bunker.savedBunkerState['bg'][0][0] > 0
     if (Object.keys(bunker.savedBunkerState).length > 1) {
@@ -292,6 +293,13 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     game.paused = false
   }
 
+  function exitBunker () {
+    if (useKey.isDown && useTimer > 30) {
+      useTimer = 0
+      console.log('Attempting to exit vault.')
+    }
+  }
+
   // Saves entire maps state.
   function saveBunker () {
     // The object we will be sending to DB.
@@ -301,7 +309,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       collision: [],
       interactive: [],
       upgrades: [],
-      floors: currentFloors
+      floors: currentFloors,
+      doorSwitch: doorSwitch
     }
     // For height of map after sky.
     for (let curY = 4; curY < 95; curY++) {
@@ -362,6 +371,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 
   // Delete all tiles.
   function clearBunker () {
+    // TODO: this saves CURRENT BUNKER STATE, not default...
     testSave = saveBunker()
     for (let curY = 4; curY < 95; curY++) {
       for (let curX = 0; curX < 30; curX++) {
@@ -410,8 +420,11 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
         }
       }
     }
+    // if saved bunker state, re-assign current floors to saved value
+    // do same with 'doorSwitch' such that added floors have correct door orientation
     if (saveData.floors) {
       currentFloors = saveData.floors
+      doorSwitch = saveData.doorSwitch
     }
     console.log('Loaded Bunker!')
   }
@@ -559,11 +572,16 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     tile = map.getTile(x, y, layer5)
     // Grab tile objects based on these
     console.log(tile)
-    log = tile.index
     // Set semi-glob to this
-    console.log({x: x, y: y, index: tile.index})
-    // Return object with pertinent data
-    return {x: x, y: y, index: tile.index}
+
+    if (tile === null) {
+      map.putTile(95, x, y, layer5)
+      console.log('Placed tile.')
+    } else {
+      log = tile.index
+      console.log({x: x, y: y, index: tile.index})
+      return {x: x, y: y, index: tile.index}
+    }
   }
 
   // Not worth getting too into - essentially the physics of moving camera via mouse.

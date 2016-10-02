@@ -1,5 +1,4 @@
 window.createGameAR = function (ele, scope, players, mapId, injector) {
-  console.log('AR GETTING CALLED!')
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
 
@@ -53,6 +52,14 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
       let y = (gameAR.world.height / 10) - (gameAR.world.height - (Math.random() * 100) - 175) * Math.sin(2 * Math.PI * i / cloudNum)
       createACloud(x, y, 1, 1)
     }
+  }
+
+  function pauseGame () {
+    gameAR.paused = true
+  }
+
+  function resumeGame () {
+    gameAR.paused = false
   }
 }
 

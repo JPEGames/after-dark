@@ -69,6 +69,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   var layer, layer2, layer3, layer4, layer5
   var tile
   var log
+  var touchJoy = false
+
   // var tileUp = false
   var player
   var marker
@@ -83,9 +85,11 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // declare semi globals - figure it out
 
   function create () {
-    game.touchControl = game.plugins.add(Phaser.Plugin.TouchControl)
-    game.touchControl.inputEnable()
-    game.touchControl.settings.singleDirection = true
+    if (touchJoy) {
+      game.touchControl = game.plugins.add(Phaser.Plugin.TouchControl)
+      game.touchControl.inputEnable()
+      game.touchControl.settings.singleDirection = false
+    }
     // Adding Mobile Control
     game.physics.startSystem(Phaser.Physics.ARCADE)
     // Multiple systems of physics, this is the simplest.
@@ -205,8 +209,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       useTimer++
     }
 
-    console.log(game.touchControl.speed)
-
     game.physics.arcade.collide(player, layer3)
     game.physics.arcade.collide(player, layer4)
     game.physics.arcade.collide(player, layer5)
@@ -219,29 +221,44 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       player.body.y = 280
     }
 
-    if (leftKey.isDown) {
-      //  Move to the left
-      player.body.velocity.x = -300
-      // by this much
-
-      player.animations.play('left')
-    // animate this
-    } else {
-      if (rightKey.isDown) {
-        //  Move to the right
-        player.body.velocity.x = 300
+    if (!touchJoy || game.touchControl.speed.x === 0) {
+      if (leftKey.isDown) {
+        //  Move to the left
+        player.body.velocity.x = -300
         // by this much
 
-        player.animations.play('right')
+        player.animations.play('left')
       // animate this
       } else {
-        player.animations.stop()
-        // otherwise, standstill
+        if (rightKey.isDown) {
+          //  Move to the right
+          player.body.velocity.x = 300
+          // by this much
 
-        player.frame = 4
-      // at this frame
+          player.animations.play('right')
+        // animate this
+        } else {
+          player.animations.stop()
+          // otherwise, standstill
+
+          player.frame = 4
+        // at this frame
+        }
+      }
+    } else {
+      if (touchJoy) {
+        if (game.touchControl.speed.x < 0) {
+          player.body.velocity.x -= game.touchControl.speed.x * 2
+          player.animations.play('right')
+        } else {
+          if (game.touchControl.speed.x > 0) {
+            player.body.velocity.x -= game.touchControl.speed.x * 2
+            player.animations.play('left')
+          }
+        }
       }
     }
+
     if (upKey.isDown) {
       // Move world up
       game.camera.y -= 4

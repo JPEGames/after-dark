@@ -1,5 +1,5 @@
 'use strict'
-window.app = angular.module('AfterDark', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'ngStorage', 'nemLogging', 'ui-leaflet', 'firebase'])
+window.app = angular.module('AfterDark', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'ngStorage', 'nemLogging', 'ui-leaflet'])
 
 app.config(function ($urlRouterProvider, $locationProvider) {
   // This turns off hashbang urls (/#about) and changes it to something normal (/about)

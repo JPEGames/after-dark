@@ -16,8 +16,8 @@ module.exports = function (config) {
     'node_modules/leaflet/dist/leaflet.js',
     'node_modules/angular-simple-logger/dist/angular-simple-logger.js',
     'node_modules/ui-leaflet/dist/ui-leaflet.js',
+    'browser/js/app.js',
     'public/main.js',
-
     'tests/browser/**/*.js'
   ]
 

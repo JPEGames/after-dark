@@ -1,4 +1,4 @@
-app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state, GameViewFactory) {
+app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state, GameViewFactory, FbFactory) {
   return {
     restrict: 'E',
     scope: {},
@@ -30,8 +30,21 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
       var setUser = function () {
         AuthService.getLoggedInUser().then(function (user) {
           scope.user = user
+          let strUserId = user.id.toString()
           // get game state associated with user
           GameViewFactory.getUserState()
+          // TODO: This isn't secure at all! Use Firebase Auth?
+          FbFactory.getFirebaseRef().child('users').once('value')
+            .then(snapshot => {
+              // if user isn't in firebase db yet, add him/her
+              if (!Object.keys(snapshot.val()).includes(strUserId)) {
+                console.log('setting up user in database!')
+                FbFactory.getFirebaseRef().child(`users/${user.id}`).set({
+                  email: user.email,
+                  Location: 'here'
+                })
+              }
+            })
         })
       }
 

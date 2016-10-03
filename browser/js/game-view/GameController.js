@@ -43,5 +43,4 @@ app.controller('GameController', function ($scope, $localStorage, showGame, Game
   $scope.$on('$destroy', () => {
     $scope.showGame = !$scope.showGame
   })
-  console.log('FIREBASE WOO: ', FbFactory.getFirebaseRef())
 })

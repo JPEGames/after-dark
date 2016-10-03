@@ -9,9 +9,15 @@ module.exports = function (config) {
     'node_modules/angular-ui-bootstrap/ui-bootstrap.js',
     'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js',
     'node_modules/socket.io-client/socket.io.js',
-    'public/main.js',
     'node_modules/sinon/pkg/sinon.js',
     'node_modules/angular-mocks/angular-mocks.js',
+    'node_modules/ngstorage/ngStorage.min.js',
+    'node_modules/firebase/firebase.js',
+    'node_modules/leaflet/dist/leaflet.js',
+    'node_modules/angular-simple-logger/dist/angular-simple-logger.js',
+    'node_modules/ui-leaflet/dist/ui-leaflet.js',
+    'public/main.js',
+
     'tests/browser/**/*.js'
   ]
 

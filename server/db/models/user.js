@@ -53,12 +53,6 @@ module.exports = db.define('user', {
         user.password = user.Model.encryptPassword(user.password, user.salt)
       }
     },
-    afterCreate: function (user) {
-      let defaultCreate = [GameState.create({}), Bunker.create({})]
-      return Promise.all(defaultCreate)
-        .spread((defaultGame, defaultBunker) => {
-          return Promise.all([defaultGame.setUser(user), defaultBunker.setUser(user)])
-        })
-    }
+    afterCreate: user => GameState.create({})
   }
 })

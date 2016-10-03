@@ -27,6 +27,19 @@ router.get('/:id', function (req, res, next) {
     .catch(next)
 })
 
+// create a bunker
+router.get('/:id/newBunker', function (req, res, next) {
+  Bunker.findOrCreate({
+    where: {
+      userId: req.requestedUser.id
+    }
+  })
+    .then(userBunker => {
+      !userBunker[0] ? res.sendStatus(500) : res.send(userBunker[0])
+    })
+    .catch(next)
+})
+
 // update savedBunkerState column in bunker model (upgrades etc. in Phaser)
 router.put('/:id', function (req, res, next) {
   Bunker.findOne({

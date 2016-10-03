@@ -48,6 +48,9 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     game.load.image('tiles', 'pmaps/tmw_desert_spacing.png')
     game.load.image('tiles2', 'pmaps/sewer_tileset.png')
     game.load.image('tiles3', 'pmaps/scifi1.png')
+    game.load.image('touch', 'pimages/touch.png')
+    game.load.image('touch_segment', 'pimages/touch_segment.png')
+    game.load.image('compass', 'pimages/compass.png')
     game.load.spritesheet('player', 'pimages/dude.png', 32, 48)
   }
   // Set bg color behind all elements in this frame
@@ -80,6 +83,10 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // declare semi globals - figure it out
 
   function create () {
+    game.touchControl = game.plugins.add(Phaser.Plugin.TouchControl)
+    game.touchControl.inputEnable()
+    game.touchControl.settings.singleDirection = true
+    // Adding Mobile Control
     game.physics.startSystem(Phaser.Physics.ARCADE)
     // Multiple systems of physics, this is the simplest.
 
@@ -197,6 +204,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     if (useTimer < 180) {
       useTimer++
     }
+
+    console.log(game.touchControl.speed)
 
     game.physics.arcade.collide(player, layer3)
     game.physics.arcade.collide(player, layer4)

@@ -52,10 +52,10 @@ app.controller('ARController', function ($scope, $localStorage, $state, showAR, 
         map.panTo({lat: geoObj.coords.latitude, lng: geoObj.coords.longitude})
       })
   }
-  let zoom = 30
+  let zoom = 20
   $scope.center = {
     lat: 0,
-    lng: -71,
+    lng: 0,
     zoom: zoom
   }
 })

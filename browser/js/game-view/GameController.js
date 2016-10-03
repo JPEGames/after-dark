@@ -1,4 +1,4 @@
-app.controller('GameController', function ($scope, $localStorage, showGame, GameViewFactory, MenuFactory, bunkerState) {
+app.controller('GameController', function ($scope, $localStorage, showGame, GameViewFactory, MenuFactory, bunkerState, FbFactory) {
   // display game upon transition to game view
   $scope.showGame = showGame
 

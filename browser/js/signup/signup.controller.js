@@ -4,7 +4,7 @@ app.controller('SignupCtrl', function ($scope, AuthService, $state, SignupFactor
 
     SignupFactory.createUser(signupInfo).then(function () {
       AuthService.login(signupInfo).then(function () {
-        $state.go('master.navbar.signup-settings')
+        $state.go('master.navbar.home')
       }).catch(function () {
         $scope.error = 'Invalid login credentials.'
       })

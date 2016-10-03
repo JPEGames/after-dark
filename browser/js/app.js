@@ -1,5 +1,5 @@
 'use strict'
-window.app = angular.module('AfterDark', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'ngStorage', 'nemLogging', 'ui-leaflet'])
+window.app = angular.module('AfterDark', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'ngStorage', 'nemLogging', 'ui-leaflet', 'firebase'])
 
 app.config(function ($urlRouterProvider, $locationProvider) {
   // This turns off hashbang urls (/#about) and changes it to something normal (/about)
@@ -13,7 +13,9 @@ app.config(function ($urlRouterProvider, $locationProvider) {
 })
 
 // This app.run is for controlling access to specific states.
-app.run(function ($rootScope, AuthService, $state) {
+app.run(function ($rootScope, AuthService, $state, FbFactory) {
+  // initialize Firebase Connection here!
+  FbFactory.initialize()
   // The given state requires an authenticated user.
   var destinationStateRequiresAuth = function (state) {
     return state.data && state.data.authenticate

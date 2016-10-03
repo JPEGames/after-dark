@@ -90,6 +90,12 @@
         })
     }
 
+    this.signup = function (credentials) {
+      return $http.post('/signup', credentials)
+        .then(res => res.data)
+        .catch(() => $q.reject({ message: 'That email is being used.' }))
+    }
+
     this.logout = function () {
       return $http.get('/logout').then(function () {
         Session.destroy()

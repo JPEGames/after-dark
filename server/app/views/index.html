@@ -9,9 +9,26 @@
         <link rel="stylesheet" type="text/css" href="/leaflet/dist/leaflet.css">
         <link href="https://fonts.googleapis.com/css?family=Antic|Bungee|Exo|Questrial|Rock+Salt|" rel="stylesheet"/>
         <link rel="stylesheet" type="text/css" href="/style.css"/>
+
+        <!--TODO: REQUIRE IN USING BROWSERIFY-->
+        <!--FIREBASE CONFIG-->
+        <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+
         <script src="/moment/moment.js"></script>
         <script src="/lodash/index.js"></script>
         <script src="/angular/angular.js"></script>
+        <!--<script>-->
+            <!--// Initialize Firebase-->
+            <!--var config = {-->
+                <!--apiKey: "AIzaSyBta3VMqrzMP5tCWcixB0wlEat5pvz_GcY",-->
+                <!--authDomain: "after-dark-b86e4.firebaseapp.com",-->
+                <!--databaseURL: "https://after-dark-b86e4.firebaseio.com",-->
+                <!--storageBucket: "",-->
+                <!--messagingSenderId: "635243851384"-->
+            <!--};-->
+            <!--var rootRef = firebase.initializeApp(config).database().ref();-->
+            <!--window.firebaseRef = rootRef-->
+        <!--</script>-->
         <script src="/phaser/build/phaser.min.js"></script>
         <script src="/ngstorage/ngStorage.min.js"></script>
         <script src="/angular-animate/angular-animate.js"></script>
@@ -21,8 +38,9 @@
         <script src="/angular-simple-logger/dist/angular-simple-logger.js"></script>
         <script src="/leaflet/dist/leaflet.js"></script>
         <script src="/ui-leaflet/dist/ui-leaflet.js"></script>
-
         <script src="/socket.io-client/socket.io.js"></script>
+        <script src="/firebase/firebase.js"></script>
+        <script src="/angularfire/dist/angularfire.min.js"></script>
         <script src="/main.js"></script>
     </head>
     <body ng-app="AfterDark" class="Site">
@@ -33,4 +51,5 @@
             </div>
         </div>
     </body>
+
 </html>

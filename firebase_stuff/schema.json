@@ -3,5 +3,11 @@
     "Eliot": {
       "Location": "Canada"
     }
+  },
+  "bunkers": {
+  	"19293": {
+  		"lat": "0",
+  		"lng": "0"
+  	}
   }
 }

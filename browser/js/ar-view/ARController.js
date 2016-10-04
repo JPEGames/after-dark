@@ -1,4 +1,4 @@
-app.controller('ARController', function ($scope, $localStorage, $state, showAR, GameViewFactory, leafletData, ArFactory) {
+app.controller('ARController', function ($scope, $localStorage, $state, showAR, GameViewFactory, leafletData, ArFactory, GeoFireFactory) {
   // display game upon transition to game view
   $scope.showAR = showAR
 
@@ -44,13 +44,25 @@ app.controller('ARController', function ($scope, $localStorage, $state, showAR, 
   })
 
   // map stuff
-  ArFactory.makeLocationWatcher(mapMover)
+  ArFactory.makeLocationWatcher(doThisOnWatch)
+  function doThisOnWatch (geoObj) {
+    mapMover(geoObj)
+    getBunkers(geoObj)
+  }
   function mapMover (geoObj) {
     leafletData.getMap()
       .then(map => {
-        console.log('panning map')
+        console.log(map.getBounds())
+        console.log(map.getPixelOrigin())
         map.panTo({lat: geoObj.coords.latitude, lng: geoObj.coords.longitude})
       })
+  }
+  function getBunkers (geoObj) {
+    let query = GeoFireFactory.query({
+      center: [geoObj.coords.latitude, geoObj.coords.longitude],
+      radius: 1
+    })
+    query.on('key_entered', console.log)
   }
   let zoom = 20
   $scope.center = {

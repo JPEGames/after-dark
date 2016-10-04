@@ -1,8 +1,8 @@
 // for retrieving game state
 
-app.factory('BunkerStateFactory', function ($http, ArFactory, $q) {
+app.factory('BunkerStateFactory', function ($http, ArFactory, $q, GeoFireFactory) {
   let BunkerStateFactory = {}
-
+  console.log(GeoFireFactory)
   // loads previously saved bunker state
   BunkerStateFactory.getBunkerState = (userId) => {
     return $http.get(`/api/bunkerstate/${userId}`)
@@ -19,11 +19,12 @@ app.factory('BunkerStateFactory', function ($http, ArFactory, $q) {
     return $q.all([$http.get(`/api/bunkerstate/${userId}/newBunker`),
       ArFactory.getCurrentPosition()])
       .then(res => {
-        console.log(res)
         let bunkerID = res[0].data.id
         let pos = res[1]
-        console.log({bunkerID, pos})
-      })
+        let geofied = {}
+        geofied[bunkerID] = [pos.latitude, pos.longitude]
+        return GeoFireFactory.set(geofied)
+      }).then(console.log)
   }
 
   return BunkerStateFactory

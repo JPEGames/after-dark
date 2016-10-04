@@ -69,7 +69,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   var layer, layer2, layer3, layer4, layer5
   var tile
   var log
-  var touchJoy = false
+  var touchJoy = true
 
   // var tileUp = false
   var player
@@ -88,7 +88,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     if (touchJoy) {
       game.touchControl = game.plugins.add(Phaser.Plugin.TouchControl)
       game.touchControl.inputEnable()
-      game.touchControl.settings.singleDirection = false
+      game.touchControl.settings.singleDirection = true
     }
     // Adding Mobile Control
     game.physics.startSystem(Phaser.Physics.ARCADE)
@@ -226,7 +226,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
         //  Move to the left
         player.body.velocity.x = -300
         // by this much
-
         player.animations.play('left')
       // animate this
       } else {
@@ -270,10 +269,12 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       // by this much
       }
     }
-    drag_camera(game.input.mousePointer)
-    drag_camera(game.input.pointer1)
-    update_camera()
-  // Monitor mouse/touch world movement
+    if (!touchJoy || game.touchControl.speed.y !== 0) {
+      drag_camera(game.input.mousePointer)
+      drag_camera(game.input.pointer1)
+      update_camera()
+    // Monitor mouse/touch world movement
+    }
   }
 
   function render () {

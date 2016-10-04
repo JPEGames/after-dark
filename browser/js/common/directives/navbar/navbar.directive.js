@@ -7,7 +7,8 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
       scope.items = [
         {label: 'Bunker', state: 'master.navbar.game', auth: true},
         {label: 'Wasteland', state: 'master.navbar.gamear', auth: true},
-        {label: 'Account', state: 'master.navbar.signup-settings', auth: true}
+        {label: 'Account', state: 'master.navbar.signup-settings', auth: true},
+        {label: 'Character Creation', state: 'master.navbar.characterCreate', auth: true}
       ]
 
       // displaying in-game menu option in nav-bar
@@ -32,7 +33,7 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
           scope.user = user
           let strUserId = user.id.toString()
           // get game state associated with user
-          GameViewFactory.getUserState()
+          // GameViewFactory.getUserState()
           // TODO: This isn't secure at all! Use Firebase Auth?
           FbFactory.getFirebaseRef().child('users').once('value')
             .then(snapshot => {

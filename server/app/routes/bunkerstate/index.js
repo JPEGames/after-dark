@@ -27,7 +27,7 @@ router.get('/:id', function (req, res, next) {
     .catch(next)
 })
 
-// create a bunker
+// get or create a bunker associated with signed-in user
 router.get('/:id/newBunker', function (req, res, next) {
   Bunker.findOrCreate({
     where: {

@@ -1,0 +1,30 @@
+<h2>Character Creation</h2>
+<div class="col-xs-6 col-xs-offset-3">
+    <uib-tabset active="active" id="tabs" justified="true">
+        <uib-tab index="0">
+            <uib-tab-heading>
+                Miner
+            </uib-tab-heading>
+            <form id="character-form" name="characterForm">
+                <input type="checkbox" ng-model="miner">
+                <input type="checkbox" ng-model="scientist">
+                <input type="checkbox" ng-model="soldier">
+                <label>Write Your Own Story</label>
+                <input type="text" class="form-control" ng-model="description">
+            </form>
+        </uib-tab>
+
+        <uib-tab index="1">
+            <uib-tab-heading>
+                Scientist
+            </uib-tab-heading>
+        </uib-tab>
+
+        <uib-tab index="2">
+            <uib-tab-heading>
+                Soldier
+            </uib-tab-heading>
+        </uib-tab>
+    </uib-tabset>
+
+</div>

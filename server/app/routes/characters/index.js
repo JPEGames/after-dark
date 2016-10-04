@@ -13,7 +13,7 @@ router.param('id', function (req, res, next, id) {
     })
 })
 
-router.get('/:id/newCharacter', function (req, res, next, id) {
+router.get('/:id', function (req, res, next) {
   Character.findOne({
     where: {
       userId: req.requestedUser.id
@@ -25,7 +25,7 @@ router.get('/:id/newCharacter', function (req, res, next, id) {
     .catch(next)
 })
 
-router.post('/:id', function (req, res, next, id) {
+router.post('/:id', function (req, res, next) {
   Character.create(req.body)
     .then(newCharacter => {
       !newCharacter ? res.sendStatus(500) : res.send(newCharacter)

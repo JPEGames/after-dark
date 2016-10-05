@@ -3,7 +3,7 @@
 window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
-  var game = new Phaser.Game(960, 600, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
+  var game = new Phaser.Game(960, 600, Phaser.AUTO, 'game-canvas', { preload: preload, create: create, update: update, render: render })
   // The walk through: Make new pseudo-iframe object. The world and camera have a width, height of 960, 600
   // My parent div is phaser-example
   // My preload function is titled preload, create: create, update: update, and render: render
@@ -88,7 +88,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     if (touchJoy) {
       game.touchControl = game.plugins.add(Phaser.Plugin.TouchControl)
       game.touchControl.inputEnable()
-      game.touchControl.settings.singleDirection = false
+      game.touchControl.settings.singleDirection = true
     }
     // Adding Mobile Control
     game.physics.startSystem(Phaser.Physics.ARCADE)
@@ -226,7 +226,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
         //  Move to the left
         player.body.velocity.x = -300
         // by this much
-
         player.animations.play('left')
       // animate this
       } else {
@@ -270,10 +269,12 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       // by this much
       }
     }
-    drag_camera(game.input.mousePointer)
-    drag_camera(game.input.pointer1)
-    update_camera()
-  // Monitor mouse/touch world movement
+    if (!touchJoy || game.touchControl.speed.y !== 0) {
+      drag_camera(game.input.mousePointer)
+      drag_camera(game.input.pointer1)
+      update_camera()
+    // Monitor mouse/touch world movement
+    }
   }
 
   function render () {

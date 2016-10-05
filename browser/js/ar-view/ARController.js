@@ -47,23 +47,40 @@ app.controller('ARController', function ($scope, $localStorage, $state, showAR, 
   ArFactory.makeLocationWatcher(doThisOnWatch)
   function doThisOnWatch (geoObj) {
     mapMover(geoObj)
-    getBunkers(geoObj)
+      .then(bounds => getBunkers(geoObj, bounds))
   }
   function mapMover (geoObj) {
-    leafletData.getMap()
-      .then(map => {
-        console.log(map.getBounds())
-        console.log(map.getPixelOrigin())
-        map.panTo({lat: geoObj.coords.latitude, lng: geoObj.coords.longitude})
-      })
+    return leafletData.getMap()
+      .then(map => map.panTo({lat: geoObj.coords.latitude, lng: geoObj.coords.longitude}))
+      .then(map => map.getBounds())
   }
-  function getBunkers (geoObj) {
+  function getBunkers (geoObj, bounds) {
     let query = GeoFireFactory.query({
       center: [geoObj.coords.latitude, geoObj.coords.longitude],
       radius: 1
     })
-    query.on('key_entered', console.log)
+    query.on('key_entered', makeFormatter(bounds))
   }
+  function makeFormatter (bounds) {
+    let ne = bounds._northEast
+    let sw = bounds._southWest
+    let nw = {lat: ne.lat, lng: sw.lng}
+    let se = {lat: sw.lat, lng: ne.lng}
+    let size = getLatLngDiff(nw, se)
+    return function makeUseAbleData (id, latlng, dist) {
+      let [lat, lng] = latlng
+      latlng = {lat, lng}
+      let obj = {id, pos: toXY(size, getLatLngDiff(nw, latlng))}
+      return obj
+    }
+  }
+  function getLatLngDiff (a, b) {
+    return {h: a.lat - b.lat, w: a.lng - b.lng}
+  }
+  function toXY (map, point) {
+    return {x: point.w / map.w, y: point.h / map.h}
+  }
+  $scope.markers
   let zoom = 20
   $scope.center = {
     lat: 0,

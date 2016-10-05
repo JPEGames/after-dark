@@ -1,6 +1,9 @@
 app.config(function ($stateProvider) {
   $stateProvider.state('master', {
-    templateUrl: 'js/master/master.html',
+    template: `
+      <div id="main" class="row" ui-view>
+       </div>
+    `,
     controller: function ($scope, $state) {
       $state.go('master.navbar.home')
     }

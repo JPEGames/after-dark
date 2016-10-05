@@ -13,11 +13,13 @@ module.exports = function (config) {
     'node_modules/angular-mocks/angular-mocks.js',
     'node_modules/ngstorage/ngStorage.min.js',
     'node_modules/firebase/firebase.js',
+    'node_modules/geofire/dist/geofire.min.js',
     'node_modules/leaflet/dist/leaflet.js',
     'node_modules/angular-simple-logger/dist/angular-simple-logger.js',
     'node_modules/ui-leaflet/dist/ui-leaflet.js',
     'browser/js/app.js',
     'public/main.js',
+    'browser/js/**/*.html',
     'tests/browser/**/*.js'
   ]
 
@@ -32,18 +34,11 @@ module.exports = function (config) {
     files: filesCollection,
     exclude: excludeFiles,
     reporters: ['mocha', 'coverage'],
-    preprocessors: {
-      'public/main.js': 'coverage'
+    ngHtml2JsPreprocessor: {
+        stripPrefix: 'browser/'
     },
-    coverageReporter: {
-      dir: 'coverage/browser/',
-      reporters: [{
-        type: 'text',
-        subdir: '.'
-      }, {
-        type: 'html',
-        subdir: '.'
-      }]
+    preprocessors: {
+      'browser/js/**/*.html': ['ng-html2js']
     }
   }
 

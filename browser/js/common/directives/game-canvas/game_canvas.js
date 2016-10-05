@@ -70,7 +70,13 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   var tile
   var log
   var touchJoy = false
+
+  var buildTime = true
   var buildHere = false
+  var upgradeHeight = 1
+  var upgradeWidth = 1
+
+  var curMouseTileX, curMouseTileY, lastMouseTileX, lastMouseTileY
 
   // var tileUp = false
   var player
@@ -116,7 +122,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     marker.alpha = 0
     // Create the things that allow us to select tiles
 
-    game.input.addMoveCallback(updateMarker, this)
+    game.input.addMoveCallback(moveMouse, this)
     // What happens when i move the mouse? Add a listener and bind this
 
     map.setCollision(55, true, layer3)
@@ -642,9 +648,12 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     }
   }
 
+  // This is a check, recreate, and general all purpose upgrade mouse checker
   function updateMarker () {
-    let updateHeight = 3
-    let updateWidth = 2
+    // The height and width of coming upgrade - using globals now - not ideal, had issues otherwise
+    let updateHeight = upgradeHeight
+    let updateWidth = upgradeWidth
+    // I have to adjust start positions etc because I am drawing this rectangle myself.
     let adjustedYStart = 0 - ((updateHeight - 1) * 32)
     let adjustedYEnd = 32 + ((updateHeight - 1) * 32)
     let adjustedWidth = 32 + ((updateWidth - 1) * 32)
@@ -655,29 +664,64 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     marker.lineStyle(2, 0xffffff, 1)
     marker.drawRect(0, adjustedYStart, adjustedWidth, adjustedYEnd)
     marker.alpha = 0
+    // Grab both the tile location and the marker location.
     let tilex = layer.getTileX(game.input.activePointer.worldX)
     let tiley = layer.getTileY(game.input.activePointer.worldY)
     marker.x = layer.getTileX(game.input.activePointer.worldX) * 32
     marker.y = layer.getTileY(game.input.activePointer.worldY) * 32
+    // Create a temporary object of the tile we are over on layer 5
     let checkTile = map.getTile(tilex, tiley, layer5)
+    // If the width of this object is greater then 1 there are edge cases
     if (updateWidth > 1) {
+      // For each additional width
       for (let i = 1; i < updateWidth; i++) {
+        // Lets check to make sure there arent upgrades in those areas.
         if (map.getTile(tilex + i, tiley, layer5) !== null) {
           checkTile = 'noped'
           break
         }
+        // Lets also make sure its not past our right boundary
         if (tilex + i > 26) {
           checkTile = 'noped'
           break
         }
       }
     }
+    // A bunch of checking based on tile patterns - y must always touch floor, x cant overlap potential doors, and it must be below ground
     if ((tiley - 3) % 7 === 0 && tilex > 3 && tilex < 27 && checkTile === null && tiley > 4) {
       marker.alpha = 1
       buildHere = true
     } else {
       marker.alpha = 0
       buildHere = false
+    }
+  }
+
+  // In an attempt to improve performance, lets only call that beast when a change on what actual tile were on happens
+  function moveMouse () {
+    // Temp storage of a change this turn so we dont call twice
+    let buildNow = false
+    // Alter global mouse tile
+    curMouseTileX = layer.getTileX(game.input.activePointer.worldX)
+    curMouseTileY = layer.getTileY(game.input.activePointer.worldY)
+    // If this is diff from last X tile
+    if (curMouseTileX !== lastMouseTileX) {
+      // set em equal
+      lastMouseTileX = curMouseTileX
+      // And if its time to be building
+      if (buildTime) {
+        // Lets check if this spot is valid
+        updateMarker()
+        // weve already built this invokation
+        buildNow = true
+      }
+    }
+    // Same for y with extra check on double invoke
+    if (curMouseTileY !== lastMouseTileY) {
+      lastMouseTileY = curMouseTileY
+      if (buildTime && !buildNow) {
+        updateMarker()
+      }
     }
   }
 
@@ -690,6 +734,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     return value
   }
 
+  // Starter computers, not sure how pertinent these will be.
   function compOne () {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0

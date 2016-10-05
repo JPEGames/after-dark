@@ -1,0 +1,83 @@
+<h2 style="text-align: center">Character Creation</h2>
+<br>
+<div class="col-xs-6 col-xs-offset-3">
+    <uib-tabset active="active" id="tabs" justified="true">
+
+        <!--MINER CHARACTER CREATION TAB-->
+        <uib-tab index="0">
+            <uib-tab-heading>
+                Miner
+            </uib-tab-heading>
+            <br>
+            <p>
+                You are a former miner from Tesla Enterprises, born and bred in the
+                Martian shadows. While not the brightest of mind, you have a knack for
+                extracting valuable Elonium from scrap metal.
+            </p>
+            <br>
+            <ul>
+                <li>Increased detection of scrap metal on map (+0.5 km radius)</li>
+                <li>Enhanced processing of collected scrap metal to Elonium (+10%)</li>
+            </ul>
+            <form style="margin-top: 3em;" name="minerForm" ng-submit="createCharacter('miner', minerDesc)">
+                <label>Write Your Own Story</label>
+                <textarea style="margin-top: 1em;" type="text" class="form-control" ng-model="minerDesc" placeholder="Optional..."></textarea>
+                <button id="minerSubmitBtn" style="display: block; margin: 0 auto; margin-top: 1em;" type="submit" class="btn btn-danger btn-sm text-center">Choose Miner</button>
+            </form>
+        </uib-tab>
+
+        <!--SCIENTIST CHARACTER CREATION TAB-->
+        <uib-tab index="1">
+            <uib-tab-heading>
+                Scientist
+            </uib-tab-heading>
+            <br>
+            <p>
+                You are one of the last surviving scientists from Tesla's think-tank, Minerva. Your
+                brilliance allows you great insight into the latest technologies, significantly boosting
+                the quality of your research. Naturally, you are also a hacker extraordinaire, having been an
+                original member of the top-secret Bunker-Tec program.
+            </p>
+            <br>
+            <ul>
+                <li>Increased research output (+15%)</li>
+                <li>Additional clues while hacking other bunkers</li>
+            </ul>
+
+            <form style="margin-top: 3em;" name="scientistForm" ng-submit="createCharacter('scientist', scientistDesc)">
+                <div class="form-group">
+                    <label>Write Your Own Story</label>
+                    <textarea style="margin-top: 1em;" type="text" class="form-control" ng-model="scientistDesc" placeholder="Optional..."></textarea>
+                    <button style="display: block; margin: 0 auto; margin-top: 1em;" type="submit" class="btn btn-danger btn-sm text-center">Choose Scientist</button>
+                </div>
+            </form>
+        </uib-tab>
+
+        <!--SOLDIER CHARACTER CREATION TAB-->
+        <uib-tab index="2">
+            <uib-tab-heading>
+                Soldier
+            </uib-tab-heading>
+            <br>
+            <p>
+                Once a distinguished captain in MUSC (Mars United Security Conglomerate), Elon Musk's private
+                task force for maintaining order on the Martian colony, your fall from grace began with a disagreement
+                with a Minerva researcher and ended in exile to Earth. Ever since, you have directed your efforts towards
+                re-building your reputation and finding that one irksome scientist. Your military background makes you
+                particularly skilled at detecting the locations of other survivors and executing strategic strikes to
+                further your goals.
+            </p>
+            <br>
+            <ul>
+                <li>Heightened detection radius for other bunkers (+0.5km)</li>
+                <li>Boost to physical attack capabilities</li>
+            </ul>
+            <form style="margin-top: 3em;" name="soldierForm" ng-submit="createCharacter('soldier', soldierDesc)">
+                <label>Write Your Own Story</label>
+                <textarea style="margin-top: 1em;" type="text" class="form-control" ng-model="soldierDesc" placeholder="Optional..."></textarea>
+                <button style="display: block; margin: 0 auto; margin-top: 1em;" type="submit" class="btn btn-danger btn-sm text-center">Choose Soldier</button>
+            </form>
+        </uib-tab>
+    </uib-tabset>
+
+</div>

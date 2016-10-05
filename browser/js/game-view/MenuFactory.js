@@ -28,7 +28,7 @@ app.factory('MenuFactory', function ($http, AuthService) {
   MenuFactory.saveBunker = bunkerState => {
     return AuthService.getLoggedInUser()
       .then(currentUser => {
-        return $http.put(`/api/bunkerstate/${currentUser.id}`, bunkerState)
+        return $http.put(`/api/bunkerstate/${currentUser.id}`, bunkerState).then(r => r.data)
       })
   }
 

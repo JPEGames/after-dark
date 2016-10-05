@@ -14,6 +14,7 @@
     "angular": "^1.5.0-beta.0",
     "angular-animate": "^1.4.7",
     "angular-mocks": "^1.4.0",
+    "angular-sanitize": "^1.5.8",
     "angular-simple-logger": "^0.1.7",
     "angular-ui-bootstrap": "^0.14.3",
     "angular-ui-router": "^0.2.15",
@@ -85,5 +86,9 @@
     "twilio": "^3.0.0-rc.5",
     "ui-leaflet": "^1.0.2",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.5.8",
+    "karma-ng-html2js-preprocessor": "^1.0.0"
   }
 }

@@ -413,7 +413,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // Delete all tiles.
   function clearBunker () {
     // TODO: this saves CURRENT BUNKER STATE, not default...
-    testSave = saveBunker()
     for (let curY = 4; curY < 95; curY++) {
       for (let curX = 0; curX < 30; curX++) {
         if (map.getTile(curX, curY, layer) !== null) {
@@ -437,6 +436,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   }
 
   function loadBunker (saveData) {
+    console.log(saveData)
     for (let curY = 4; curY < 95; curY++) {
       for (let curX = 0; curX < 30; curX++) {
         let actY = curY - 4
@@ -466,6 +466,15 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     if (saveData.floors) {
       currentFloors = saveData.floors
       doorSwitch = saveData.doorSwitch
+    }
+
+    if (saveData.listeners) {
+      upgradeActions = saveData.listeners
+      console.log('In restore listeners load.')
+      for (let q = 0; q < saveData.listeners.length; q++) {
+        console.log('Trying to reassign listener...')
+        map.setTileLocationCallback(saveData.listeners[q].x, saveData.listeners[q].y, 1, 1, saveData.listeners[q].action, this, layer5)
+      }
     }
     console.log('Loaded Bunker!')
   }
@@ -749,13 +758,13 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
             map.putTile(upgradePieces[y - 1][x], curMouseTileX + x, curMouseTileY - (y - 1), layer5)
             if (y === 1) {
               map.setTileLocationCallback(curMouseTileX + x, curMouseTileY - (y - 1), 1, 1, upFunc, this, layer5)
-              upgradeActions.push({action: upgradeAction, x: curMouseTileX + x, y: curMouseTileY - (y - 1)})
+              upgradeActions.push({action: upFunc, x: curMouseTileX + x, y: curMouseTileY - (y - 1)})
             }
           }
         } else {
           map.putTile(upgradePieces[y], curMouseTileX + (y - 1), curMouseTileY, layer5)
           map.setTileLocationCallback(curMouseTileX + (y - 1), curMouseTileY, 1, 1, upFunc, this, layer5)
-          upgradeActions.push({action: upgradeAction, x: curMouseTileX + (y - 1), y: curMouseTileY})
+          upgradeActions.push({action: upFunc, x: curMouseTileX + (y - 1), y: curMouseTileY})
         }
       }
       console.log(returnKeyListener(upgradeAction))

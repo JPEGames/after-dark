@@ -71,6 +71,18 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   var log
   var touchJoy = false
 
+  var buildTime = true
+  var buildHere = false
+  var upgradeHeight = 2
+  var upgradeWidth = 2
+  var upgradePieces = [[99, 99], [99, 99]]
+  var upgradeAction = function () {
+    console.log('Some Action!!!')
+  }
+  var upgradeActions = []
+
+  var curMouseTileX, curMouseTileY, lastMouseTileX, lastMouseTileY
+
   // var tileUp = false
   var player
   var marker
@@ -112,9 +124,10 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     marker = game.add.graphics()
     marker.lineStyle(2, 0xffffff, 1)
     marker.drawRect(0, 0, 32, 32)
+    marker.alpha = 0
     // Create the things that allow us to select tiles
 
-    game.input.addMoveCallback(updateMarker, this)
+    game.input.addMoveCallback(moveMouse, this)
     // What happens when i move the mouse? Add a listener and bind this
 
     map.setCollision(55, true, layer3)
@@ -158,7 +171,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     game.inputEnabled = true
 
     // TODO: PUT ANY FUNCTION HERE - will activate on any click of wall
-    game.input.onDown.add(getTileProperties, this)
+    game.input.onDown.add(buildUpgrade, this)
     // OKAY - input enabled is 1/2 things for touch enabled. May not work yet.
     // game.input = mouse
     // onDown = event
@@ -337,7 +350,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       interactive: [],
       upgrades: [],
       floors: currentFloors,
-      doorSwitch: doorSwitch
+      doorSwitch: doorSwitch,
+      listeners: upgradeActions
     }
     // For height of map after sky.
     for (let curY = 4; curY < 95; curY++) {
@@ -602,7 +616,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     // Set semi-glob to this
 
     if (tile === null) {
-      map.putTile(95, x, y, layer5)
+      // map.putTile(95, x, y, layer5)
       console.log('Placed tile.')
     } else {
       log = tile.index
@@ -640,9 +654,118 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     }
   }
 
+  // This is a check, recreate, and general all purpose upgrade mouse checker
   function updateMarker () {
+    // The height and width of coming upgrade - using globals now - not ideal, had issues otherwise
+    let updateHeight = upgradeHeight
+    let updateWidth = upgradeWidth
+    // I have to adjust start positions etc because I am drawing this rectangle myself.
+    let adjustedYStart = 0 - ((updateHeight - 1) * 32)
+    let adjustedYEnd = 32 + ((updateHeight - 1) * 32)
+    let adjustedWidth = 32 + ((updateWidth - 1) * 32)
+    // All the marker creation stuff below should be called once on the click of making an upgrade being approved
+    // Will increase performance greatly
+    marker.destroy()
+    marker = game.add.graphics()
+    marker.lineStyle(2, 0xffffff, 1)
+    marker.drawRect(0, adjustedYStart, adjustedWidth, adjustedYEnd)
+    marker.alpha = 0
+    // Grab both the tile location and the marker location.
+    let tilex = layer.getTileX(game.input.activePointer.worldX)
+    let tiley = layer.getTileY(game.input.activePointer.worldY)
     marker.x = layer.getTileX(game.input.activePointer.worldX) * 32
     marker.y = layer.getTileY(game.input.activePointer.worldY) * 32
+    // Create a temporary object of the tile we are over on layer 5
+    let checkTile = map.getTile(tilex, tiley, layer5)
+    // If the width of this object is greater then 1 there are edge cases
+    if (updateWidth > 1) {
+      // For each additional width
+      for (let i = 1; i < updateWidth; i++) {
+        // Lets check to make sure there arent upgrades in those areas.
+        if (map.getTile(tilex + i, tiley, layer5) !== null) {
+          checkTile = 'noped'
+          break
+        }
+        // Lets also make sure its not past our right boundary
+        if (tilex + i > 26) {
+          checkTile = 'noped'
+          break
+        }
+      }
+    }
+    // A bunch of checking based on tile patterns - y must always touch floor, x cant overlap potential doors, and it must be below ground
+    if ((tiley - 3) % 7 === 0 && tilex > 3 && tilex < 27 && checkTile === null && tiley > 4) {
+      marker.alpha = 1
+      buildHere = true
+    } else {
+      marker.alpha = 0
+      buildHere = false
+    }
+  }
+
+  // In an attempt to improve performance, lets only call that beast when a change on what actual tile were on happens
+  function moveMouse () {
+    // Temp storage of a change this turn so we dont call twice
+    let buildNow = false
+    // Alter global mouse tile
+    curMouseTileX = layer.getTileX(game.input.activePointer.worldX)
+    curMouseTileY = layer.getTileY(game.input.activePointer.worldY)
+    // If this is diff from last X tile
+    if (curMouseTileX !== lastMouseTileX) {
+      // set em equal
+      lastMouseTileX = curMouseTileX
+      // And if its time to be building
+      if (buildTime) {
+        // Lets check if this spot is valid
+        updateMarker()
+        // weve already built this invokation
+        buildNow = true
+      }
+    }
+    // Same for y with extra check on double invoke
+    if (curMouseTileY !== lastMouseTileY) {
+      lastMouseTileY = curMouseTileY
+      if (buildTime && !buildNow) {
+        updateMarker()
+      }
+    }
+  }
+
+  // Set global upgrade variables to proper vars.
+  function setCurrentUpgrade (myWidth, myHeight, myPieces, myAction) {
+    upgradeHeight = myHeight
+    upgradeWidth = myWidth
+    upgradePieces = myPieces
+    upgradeAction = myAction
+  }
+
+  // Build an upgrade
+  function buildUpgrade () {
+    if (buildHere) {
+      let upFunc = returnKeyListener(upgradeAction)
+      for (let y = upgradePieces.length; y > 0; y--) {
+        if (Array.isArray(upgradePieces[y - 1])) {
+          for (let x = 0; x < upgradePieces[y - 1].length; x++) {
+            map.putTile(upgradePieces[y - 1][x], curMouseTileX + x, curMouseTileY - (y - 1), layer5)
+            if (y === 1) {
+              map.setTileLocationCallback(curMouseTileX + x, curMouseTileY - (y - 1), 1, 1, upFunc, this, layer5)
+              upgradeActions.push({action: upgradeAction, x: curMouseTileX + x, y: curMouseTileY - (y - 1)})
+            }
+          }
+        } else {
+          map.putTile(upgradePieces[y], curMouseTileX + (y - 1), curMouseTileY, layer5)
+          map.setTileLocationCallback(curMouseTileX + (y - 1), curMouseTileY, 1, 1, upFunc, this, layer5)
+          upgradeActions.push({action: upgradeAction, x: curMouseTileX + (y - 1), y: curMouseTileY})
+        }
+      }
+      console.log(returnKeyListener(upgradeAction))
+      console.log('Build Completed!')
+      buildTime = false
+      buildHere = false
+      marker.destroy()
+    } else {
+      console.log('Could not build here.')
+    }
   }
 
   function clamp (val, max, min) {
@@ -654,6 +777,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     return value
   }
 
+  // Starter computers, not sure how pertinent these will be.
   function compOne () {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
@@ -672,6 +796,18 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
       console.log('Computer Three Activated')
+    }
+  }
+
+  // Turns a function into a function that is listened to.
+  function returnKeyListener (aFunction) {
+    console.log('keylistener returned')
+    let bFunction = aFunction
+    return function () {
+      if (useKey.isDown && useTimer > 30) {
+        useTimer = 0
+        bFunction()
+      }
     }
   }
 }

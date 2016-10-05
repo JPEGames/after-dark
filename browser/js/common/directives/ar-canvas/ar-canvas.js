@@ -2,7 +2,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
 
-  var gameAR = new Phaser.Game(960, 600, Phaser.CANVAS, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
+  var gameAR = new Phaser.Game(960, 600, Phaser.AUTO, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
 
   scope.$on('$destroy', () => {
     gameAR.destroy()

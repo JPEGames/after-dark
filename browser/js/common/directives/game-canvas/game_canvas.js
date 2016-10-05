@@ -3,7 +3,7 @@
 window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
-  var game = new Phaser.Game(960, 600, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
+  var game = new Phaser.Game(960, 600, Phaser.AUTO, 'game-canvas', { preload: preload, create: create, update: update, render: render })
   // The walk through: Make new pseudo-iframe object. The world and camera have a width, height of 960, 600
   // My parent div is phaser-example
   // My preload function is titled preload, create: create, update: update, and render: render
@@ -69,7 +69,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   var layer, layer2, layer3, layer4, layer5
   var tile
   var log
-  var touchJoy = true
+  var touchJoy = false
 
   // var tileUp = false
   var player

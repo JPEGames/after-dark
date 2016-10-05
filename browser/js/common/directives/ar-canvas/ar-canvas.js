@@ -2,23 +2,32 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
 
-  var gameAR = new Phaser.Game(960, 600, Phaser.AUTO, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
+  const gameAR = new Phaser.Game(960, 600, Phaser.AUTO, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
 
   scope.$on('$destroy', () => {
     gameAR.destroy()
   })
 
-  var randCount = 180
-  var randFrequency = 180
-  var randOn = true
-  var cloudArray = []
+  let randCount = 180
+  let randFrequency = 180
+  let randOn = true
+  let cloudArray = []
+  let markerArray = []
+  let markerLayer, graphicsLayer
 
   function preload () {
     gameAR.load.image('cloud', '/pimages/cloud2.png')
+    gameAR.load.image('bunker', '/pimages/vault.png')
   }
 
   function create () {
+    markerLayer = gameAR.add.group()
+    markerLayer.z = 0
+    graphicsLayer = gameAR.add.group()
+    graphicsLayer.z = 1
     gameAR.physics.startSystem(Phaser.Physics.ARCADE)
+    gameAR.inputEnabled = true
+    gameAR.input.onDown.add(testMarker, this)
   }
 
   function update () {
@@ -33,8 +42,25 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   function render () {
   }
 
+  // HELPER FUNCTIONS
+
+  function testMarker () {
+    addAMarker(gameAR.input.activePointer.worldX, gameAR.input.activePointer.worldY, 0.3, 0.3, 'bunker')
+  }
+
+  function addAMarker (x, y, width, height, type) {
+    let tempSprite
+    if (type === 'bunker') {
+      tempSprite = new Phaser.Sprite(gameAR, x, y, 'bunker')
+      markerLayer.add(tempSprite)
+    }
+    tempSprite.scale.setTo(width, height)
+    markerArray.push(tempSprite)
+  }
+
   function createACloud (x, y, width, height) {
-    let tempSprite = gameAR.add.sprite(x, y, 'cloud')
+    let tempSprite = new Phaser.Sprite(gameAR, x, y, 'cloud')
+    graphicsLayer.add(tempSprite)
     tempSprite.scale.setTo(width, height)
     cloudArray.push(tempSprite)
   }

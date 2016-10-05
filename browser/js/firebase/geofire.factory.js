@@ -1,5 +1,9 @@
 app.factory('GeoFireFactory', function (FbFactory) {
   let instance = FbFactory.getFirebaseRef()
   let geofire = new window.GeoFire(instance.child('bunkers'))
+  geofire.convertResultstoObj = function (latlng) {
+    let [lat, lng] = latlng
+    return {lat, lng}
+  }
   return geofire
 })

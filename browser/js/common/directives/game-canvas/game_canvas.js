@@ -70,6 +70,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   var tile
   var log
   var touchJoy = false
+  var buildHere = false
 
   // var tileUp = false
   var player
@@ -112,6 +113,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     marker = game.add.graphics()
     marker.lineStyle(2, 0xffffff, 1)
     marker.drawRect(0, 0, 32, 32)
+    marker.alpha = 0
     // Create the things that allow us to select tiles
 
     game.input.addMoveCallback(updateMarker, this)
@@ -602,7 +604,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     // Set semi-glob to this
 
     if (tile === null) {
-      map.putTile(95, x, y, layer5)
+      // map.putTile(95, x, y, layer5)
       console.log('Placed tile.')
     } else {
       log = tile.index
@@ -641,8 +643,42 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   }
 
   function updateMarker () {
+    let updateHeight = 3
+    let updateWidth = 2
+    let adjustedYStart = 0 - ((updateHeight - 1) * 32)
+    let adjustedYEnd = 32 + ((updateHeight - 1) * 32)
+    let adjustedWidth = 32 + ((updateWidth - 1) * 32)
+    // All the marker creation stuff below should be called once on the click of making an upgrade being approved
+    // Will increase performance greatly
+    marker.destroy()
+    marker = game.add.graphics()
+    marker.lineStyle(2, 0xffffff, 1)
+    marker.drawRect(0, adjustedYStart, adjustedWidth, adjustedYEnd)
+    marker.alpha = 0
+    let tilex = layer.getTileX(game.input.activePointer.worldX)
+    let tiley = layer.getTileY(game.input.activePointer.worldY)
     marker.x = layer.getTileX(game.input.activePointer.worldX) * 32
     marker.y = layer.getTileY(game.input.activePointer.worldY) * 32
+    let checkTile = map.getTile(tilex, tiley, layer5)
+    if (updateWidth > 1) {
+      for (let i = 1; i < updateWidth; i++) {
+        if (map.getTile(tilex + i, tiley, layer5) !== null) {
+          checkTile = 'noped'
+          break
+        }
+        if (tilex + i > 26) {
+          checkTile = 'noped'
+          break
+        }
+      }
+    }
+    if ((tiley - 3) % 7 === 0 && tilex > 3 && tilex < 27 && checkTile === null && tiley > 4) {
+      marker.alpha = 1
+      buildHere = true
+    } else {
+      marker.alpha = 0
+      buildHere = false
+    }
   }
 
   function clamp (val, max, min) {

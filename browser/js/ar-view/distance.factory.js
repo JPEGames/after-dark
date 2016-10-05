@@ -1,9 +1,13 @@
 app.factory('DistanceFactory', function () {
+  // returns boolean, is true if distance between 2 coordinates
+  // is greater than some sensitivity (3rd parameter)
   function greaterThanXM (loc1, loc2, meters) {
     console.log(loc1, loc2)
     return convertToMeters(loc1, loc2) > meters
   }
-  function convertToMeters (loc1, loc2) { // generally used geo measurement function
+
+  // Haversine's formula (distance in meters between two coordinates (lat, long))
+  function convertToMeters (loc1, loc2) {
     const R = 6378.137 // Radius of earth in KM
     let dLat = loc2.lat * Math.PI / 180 - loc1.lat * Math.PI / 180
     let dLon = loc2.lng * Math.PI / 180 - loc1.lng * Math.PI / 180

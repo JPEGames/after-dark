@@ -73,8 +73,13 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 
   var buildTime = true
   var buildHere = false
-  var upgradeHeight = 1
-  var upgradeWidth = 1
+  var upgradeHeight = 2
+  var upgradeWidth = 2
+  var upgradePieces = [[99, 99], [99, 99]]
+  var upgradeAction = function () {
+    console.log('Some Action!!!')
+  }
+  var upgradeActions = []
 
   var curMouseTileX, curMouseTileY, lastMouseTileX, lastMouseTileY
 
@@ -166,7 +171,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     game.inputEnabled = true
 
     // TODO: PUT ANY FUNCTION HERE - will activate on any click of wall
-    game.input.onDown.add(getTileProperties, this)
+    game.input.onDown.add(buildUpgrade, this)
     // OKAY - input enabled is 1/2 things for touch enabled. May not work yet.
     // game.input = mouse
     // onDown = event
@@ -345,7 +350,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       interactive: [],
       upgrades: [],
       floors: currentFloors,
-      doorSwitch: doorSwitch
+      doorSwitch: doorSwitch,
+      listeners: upgradeActions
     }
     // For height of map after sky.
     for (let curY = 4; curY < 95; curY++) {
@@ -725,6 +731,43 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     }
   }
 
+  // Set global upgrade variables to proper vars.
+  function setCurrentUpgrade (myWidth, myHeight, myPieces, myAction) {
+    upgradeHeight = myHeight
+    upgradeWidth = myWidth
+    upgradePieces = myPieces
+    upgradeAction = myAction
+  }
+
+  // Build an upgrade
+  function buildUpgrade () {
+    if (buildHere) {
+      let upFunc = returnKeyListener(upgradeAction)
+      for (let y = upgradePieces.length; y > 0; y--) {
+        if (Array.isArray(upgradePieces[y - 1])) {
+          for (let x = 0; x < upgradePieces[y - 1].length; x++) {
+            map.putTile(upgradePieces[y - 1][x], curMouseTileX + x, curMouseTileY - (y - 1), layer5)
+            if (y === 1) {
+              map.setTileLocationCallback(curMouseTileX + x, curMouseTileY - (y - 1), 1, 1, upFunc, this, layer5)
+              upgradeActions.push({action: upgradeAction, x: curMouseTileX + x, y: curMouseTileY - (y - 1)})
+            }
+          }
+        } else {
+          map.putTile(upgradePieces[y], curMouseTileX + (y - 1), curMouseTileY, layer5)
+          map.setTileLocationCallback(curMouseTileX + (y - 1), curMouseTileY, 1, 1, upFunc, this, layer5)
+          upgradeActions.push({action: upgradeAction, x: curMouseTileX + (y - 1), y: curMouseTileY})
+        }
+      }
+      console.log(returnKeyListener(upgradeAction))
+      console.log('Build Completed!')
+      buildTime = false
+      buildHere = false
+      marker.destroy()
+    } else {
+      console.log('Could not build here.')
+    }
+  }
+
   function clamp (val, max, min) {
     var value = val
 
@@ -753,6 +796,18 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
       console.log('Computer Three Activated')
+    }
+  }
+
+  // Turns a function into a function that is listened to.
+  function returnKeyListener (aFunction) {
+    console.log('keylistener returned')
+    let bFunction = aFunction
+    return function () {
+      if (useKey.isDown && useTimer > 30) {
+        useTimer = 0
+        bFunction()
+      }
     }
   }
 }

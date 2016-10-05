@@ -9,6 +9,8 @@ app.factory('ArFactory', function (DistanceFactory) {
 
   ArFactory.getMenuView = () => showMenu
 
+  // promise for current location, resolves to {lat(type FLOAT), long(type FLOAT)}
+  // currently only called when creating bunker initially
   ArFactory.getCurrentPosition = () => {
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition((position) => {

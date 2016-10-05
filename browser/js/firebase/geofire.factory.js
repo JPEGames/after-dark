@@ -2,8 +2,12 @@
 
 app.factory('GeoFireFactory', function (FbFactory) {
   let instance = FbFactory.getFirebaseRef()
-  console.log(instance)
+
+  // return all bunkers in firebase bunkers column
   let geofire = new window.GeoFire(instance.child('bunkers'))
+
+  // for converting coordinates from GeoFire radius query in array format to object format
+  // this is useful for consistency (final is {lat: FLOAT, lng: FLOAT})
   geofire.convertResultstoObj = function (latlng) {
     let [lat, lng] = latlng
     return {lat, lng}

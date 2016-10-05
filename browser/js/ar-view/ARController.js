@@ -44,7 +44,9 @@ app.controller('ARController', function ($scope, $localStorage, $state, showAR, 
     $scope.showAR = !$scope.showAR
   })
 
-  // map stuff
+  // initialize watcher that executes callbacks to send all bunkers/positions of interest
+  // if moved distance > some threshold - will send updated positions of interest
+  // to Phaser AR-Canvas
   LocationWatcherFactory.watch()
 
   $scope.markers

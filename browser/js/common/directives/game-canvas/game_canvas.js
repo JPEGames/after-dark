@@ -1,9 +1,9 @@
 // testing for phaser
 
 window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
-  // let height = parseInt(ele.css('height'), 10)
+  let height = scope.height
   // let width = parseInt(ele.css('width'), 10)
-  var game = new Phaser.Game(960, 600, Phaser.AUTO, 'game-canvas', { preload: preload, create: create, update: update, render: render })
+  var game = new Phaser.Game(960, height, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
   // The walk through: Make new pseudo-iframe object. The world and camera have a width, height of 960, 600
   // My parent div is phaser-example
   // My preload function is titled preload, create: create, update: update, and render: render
@@ -69,16 +69,15 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   var layer, layer2, layer3, layer4, layer5
   var tile
   var log
-  var touchJoy = false
+  var touchJoy = true
 
   var buildTime = true
   var buildHere = false
   var upgradeHeight = 2
   var upgradeWidth = 2
   var upgradePieces = [[99, 99], [99, 99]]
-  var upgradeAction = function () {
-    console.log('Some Action!!!')
-  }
+  var upgradeData = {}
+  var upgradeAction = 'test'
   var upgradeActions = []
 
   var curMouseTileX, curMouseTileY, lastMouseTileX, lastMouseTileY
@@ -162,8 +161,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
      game.add.text(300, 400, "Mouse Drag/Touch", { font: "32px Arial", fill: "#330088", align: "center" })
      //Early testing stuff
      */
-    var g = game.add.group()
-    g.x = 500
     // Disregard - may be used later.
 
     cursors = game.input.keyboard.createCursorKeys()
@@ -201,6 +198,16 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     player.animations.add('right', [5, 6, 7, 8], 10, true)
     // Name animation, what frames is this animation, at what FPS, do I idle otherwise?
 
+    this.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
+
+    this.scale.pageAlignHorizontally = true
+
+    this.scale.pageAlignVertically = true
+
+    // game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT
+
+    // SCALING
+
     upKey = game.input.keyboard.addKey(Phaser.Keyboard.W)
     downKey = game.input.keyboard.addKey(Phaser.Keyboard.S)
     leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A)
@@ -228,11 +235,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 
     player.body.velocity.x = 0
     // Every 1/60 frame, reset x velocity
-
-    if (player.body.y > 2900) {
-      loadBunker(testSave)
-      player.body.y = 280
-    }
 
     if (!touchJoy || game.touchControl.speed.x === 0) {
       if (leftKey.isDown) {
@@ -406,14 +408,13 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       saveObj.interactive.push(iCurRow)
       saveObj.upgrades.push(uCurRow)
     }
-    // console.log(saveObj)
+    console.log(saveObj)
     return saveObj
   }
 
   // Delete all tiles.
   function clearBunker () {
     // TODO: this saves CURRENT BUNKER STATE, not default...
-    testSave = saveBunker()
     for (let curY = 4; curY < 95; curY++) {
       for (let curX = 0; curX < 30; curX++) {
         if (map.getTile(curX, curY, layer) !== null) {
@@ -437,6 +438,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   }
 
   function loadBunker (saveData) {
+    console.log(saveData)
     for (let curY = 4; curY < 95; curY++) {
       for (let curX = 0; curX < 30; curX++) {
         let actY = curY - 4
@@ -466,6 +468,16 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     if (saveData.floors) {
       currentFloors = saveData.floors
       doorSwitch = saveData.doorSwitch
+    }
+
+    if (saveData.listeners) {
+      upgradeActions = saveData.listeners
+      console.log('In restore listeners load.')
+      for (let q = 0; q < saveData.listeners.length; q++) {
+        console.log('Trying to reassign listener...')
+        let reFunc = returnKeyListener(saveData.listeners[q].action, saveData.listeners[q].data)
+        map.setTileLocationCallback(saveData.listeners[q].x, saveData.listeners[q].y, 1, 1, reFunc, this, layer5)
+      }
     }
     console.log('Loaded Bunker!')
   }
@@ -694,7 +706,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       }
     }
     // A bunch of checking based on tile patterns - y must always touch floor, x cant overlap potential doors, and it must be below ground
-    if ((tiley - 3) % 7 === 0 && tilex > 3 && tilex < 27 && checkTile === null && tiley > 4) {
+    if ((tiley - 3) % 7 === 0 && tilex > 3 && tilex < 27 && checkTile === null && tiley > 4 && tiley <= 10 + ((currentFloors - 1) * 7)) {
       marker.alpha = 1
       buildHere = true
     } else {
@@ -732,36 +744,38 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   }
 
   // Set global upgrade variables to proper vars.
-  function setCurrentUpgrade (myWidth, myHeight, myPieces, myAction) {
+  function setCurrentUpgrade (myWidth, myHeight, myPieces, myAction, myData) {
     upgradeHeight = myHeight
     upgradeWidth = myWidth
     upgradePieces = myPieces
     upgradeAction = myAction
+    upgradeData = myData
   }
 
   // Build an upgrade
   function buildUpgrade () {
     if (buildHere) {
-      let upFunc = returnKeyListener(upgradeAction)
+      let upFunc = returnKeyListener(upgradeAction, upgradeData)
       for (let y = upgradePieces.length; y > 0; y--) {
         if (Array.isArray(upgradePieces[y - 1])) {
           for (let x = 0; x < upgradePieces[y - 1].length; x++) {
             map.putTile(upgradePieces[y - 1][x], curMouseTileX + x, curMouseTileY - (y - 1), layer5)
             if (y === 1) {
               map.setTileLocationCallback(curMouseTileX + x, curMouseTileY - (y - 1), 1, 1, upFunc, this, layer5)
-              upgradeActions.push({action: upgradeAction, x: curMouseTileX + x, y: curMouseTileY - (y - 1)})
+              upgradeActions.push({action: upgradeAction, data: upgradeData, x: curMouseTileX + x, y: curMouseTileY - (y - 1)})
             }
           }
         } else {
           map.putTile(upgradePieces[y], curMouseTileX + (y - 1), curMouseTileY, layer5)
           map.setTileLocationCallback(curMouseTileX + (y - 1), curMouseTileY, 1, 1, upFunc, this, layer5)
-          upgradeActions.push({action: upgradeAction, x: curMouseTileX + (y - 1), y: curMouseTileY})
+          upgradeActions.push({action: upgradeAction, data: upgradeData, x: curMouseTileX + (y - 1), y: curMouseTileY})
         }
       }
-      console.log(returnKeyListener(upgradeAction))
+      console.log(returnKeyListener(upgradeAction, upgradeData))
       console.log('Build Completed!')
       buildTime = false
       buildHere = false
+      MenuFactory.saveBunker(saveBunker())
       marker.destroy()
     } else {
       console.log('Could not build here.')
@@ -800,20 +814,28 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   }
 
   // Turns a function into a function that is listened to.
-  function returnKeyListener (aFunction) {
+  function returnKeyListener (emitWord, emitData) {
     console.log('keylistener returned')
-    let bFunction = aFunction
     return function () {
       if (useKey.isDown && useTimer > 30) {
         useTimer = 0
-        bFunction()
+        console.log(emitWord)
+        scope.$emit(emitWord, emitData)
       }
+    }
+  }
+
+  function gofull () {
+    if (game.scale.isFullScreen) {
+      game.scale.stopFullScreen()
+    } else {
+      game.scale.startFullScreen(false)
     }
   }
 }
 
 // custom directive to link phaser object to angular
-app.directive('gameCanvas', function ($injector, $http, MenuFactory, AuthService) {
+app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, AuthService) {
   return {
     scope: {
       data: '=',
@@ -822,6 +844,8 @@ app.directive('gameCanvas', function ($injector, $http, MenuFactory, AuthService
     template: '<div id="game-canvas"></div>',
     link: function (scope, ele, attrs) {
       // condition for state transition into game view
+      scope.height = $window.innerHeight
+
       if (scope.data) {
         window.createGame(ele, scope, scope.bunker, $injector, MenuFactory)
       }

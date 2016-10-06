@@ -1,6 +1,6 @@
 <!--BUNKER VIEW + BUNKER MENU-->
 <div id="gameContainer">
-    <h3 id="gameTitle">Your Bunker</h3>
+<!--     <h3 id="gameTitle">Your Bunker</h3>
     <div id="statsContainer" style="width: 100%; margin-bottom: 1em">
         <div id="innerStatsContainer" style="text-align: center">
             <div class="btn-group">
@@ -40,8 +40,8 @@
         </div>
     </div>
     <button id="bunkerBtn" class="btn btn-sm btn-default" ng-click="menuVisible()">Bunker Menu</button>
-    <!--BUNKER MENU-->
-    <div class="btn-group-vertical" role="group" id="game-menu" ng-show="showMenu()" style="margin-top: 2em">
+    BUNKER MENU-->
+    <!-- <div class="btn-group-vertical" role="group" id="game-menu" ng-show="showMenu()" style="margin-top: 2em">
         <div id="gameMenuTitle">Game Menu</div>
         <button class="btn btn-sm btn-default">View Resources</button>
         <button class="btn btn-sm btn-default" ng-click="addFloor()">Add Floor</button>
@@ -50,8 +50,8 @@
         <button class="btn btn-sm btn-default" ng-click="clearBunker()">Clear Bunker</button>
     </div>
     <br>
-    <!--PAUSE MESSAGE-->
-    <h1 id="gamePauseMsg" ng-show="showMenu()">GAME PAUSED</h1>
-    <!--DIRECTIVE THAT BUNKER PHASER GAME ATTACHES TO-->
+    PAUSE MESSAGE
+    <h1 id="gamePauseMsg" ng-show="showMenu()">GAME PAUSED</h1> 
+    DIRECTIVE THAT BUNKER PHASER GAME ATTACHES TO-->
 <game-canvas data="showGame" bunker="bunkerState"></game-canvas>
 </div>

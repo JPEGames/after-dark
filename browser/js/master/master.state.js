@@ -1,7 +1,7 @@
 app.config(function ($stateProvider) {
   $stateProvider.state('master', {
     template: `
-      <div id="main" class="row" ui-view>
+      <div id="main" ui-view>
        </div>
     `,
     controller: function ($scope, $state) {

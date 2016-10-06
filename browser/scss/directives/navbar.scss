@@ -1,6 +1,10 @@
 navbar {
 
+  z-index: 99999;
   display: block;
+  position: fixed;
+  width: 100%;
+  opacity: 0.75;
   background-color: #263238;
   border-bottom: 1px solid black;
   box-shadow: 1px 1px 14px -3px black;
@@ -31,10 +35,6 @@ navbar {
     font-family: 'Bungee', sans-serif;
   }
 
-  #appNameSubtext {
-    line-height: 175%;
-  }
-
   .container {
     width: 91%;
     max-width: 1340px;
@@ -50,18 +50,36 @@ navbar {
     font-size: 16px;
   }
 
-  .nav > li > a {
+  //.nav > li > a {
+  //  cursor: pointer;
+  //  transition: color 0.2s;
+  //  &.active {
+  //    color: lighten(#FFC107, 10%);
+  //  }
+  //  &:hover {
+  //    background: none;
+  //    color: lighten(#FFC107, 5%);
+  //  }
+  //  &:focus {
+  //    background: none;
+  //  }
+  //}
+
+  #navBarDropDown {
     cursor: pointer;
     transition: color 0.2s;
     &.active {
       color: lighten(#FFC107, 10%);
+      text-decoration: none;
     }
     &:hover {
       background: none;
       color: lighten(#FFC107, 5%);
+      text-decoration: none;
     }
     &:focus {
       background: none;
+      text-decoration: none;
     }
   }
 
@@ -69,7 +87,9 @@ navbar {
     margin-left: 1em;
     float: right;
     border: 1px solid black;
-    margin-top: 10px;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    margin-right: 0.2em;
     background: none;
     outline: none !important;
   }
@@ -77,7 +97,8 @@ navbar {
   .signup-button {
     float: right;
     border: 1px solid black;
-    margin-top: 10px;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
     background: none;
     outline: none !important;
   }

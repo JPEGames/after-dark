@@ -1,5 +1,5 @@
 <div id="arContainer">
-    <h3 id="gameTitle">Welcome to the Wasteland</h3>
+   <!--  <h3 id="gameTitle">Welcome to the Wasteland</h3>
     <button id="arMenuBtn" class="btn btn-sm btn-default" ng-click="menuVisible()" style="margin: 0 auto; display: block">AR Menu</button>
     <div class="btn-group-vertical" role="group" id="game-menu" ng-show="showMenu()" style="margin-left: 960px; margin-top: 2em; z-index: 9999">
         <div id="gameMenuTitle">Game Menu</div>
@@ -10,11 +10,11 @@
 
     <br>
     <div id="arInnerContainer" style="margin: 0 auto; width: 960px; height: 600px; position: relative">
-        <div id="gMapContainer" style="max-width: 100%; margin: 0 auto">
+        <div id="gMapContainer" style="max-width: 100%; margin: 0 auto"> -->
             <!--PIERRE'S LEAFLET ON TOP-->
-            <leaflet defaults="defaults" lf-center="center" style="width: 960px; height: 600px; z-index: 1; position: absolute; margin: 0 auto"> </leaflet>
+            <leaflet defaults="defaults" lf-center="center" style="width: 100%; height: 100%; z-index: 1; position: absolute; margin: 0 auto"> </leaflet>
             <!--<leaflet defaults="defaults" style="width: 960px; height: 600px; z-index: 1; position: absolute; margin: 0 auto"> </leaflet>-->
-        </div>
+         <!-- </div> -->
         <ar-canvas data="showAR" style="position: absolute; z-index: 1000; margin: 0 auto;"></ar-canvas>
-    </div>
+   <!-- </div> -->
 </div>

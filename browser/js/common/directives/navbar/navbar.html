@@ -1,16 +1,30 @@
-<div class="container">
-    <div id="appName">
-        <a id="home-link" ui-sref="master.navbar.home"> <div> <h1 id="appNameText">After Dark</h1> </div> </a>
-    </div>
-    <ul class="nav navbar-nav">
-        <li ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">
-            <a ui-sref-active="active" ui-sref="{{ item.state }}">{{ item.label }}</a>
-        </li>
+<!--<div class="container">-->
+    <!--<div id="appName">-->
+        <!--<a id="home-link" ui-sref="master.navbar.home"> <div> <h1 id="appNameText">After Dark</h1> </div> </a>-->
+    <!--</div>-->
+    <!--<ul class="nav navbar-nav">-->
+        <!--<li ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">-->
+            <!--<a ui-sref-active="active" ui-sref="{{ item.state }}">{{ item.label }}</a>-->
+        <!--</li>-->
+    <!--</ul>-->
+    <!--<button ng-show="!user" ui-sref="master.navbar.login" class="btn login-button" id="forceButtonChange">Login</button>-->
+    <!--<button ng-show="!user" ui-sref="master.navbar.signup" class="btn signup-button" id="forceButtonChange">Sign-Up</button>-->
+    <!--<div ng-show="user" class="welcome">-->
+        <!--<span id="login-status-text">{{ user.email }}</span>-->
+        <!--<a id="login-status-link" ng-click="logout()">Logout</a>-->
+    <!--</div>-->
+<!--</div>-->
+
+<div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        Dropdown
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        <li><a href="#">Action</a></li>
+        <li><a href="#">Another action</a></li>
+        <li><a href="#">Something else here</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="#">Separated link</a></li>
     </ul>
-    <button ng-show="!user" ui-sref="master.navbar.login" class="btn login-button" id="forceButtonChange">Login</button>
-    <button ng-show="!user" ui-sref="master.navbar.signup" class="btn signup-button" id="forceButtonChange">Sign-Up</button>
-    <div ng-show="user" class="welcome">
-        <span id="login-status-text">{{ user.email }}</span>
-        <a id="login-status-link" ng-click="logout()">Logout</a>
-    </div>
 </div>

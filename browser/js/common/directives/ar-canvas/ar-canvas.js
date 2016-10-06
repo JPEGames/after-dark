@@ -81,14 +81,16 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     // Increase counter for recreating clouds for shitty animation effect that needs work.
     randCount++
     // If the counter is above the set timer...
+    /*    
     if (randCount >= randFrequency && randOn) {
-      // Delete the clouds,
-      deleteClouds()
-      // Recreate a new ring,
-      cloudRing()
-      // Reset timer.
-      randCount = 0
-    }
+          // Delete the clouds,
+          deleteClouds()
+          // Recreate a new ring,
+          cloudRing()
+          // Reset timer.
+          randCount = 0
+        }
+    */
 
   // If I havent run a test on markers...
   // if (!ranTest) {

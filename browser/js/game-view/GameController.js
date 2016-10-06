@@ -39,6 +39,10 @@ app.controller('GameController', function ($scope, $localStorage, showGame, Game
     $scope.$broadcast('clearing')
   }
 
+  $scope.$on('test', function () {
+    console.log('RECIEVED TEST!')
+  })
+
   // removes erroneous 'second' game view on page refresh
   $scope.$on('$destroy', () => {
     $scope.showGame = !$scope.showGame

@@ -84,13 +84,13 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
       randCount = 0
     }
 
-    // If I havent run a test on markers...
-    if (!ranTest) {
-      // Add test markers.
-      addMarkers(testObj)
-      // I've run the test.
-      ranTest = true
-    }
+  // If I havent run a test on markers...
+  // if (!ranTest) {
+  // Add test markers.
+  // addMarkers(testObj)
+  // I've run the test.
+  // ranTest = true
+  // }
   }
 
   // For future animation effects.

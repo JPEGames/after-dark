@@ -180,6 +180,11 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   function resumeGame () {
     gameAR.paused = false
   }
+
+  scope.$on('updateAR', (event, data) => {
+    clearMarkers()
+    addMarkers(data)
+  })
 }
 
 // Part of a state that has an ARController as a parent - so broadcasts are available.

@@ -228,11 +228,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     player.body.velocity.x = 0
     // Every 1/60 frame, reset x velocity
 
-    if (player.body.y > 2900) {
-      loadBunker(testSave)
-      player.body.y = 280
-    }
-
     if (!touchJoy || game.touchControl.speed.x === 0) {
       if (leftKey.isDown) {
         //  Move to the left
@@ -703,7 +698,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       }
     }
     // A bunch of checking based on tile patterns - y must always touch floor, x cant overlap potential doors, and it must be below ground
-    if ((tiley - 3) % 7 === 0 && tilex > 3 && tilex < 27 && checkTile === null && tiley > 4) {
+    if ((tiley - 3) % 7 === 0 && tilex > 3 && tilex < 27 && checkTile === null && tiley > 4 && tiley <= 10 + ((currentFloors - 1) * 7)) {
       marker.alpha = 1
       buildHere = true
     } else {
@@ -772,6 +767,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       console.log('Build Completed!')
       buildTime = false
       buildHere = false
+      MenuFactory.saveBunker(saveBunker())
       marker.destroy()
     } else {
       console.log('Could not build here.')

@@ -1,9 +1,10 @@
 navbar {
 
+  z-index: 99999;
   display: block;
   position: fixed;
   width: 100%;
-  opacity: 0.5;
+  opacity: 1;
   background-color: #263238;
   border-bottom: 1px solid black;
   box-shadow: 1px 1px 14px -3px black;
@@ -32,10 +33,6 @@ navbar {
     margin: 0 auto;
     text-align: center;
     font-family: 'Bungee', sans-serif;
-  }
-
-  #appNameSubtext {
-    line-height: 175%;
   }
 
   .container {

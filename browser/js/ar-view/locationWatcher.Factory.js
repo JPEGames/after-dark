@@ -50,7 +50,8 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   }
 
   // returns corners that complete a rectangle with parameters as opposite corners
-  // EX: {lat: 0, lng: 0}, {lat: 1, lng: 1} returns [{lat: 0, lng: 1}, {lat: 1, lng: 0}]
+  // (i.e. getIntersects (nwCorner, seCorner) => [neCorner, swCorner])
+  // EX: point1 {lat: 0, lng: 0}, point2 {lat: 1, lng: 1} returns [{lat: 0, lng: 1}, {lat: 1, lng: 0}]
   // <----- HELPER FUNCTION ------>
   function getIntersects (point1, point2) {
     return [{lat: point1.lat, lng: point2.lng}, {lat: point2.lat, lng: point1.lng}]
@@ -101,6 +102,8 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   function toXY (bunker) {
     let point = bunker.coords
     let [NE, SW] = getIntersects(nw, point)
+    // returns {height, width} corresponding to rectangle with
+    // its top-left : map top-left corner, bottom-right: point coordinates
     let pointDist = getSize(nw, NE, SW)
     let coords = {x: pointDist.w / size.w, y: pointDist.h / size.h}
     return {id: bunker.id, coords: coords}

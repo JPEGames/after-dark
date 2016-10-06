@@ -76,9 +76,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   var upgradeHeight = 2
   var upgradeWidth = 2
   var upgradePieces = [[99, 99], [99, 99]]
-  var upgradeAction = function () {
-    console.log('Some Action!!!')
-  }
+  var upgradeData = {}
+  var upgradeAction = 'test'
   var upgradeActions = []
 
   var curMouseTileX, curMouseTileY, lastMouseTileX, lastMouseTileY
@@ -406,7 +405,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       saveObj.interactive.push(iCurRow)
       saveObj.upgrades.push(uCurRow)
     }
-    // console.log(saveObj)
+    console.log(saveObj)
     return saveObj
   }
 
@@ -473,7 +472,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       console.log('In restore listeners load.')
       for (let q = 0; q < saveData.listeners.length; q++) {
         console.log('Trying to reassign listener...')
-        map.setTileLocationCallback(saveData.listeners[q].x, saveData.listeners[q].y, 1, 1, saveData.listeners[q].action, this, layer5)
+        let reFunc = returnKeyListener(saveData.listeners[q].action, saveData.listeners[q].data)
+        map.setTileLocationCallback(saveData.listeners[q].x, saveData.listeners[q].y, 1, 1, reFunc, this, layer5)
       }
     }
     console.log('Loaded Bunker!')
@@ -741,33 +741,34 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   }
 
   // Set global upgrade variables to proper vars.
-  function setCurrentUpgrade (myWidth, myHeight, myPieces, myAction) {
+  function setCurrentUpgrade (myWidth, myHeight, myPieces, myAction, myData) {
     upgradeHeight = myHeight
     upgradeWidth = myWidth
     upgradePieces = myPieces
     upgradeAction = myAction
+    upgradeData = myData
   }
 
   // Build an upgrade
   function buildUpgrade () {
     if (buildHere) {
-      let upFunc = returnKeyListener(upgradeAction)
+      let upFunc = returnKeyListener(upgradeAction, upgradeData)
       for (let y = upgradePieces.length; y > 0; y--) {
         if (Array.isArray(upgradePieces[y - 1])) {
           for (let x = 0; x < upgradePieces[y - 1].length; x++) {
             map.putTile(upgradePieces[y - 1][x], curMouseTileX + x, curMouseTileY - (y - 1), layer5)
             if (y === 1) {
               map.setTileLocationCallback(curMouseTileX + x, curMouseTileY - (y - 1), 1, 1, upFunc, this, layer5)
-              upgradeActions.push({action: upFunc, x: curMouseTileX + x, y: curMouseTileY - (y - 1)})
+              upgradeActions.push({action: upgradeAction, data: upgradeData, x: curMouseTileX + x, y: curMouseTileY - (y - 1)})
             }
           }
         } else {
           map.putTile(upgradePieces[y], curMouseTileX + (y - 1), curMouseTileY, layer5)
           map.setTileLocationCallback(curMouseTileX + (y - 1), curMouseTileY, 1, 1, upFunc, this, layer5)
-          upgradeActions.push({action: upFunc, x: curMouseTileX + (y - 1), y: curMouseTileY})
+          upgradeActions.push({action: upgradeAction, data: upgradeData, x: curMouseTileX + (y - 1), y: curMouseTileY})
         }
       }
-      console.log(returnKeyListener(upgradeAction))
+      console.log(returnKeyListener(upgradeAction, upgradeData))
       console.log('Build Completed!')
       buildTime = false
       buildHere = false
@@ -809,13 +810,13 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   }
 
   // Turns a function into a function that is listened to.
-  function returnKeyListener (aFunction) {
+  function returnKeyListener (emitWord, emitData) {
     console.log('keylistener returned')
-    let bFunction = aFunction
     return function () {
       if (useKey.isDown && useTimer > 30) {
         useTimer = 0
-        bFunction()
+        console.log(emitWord)
+        scope.$emit(emitWord, emitData)
       }
     }
   }

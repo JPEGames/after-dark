@@ -36,8 +36,8 @@
 </head>
 <body ng-app="AfterDark" class="Site">
 <div class="ui-view-container Site-content">
-    <div style="position: absolute; top: 0; width: 100%;
-    text-align: center; margin-top: -1.25em; z-index: 100000">
+    <div id="WelText" style="position: absolute; top: 20em; width: 100%;
+    text-align: center; margin-top: -1.25em; z-index: 100000; transition: top 0.5s ease-in-out 0.5s; pointer-events: none">
         <h1>After Dark</h1>
     </div>
     <div id="master" class="col-xs-12" ui-view>
@@ -45,4 +45,5 @@
 </div
 >
 </body>
+<script>$(function() {$('#WelText').css('top','0');});</script>
 </html>

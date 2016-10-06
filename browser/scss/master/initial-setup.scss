@@ -3,122 +3,6 @@
     margin: 0 auto;
 }
 
-#task-semicolon {
-    font-weight: bold;
-    text-align: center;
-    width: 1em;
-    max-width: 1em;
-    float: left;
-}
-
-#task-hour {
-    margin-left: 0.5em;
-    width: 5em;
-    max-width: 5em;
-    float: left;
-}
-
-#task-minute {
-    width: 5em;
-    max-width: 5em;
-    float: left;
-}
-
-#taskdir-time {
-    color: white;
-}
-
-#taskdir-title {
-    color: #CFD8DC;
-}
-
-#task-ampm {
-    margin-left: 1em;
-    width: 6em;
-    max-width: 6em;
-    float: left;
-}
-
-#task-lhour {
-    margin-left: 0.5em;
-    width: 5em;
-    max-width: 5em;
-    float: left;
-}
-
-#task-lminute {
-    width: 5em;
-    max-width: 5em;
-    float: left;
-}
-
-#task-lsemicolon {
-    font-weight: bold;
-    text-align: center;
-    width: 1em;
-    max-width: 1em;
-    float: left;
-}
-
-#time-length-container {
-    max-width: 12em;
-    margin: 0 auto;
-}
-
-#time-task-container {
-    max-width: 20em;
-    margin: 0 auto;
-}
-
-#task-text-container {
-    opacity: 1;
-    margin-left: 1em;
-    margin-right: 1em;
-}
-
-#task-inner-container:hover {
-    text-decoration: none;
-    color: white;
-}
-
-#task-creator {
-    margin-top: 1em;
-}
-
-#task-inner-container:visited {
-    text-decoration: none;
-    color: white;
-}
-
-#task-inner-container:link {
-    text-decoration: none;
-    color: white;
-}
-
-#task-inner-container {
-    text-decoration: none;
-    display: block;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    line-height: 1.2em;
-    font-size: 1em;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    border: solid 1px black;
-    background-color: darken(#1B5E20, 10%);
-    box-shadow: 1px 1px 14px -3px black;
-    text-align: left;
-    clear: both;
-}
-
-#taskdir-container {
-    width: 90%;
-    height: 90%;
-    margin: auto;
-}
-
 #home-link {
     text-decoration: none;
 }
@@ -142,18 +26,6 @@
     min-height: 3em;
     max-height: 3em;
     height: 3em;
-}
-
-#checkbox-span {
-    display: block;
-    margin: 0 auto;
-    text-align: center;
-    font-size: 1.3em;
-}
-
-#checkbox-group {
-    margin: 0 auto;
-    text-align: center;
 }
 
 #content-hr {
@@ -250,29 +122,20 @@ input {
     padding: 0;
 }
 
-.Site {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.Site-content {
-  flex: 1;
-}
-
 html, body {
-    min-height: 100%;
+    min-height: 100vh;
     position: relative;
-    max-width: 100vw;
+    min-width: 100vw;
+    max-height: 100vh;
+    max-width: 100vh;
+    overflow: hidden;
 }
 
 body {
-    margin-bottom: 3em;
     color: #FFB300;
     font-family: 'Exo', sans-serif;
     background-color: #37474F;
     transition: background-color 1s;
-    overflow-x: hidden;
     margin: 0 auto;
 }
 

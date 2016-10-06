@@ -2,7 +2,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // let height = parseInt(ele.css('height'), 10)
   // let width = parseInt(ele.css('width'), 10)
 
-  const gameAR = new Phaser.Game(960, 600, Phaser.AUTO, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
+  const gameAR = new Phaser.Game(960, 600, Phaser.CANVAS, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
 
   // Deals with canvas glitch involving invincible phaser instance.
   scope.$on('$destroy', () => {

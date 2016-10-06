@@ -11,11 +11,10 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   let size // total size of map, represented by object with height(h) and width(w) in meters
   let bunkers = []
 
-  // compares previous location with current location, returns boolean
-  // if previous is undefined, as in at map loading, return true to pan map, get bunkers etc etc.
-  let diff = (loc, prev, sensitivity = 0) => prev
-    ? DistanceFactory.greaterThanXM(loc, prev, sensitivity)
-    : true
+  // exported watcher function, runs all map code
+  let watch = function () {
+    navigator.geolocation.watchPosition(success, console.warn, {enableHighAccuracy: true})
+  }
 
   // callback used by navigator.geolocation.watchPosition, decides to execute callback chain
   // new position upon location change is constantly fed in as parameter
@@ -26,14 +25,14 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
     }
   }
 
-  // exported watcher function, runs all map code
-  let watch = function () {
-    navigator.geolocation.watchPosition(success, console.warn, {enableHighAccuracy: true})
-  }
+  // compares previous location with current location, returns boolean
+  // if previous is undefined, as in at map loading, return true to pan map, get bunkers etc etc.
+  let diff = (loc, prev, sensitivity = 0) => prev
+    ? DistanceFactory.greaterThanXM(loc, prev, sensitivity)
+    : true
 
   // Does a bunch of stuff with location info
   function mapMover (geoObj) {
-    let prevCenter = center || {lat: 0, lng: 0} // avoids undefined previous center on initial load
     center = geoObj // resets center to new position after movement
     return leafletData.getMap()
       .then(map => map.panTo(geoObj)) // move map view to new location on movement
@@ -74,7 +73,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
     bunkers = []
     let query = GeoFireFactory.query({
       center: [geoObj.lat, geoObj.lng],
-      radius: 1
+      radius: 2
     })
     query.on('key_entered', (id, latlng, dist) => {
       bunkers.push({id, coords: GeoFireFactory.convertResultstoObj(latlng)})
@@ -106,7 +105,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
     // its top-left : map top-left corner, bottom-right: point coordinates
     let pointDist = getSize(nw, NE, SW)
     let coords = {x: pointDist.w / size.w, y: pointDist.h / size.h}
-    return {id: bunker.id, coords: coords}
+    return {id: bunker.id, pos: coords, type: 'bunker'}
   }
 
   return {watch}

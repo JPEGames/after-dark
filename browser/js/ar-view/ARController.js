@@ -1,7 +1,8 @@
-app.controller('ARController', function ($scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory) {
+app.controller('ARController', function ($window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory) {
   // display game upon transition to game view
+  $scope.mapHeight = $window.innerHeight
+  $scope.mapWidth = $window.innerWidth
   $scope.showAR = showAR
-
   // show AR menu
   $scope.showMenu = () => {
     let retVal = ArFactory.getMenuView()

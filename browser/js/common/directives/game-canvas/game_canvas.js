@@ -161,8 +161,6 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
      game.add.text(300, 400, "Mouse Drag/Touch", { font: "32px Arial", fill: "#330088", align: "center" })
      //Early testing stuff
      */
-    var g = game.add.group()
-    g.x = 500
     // Disregard - may be used later.
 
     cursors = game.input.keyboard.createCursorKeys()
@@ -200,7 +198,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     player.animations.add('right', [5, 6, 7, 8], 10, true)
     // Name animation, what frames is this animation, at what FPS, do I idle otherwise?
 
-    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
+    this.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
 
     this.scale.pageAlignHorizontally = true
 
@@ -846,11 +844,11 @@ app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, Au
     template: '<div id="game-canvas"></div>',
     link: function (scope, ele, attrs) {
       // condition for state transition into game view
+      scope.height = $window.innerHeight
+
       if (scope.data) {
         window.createGame(ele, scope, scope.bunker, $injector, MenuFactory)
       }
-
-      scope.height = $window.height
     }
   }
 })

@@ -50,18 +50,36 @@ navbar {
     font-size: 16px;
   }
 
-  .nav > li > a {
+  //.nav > li > a {
+  //  cursor: pointer;
+  //  transition: color 0.2s;
+  //  &.active {
+  //    color: lighten(#FFC107, 10%);
+  //  }
+  //  &:hover {
+  //    background: none;
+  //    color: lighten(#FFC107, 5%);
+  //  }
+  //  &:focus {
+  //    background: none;
+  //  }
+  //}
+
+  #navBarDropDown {
     cursor: pointer;
     transition: color 0.2s;
     &.active {
       color: lighten(#FFC107, 10%);
+      text-decoration: none;
     }
     &:hover {
       background: none;
       color: lighten(#FFC107, 5%);
+      text-decoration: none;
     }
     &:focus {
       background: none;
+      text-decoration: none;
     }
   }
 

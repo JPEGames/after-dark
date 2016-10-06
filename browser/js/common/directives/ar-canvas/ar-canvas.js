@@ -1,8 +1,8 @@
 window.createGameAR = function (ele, scope, players, mapId, injector) {
-  // let height = parseInt(ele.css('height'), 10)
-  // let width = parseInt(ele.css('width'), 10)
+  let height = scope.height
+  let width = scope.width
 
-  const gameAR = new Phaser.Game(960, 600, Phaser.CANVAS, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
+  const gameAR = new Phaser.Game(width, height, Phaser.CANVAS, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
 
   // Deals with canvas glitch involving invincible phaser instance.
   scope.$on('$destroy', () => {
@@ -62,6 +62,12 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     markerLayer.z = 0
     graphicsLayer = gameAR.add.group()
     graphicsLayer.z = 1
+
+    this.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
+
+    this.scale.pageAlignHorizontally = true
+
+    this.scale.pageAlignVertically = true
 
     // Add physics system for future animation.
     gameAR.physics.startSystem(Phaser.Physics.ARCADE)
@@ -184,7 +190,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
 // Part of a state that has an ARController as a parent - so broadcasts are available.
 // custom directive to link phaser object to angular
-app.directive('arCanvas', function ($injector) {
+app.directive('arCanvas', function ($injector, $window) {
   return {
     scope: {
       data: '=',
@@ -199,6 +205,8 @@ app.directive('arCanvas', function ($injector) {
         zoom: 12,
         autodiscover: true
       }
+      scope.width = $window.innerWidth
+      scope.height = $window.innerHeight
       if (scope.data) {
         window.createGameAR(ele, scope, scope.players, scope.mapId, $injector)
       }

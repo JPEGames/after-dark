@@ -1,9 +1,9 @@
 // testing for phaser
 
 window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
-  // let height = parseInt(ele.css('height'), 10)
+  let height = scope.height
   // let width = parseInt(ele.css('width'), 10)
-  var game = new Phaser.Game(960, 600, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
+  var game = new Phaser.Game(960, height, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
   // The walk through: Make new pseudo-iframe object. The world and camera have a width, height of 960, 600
   // My parent div is phaser-example
   // My preload function is titled preload, create: create, update: update, and render: render
@@ -200,15 +200,11 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     player.animations.add('right', [5, 6, 7, 8], 10, true)
     // Name animation, what frames is this animation, at what FPS, do I idle otherwise?
 
-    this.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
-
-    /*
-    // have the game centered horizontally
+    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
 
     this.scale.pageAlignHorizontally = true
 
     this.scale.pageAlignVertically = true
-    */
 
     // game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT
 
@@ -841,7 +837,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 }
 
 // custom directive to link phaser object to angular
-app.directive('gameCanvas', function ($injector, $http, MenuFactory, AuthService) {
+app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, AuthService) {
   return {
     scope: {
       data: '=',
@@ -853,6 +849,8 @@ app.directive('gameCanvas', function ($injector, $http, MenuFactory, AuthService
       if (scope.data) {
         window.createGame(ele, scope, scope.bunker, $injector, MenuFactory)
       }
+
+      scope.height = $window.height
     }
   }
 })

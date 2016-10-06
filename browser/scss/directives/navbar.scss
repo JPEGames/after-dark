@@ -87,7 +87,9 @@ navbar {
     margin-left: 1em;
     float: right;
     border: 1px solid black;
-    margin-top: 10px;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    margin-right: 0.2em;
     background: none;
     outline: none !important;
   }
@@ -95,7 +97,8 @@ navbar {
   .signup-button {
     float: right;
     border: 1px solid black;
-    margin-top: 10px;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
     background: none;
     outline: none !important;
   }

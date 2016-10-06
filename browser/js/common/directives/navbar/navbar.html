@@ -15,13 +15,21 @@
     <!--</div>-->
 <!--</div>-->
 
-<div class="dropdown">
-    <a class=" dropdown-toggle glyphicon glyphicon-menu-hamburger"
+<div class="dropdown" >
+    <a class="dropdown-toggle glyphicon glyphicon-menu-hamburger" style="float:left;font-size: 2em; margin-top: 0.2em; margin-bottom: 0.2em; margin-left: 0.2em;"
        id="navBarDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
     </a>
-    <ul class="dropdown-menu" aria-labelledby="navBarDropDown">
+    <ul class="dropdown-menu" aria-labelledby="navBarDropDown" style="margin-top: 2.8em">
         <li ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">
             <a ui-sref-active="active" ui-sref="{{ item.state }}">{{ item.label }}</a>
         </li>
     </ul>
+</div>
+
+
+<button ng-show="!user" ui-sref="master.navbar.login" class="btn login-button" id="forceButtonChange">Login</button>
+<button ng-show="!user" ui-sref="master.navbar.signup" class="btn signup-button" id="forceButtonChange">Sign-Up</button>
+<div ng-show="user" class="welcome" style="margin-right: 0.2em">
+<span id="login-status-text">{{ user.email }}</span>
+<a id="login-status-link" ng-click="logout()">Logout</a>
 </div>

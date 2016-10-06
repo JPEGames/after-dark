@@ -9,7 +9,6 @@
         <link rel="stylesheet" type="text/css" href="/leaflet/dist/leaflet.css">
         <link href="https://fonts.googleapis.com/css?family=Antic|Bungee|Exo|Questrial|Rock+Salt|" rel="stylesheet"/>
         <link rel="stylesheet" type="text/css" href="/style.css"/>
-
         <!--TODO: REQUIRE IN USING BROWSERIFY-->
         <!--FIREBASE CONFIG-->
         <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
@@ -33,12 +32,9 @@
         <script src="/main.js"></script>
     </head>
     <body ng-app="AfterDark" class="Site">
-        <div class="row">
-            <div class="ui-view-container Site-content">
-                <div id="master" class="col-xs-12" ui-view>
-                </div>
+        <div class="ui-view-container Site-content">
+            <div id="master" class="col-xs-12" ui-view>
             </div>
         </div>
     </body>
-
 </html>

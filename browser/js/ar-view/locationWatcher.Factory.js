@@ -1,4 +1,4 @@
-app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafletData, DistanceFactory, $rootScope) {
+app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafletData, DistanceFactory, $rootScope, GridFactory) {
   /* GLOBALS */
   const mapReloadDistance = 200 // distance moved (meters) before panning map to new center
   const dataReloadDistance = 1000 // distance moved before making GeoFire query for bunkers + other markers...
@@ -70,18 +70,22 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   // Querying geoFire
   function queryBunkers (geoObj) {
     lastFetchedCenter = geoObj
-    bunkers = []
-    let query = GeoFireFactory.query({
-      center: [geoObj.lat, geoObj.lng],
-      radius: 2
+    bunkers = GridFactory.makeGrid(geoObj).map((pos, i) => {
+      return {id: i, coords: pos}
     })
-    query.on('key_entered', (id, latlng, dist) => {
-      bunkers.push({id, coords: GeoFireFactory.convertResultstoObj(latlng)})
-    })
-    query.on('ready', () => {
-      updatePhaser()
-      query.cancel()
-    })
+    updatePhaser()
+  // bunkers = []
+  // let query = GeoFireFactory.query({
+  //   center: [geoObj.lat, geoObj.lng],
+  //   radius: 2
+  // })
+  // query.on('key_entered', (id, latlng, dist) => {
+  //   bunkers.push({id, coords: GeoFireFactory.convertResultstoObj(latlng)})
+  // })
+  // query.on('ready', () => {
+  //   updatePhaser()
+  //   query.cancel()
+  // })
   }
 
   // Converting cummulated geofire objects to our data

@@ -12,5 +12,6 @@ app.factory('GeoFireFactory', function (FbFactory) {
     let [lat, lng] = latlng
     return {lat, lng}
   }
+  geofire.distance = window.GeoFire.distance
   return geofire
 })

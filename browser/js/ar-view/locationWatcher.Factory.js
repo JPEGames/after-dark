@@ -1,4 +1,4 @@
-app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafletData, DistanceFactory, $rootScope) {
+app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafletData, DistanceFactory, $rootScope, GridFactory) {
   /* GLOBALS */
   const mapReloadDistance = 200 // distance moved (meters) before panning map to new center
   const dataReloadDistance = 1000 // distance moved before making GeoFire query for bunkers + other markers...

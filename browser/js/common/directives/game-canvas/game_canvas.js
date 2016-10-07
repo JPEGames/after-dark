@@ -198,7 +198,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     player.animations.add('right', [5, 6, 7, 8], 10, true)
     // Name animation, what frames is this animation, at what FPS, do I idle otherwise?
 
-    this.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
+    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
 
     this.scale.pageAlignHorizontally = true
 

@@ -35,11 +35,8 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
 
       var setUser = function () {
         AuthService.getLoggedInUser().then(function (user) {
-          console.log('hi im logging in!')
-          console.log()
           if (user) {
             scope.user = user
-            console.log('going to character!')
             goToCharacterOverview()
           }
           // get game state associated with user
@@ -55,10 +52,6 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
           //                 })
           //               }
           //             })
-          // if (user) {
-          //   console.log('going to characteroverview!')
-          //   $state.go('master.navbar.characterOverview')
-          // }
         })
       }
       var removeUser = function () {

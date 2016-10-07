@@ -44,8 +44,11 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
         nw = getIntersects(ne, sw)[0]
         size = getSize(nw, ne, sw)
         // only does GeoFire query if movement > dataReloadDistance
-        if (diff(center, lastFetchedCenter, dataReloadDistance)) makeGrid(center).then(() => queryPoints(center))
-        else updatePhaser() // send payload to phaser without making query, for updating which markers/bunkers are in bounds
+        if (diff(center, lastFetchedCenter, dataReloadDistance)) {
+          makeGrid(center)
+            .then(() => queryPoints(center))
+            .then(() => updatePhaser())
+        } else updatePhaser() // send payload to phaser without making query, for updating which markers/bunkers are in bounds
       })
   }
 
@@ -73,7 +76,10 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
     let grid = GridFactory.makeGrid(center)
     let corners = GridFactory.getNearestPoints(center)
     return $http.post('/api/grid', {grid, corners})
-      .then(visited => foundPoints.concat(visited))
+      .then(res => res.data.visited)
+      .then(arr => arr.forEach(elem => {
+        foundPoints.push(grid[elem])
+      }))
   }
 
   // Querying geoFire
@@ -87,36 +93,43 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
     query.on('key_entered', (id, latlng, dist) => {
       pointsOfInterest.push({id, coords: GeoFireFactory.convertResultstoObj(latlng)})
     })
-    query.on('ready', () => {
-      updatePhaser()
-      query.cancel()
+    return new Promise(function (resolve, reject) {
+      query.on('ready', () => {
+        query.cancel()
+        resolve()
+      })
     })
+  // query.on('ready', () => {
+  //   updatePhaser()
+  //   query.cancel()
+  // })
   }
 
   // Converting cummulated geofire objects to our data
   function updatePhaser () {
-    console.log(pointsOfInterest)
-    $rootScope.$broadcast('updateAR', pointsOfInterest.filter(inMapBounds).map(toXY))
+    $rootScope.$broadcast('updateAR', {locations: pointsOfInterest.filter(x => inMapBounds(x.coords)).map(formatMarker), visited: foundPoints.filter(inMapBounds).map(toXY)})
   }
 
   // checks if given bunker {coords: {lat, lng}} should show on map
   function inMapBounds (point) {
-    let lat = point.coords.lat
-    let lng = point.coords.lng
+    let lat = point.lat
+    let lng = point.lng
     return (sw.lat <= lat && sw.lng <= lng) && (ne.lat >= lat && ne.lng >= lng)
   }
 
   // convert bunker coordinates to x, y where x = % from left of map
   // y = % from top of map
-  function toXY (point) {
-    let coords = point.coords
+  function formatMarker (point) {
     let [type, id] = point.id.split('_')
+    let pos = toXY(point.coords)
+    return {id, type, pos}
+  }
+  function toXY (coords) {
     let [NE, SW] = getIntersects(nw, coords)
     // returns {height, width} corresponding to rectangle with
     // its top-left : map top-left corner, bottom-right: point coordinates
     let pointDist = getSize(nw, NE, SW)
-    let pos = {x: pointDist.w / size.w, y: pointDist.h / size.h}
-    return {id, type, pos}
+    return {x: pointDist.w / size.w, y: pointDist.h / size.h}
   }
 
   return {watch}

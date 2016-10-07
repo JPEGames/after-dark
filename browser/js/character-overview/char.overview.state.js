@@ -7,6 +7,11 @@ app.config(function ($stateProvider) {
       myCharacter: function (CharacterFactory) {
         console.log('Got character!')
         return CharacterFactory.getCharacter()
+      },
+      myUsername: function (AuthService) {
+        console.log('Got username!')
+        return AuthService.getLoggedInUser()
+          .then(user => user.username)
       }
     }
   })

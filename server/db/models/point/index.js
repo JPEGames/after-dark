@@ -16,8 +16,6 @@ module.exports = db.define('point', {
   }
 }, {
   hooks: {
-    afterCreate: function (point) {
-
-    }
+    afterCreate: function (point) {}
   }
 })

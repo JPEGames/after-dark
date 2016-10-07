@@ -6,6 +6,7 @@ router.use('/gamestate', require('./gamestate'))
 router.use('/bunkerstate', require('./bunkerstate'))
 router.use('/users', require('./users'))
 router.use('/characters', require('./characters'))
+router.use('/grid', require('./grid'))
 // router.use('/members', require('./members'))
 
 // Make sure this is after all of

@@ -2,8 +2,12 @@ const Sequelize = require('sequelize')
 const db = require('../../_db')
 
 module.exports = db.define('point', {
-  coordinates: {
-    type: Sequelize.ARRAY(Sequelize.FLOAT),
+  lat: {
+    type: Sequelize.FLOAT,
+    allowNull: false
+  },
+  lng: {
+    type: Sequelize.FLOAT,
     allowNull: false
   },
   event: {

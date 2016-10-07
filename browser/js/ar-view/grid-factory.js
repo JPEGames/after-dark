@@ -23,5 +23,12 @@ app.factory('GridFactory', function (DistanceFactory) {
   function makeArray (base, interval) {
     return Array(gridSize).fill(base).map((base, ind) => base + (interval * (ind - gridSize / 2)))
   }
-  return {makeGrid}
+  function getNearestPoints (position) {
+    let [lat, latInter] = getClosestEvenLat(position)
+    return _.flatten([lat, lat + latInter].map(lat => {
+      let [lng, lngInter] = getClosestEvenLng(lat, position.lng)
+      return [{lat, lng}, {lat, lng: (lng - lngInter)}]
+    }))
+  }
+  return {makeGrid, getNearestPoints}
 })

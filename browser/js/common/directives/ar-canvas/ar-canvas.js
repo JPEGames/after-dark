@@ -191,7 +191,8 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
   scope.$on('updateAR', (event, data) => {
     clearMarkers()
-    addMarkers(data)
+    console.log('no clouds here: ', data.visited)
+    addMarkers(data.locations)
   })
 }
 

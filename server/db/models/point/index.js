@@ -3,19 +3,21 @@ const db = require('../../_db')
 
 module.exports = db.define('point', {
   lat: {
-    type: Sequelize.FLOAT,
+    type: Sequelize.DECIMAL,
     allowNull: false
   },
   lng: {
-    type: Sequelize.FLOAT,
+    type: Sequelize.DECIMAL,
     allowNull: false
   },
   event: {
     type: Sequelize.STRING,
     defaultValue: 'none'
   }
-}, {
-  hooks: {
-    afterCreate: function (point) {}
-  }
-})
+},
+  {
+    hooks: {
+      afterCreate: function (point) {}
+    }
+
+  })

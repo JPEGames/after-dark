@@ -71,7 +71,8 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   // Making the grid
   function makeGrid () {
     let grid = GridFactory.makeGrid(center)
-    return $http.post('/api/grid', {grid})
+    let corners = GridFactory.getNearestPoints(center)
+    return $http.post('/api/grid', {grid, corners})
       .then(visited => foundPoints.concat(visited))
   }
 

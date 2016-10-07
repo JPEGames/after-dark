@@ -47,6 +47,9 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
                 })
               }
             })
+          if (user) {
+            $state.go('master.navbar.characterOverview')
+          }
         })
       }
 

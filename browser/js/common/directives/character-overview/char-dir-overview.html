@@ -7,9 +7,12 @@
 		<img ng-src="/pimages/soldier.png" height="100%" width="100%" ng-show="myChar.perk === 'soldier'">
 	</div>
 	<div class="progress" style="max-width: 30%; margin: 0 auto; margin-top: 1em; width: 30%">
+	  <div style="float: left; position: absolute; margin-left: -2.2em; font-weight:bold">
+	  <span>Exp: </span>
+	  </div>
 	  <div class="progress-bar progress-bar-striped active" role="progressbar"
-	  aria-valuenow="{{myExpPer}}" value="{{myExpPer}}" aria-valuemin="0" aria-valuemax="100" ng-style="myProgress">
-	    {{myExpPer}}
+	  aria-valuenow="{{myExpPer}}" value="{{myExpPer}}" aria-valuemin="0" aria-valuemax="100" ng-style="myProgress" style="color: black; font-weight: bold">
+	    <span>{{myExpPer}}</span>
 	  </div>
 	</div>
 	<hr style="max-width: 40%">

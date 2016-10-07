@@ -1,3 +1,4 @@
+<div style="overflow-y: auto; height: 100%; width: 100%">
 <h2 style="text-align: center">Character Creation</h2>
 <br>
 <div class="col-xs-6 col-xs-offset-3">
@@ -22,7 +23,7 @@
             <form style="margin-top: 3em;" name="minerForm" ng-submit="createCharacter('miner', minerDesc)">
                 <label>Write Your Own Story</label>
                 <textarea style="margin-top: 1em;" type="text" class="form-control" ng-model="minerDesc" placeholder="Optional..."></textarea>
-                <button id="minerSubmitBtn" style="display: block; margin: 0 auto; margin-top: 1em;" type="submit" class="btn btn-danger btn-sm text-center">Choose Miner</button>
+                <button id="minerSubmitBtn" style="display: block; margin: 0 auto; margin-top: 1em; margin-bottom: 1em" type="submit" class="btn btn-danger btn-sm text-center">Choose Miner</button>
             </form>
         </uib-tab>
 
@@ -48,7 +49,7 @@
                 <div class="form-group">
                     <label>Write Your Own Story</label>
                     <textarea style="margin-top: 1em;" type="text" class="form-control" ng-model="scientistDesc" placeholder="Optional..."></textarea>
-                    <button style="display: block; margin: 0 auto; margin-top: 1em;" type="submit" class="btn btn-danger btn-sm text-center">Choose Scientist</button>
+                    <button style="display: block; margin: 0 auto; margin-top: 1em; margin-bottom: 1em" type="submit" class="btn btn-danger btn-sm text-center">Choose Scientist</button>
                 </div>
             </form>
         </uib-tab>
@@ -75,9 +76,10 @@
             <form style="margin-top: 3em;" name="soldierForm" ng-submit="createCharacter('soldier', soldierDesc)">
                 <label>Write Your Own Story</label>
                 <textarea style="margin-top: 1em;" type="text" class="form-control" ng-model="soldierDesc" placeholder="Optional..."></textarea>
-                <button style="display: block; margin: 0 auto; margin-top: 1em;" type="submit" class="btn btn-danger btn-sm text-center">Choose Soldier</button>
+                <button style="display: block; margin: 0 auto; margin-top: 1em; margin-bottom: 1em" type="submit" class="btn btn-danger btn-sm text-center">Choose Soldier</button>
             </form>
         </uib-tab>
     </uib-tabset>
 
+</div>
 </div>

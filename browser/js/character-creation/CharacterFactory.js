@@ -1,7 +1,10 @@
 app.factory('CharacterFactory', function ($http, AuthService) {
   let CharacterFactory = {}
-  CharacterFactory.getCharacter = (userId) => {
-    return $http.get(`/api/characters/${userId}`)
+  CharacterFactory.getCharacter = () => {
+    return AuthService.getLoggedInUser()
+      .then(user => {
+        return $http.get(`/api/characters/${user.id}`)
+      })
       .then(res => res.data)
   }
   CharacterFactory.createCharacter = (character) => {

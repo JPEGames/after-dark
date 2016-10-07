@@ -1,4 +1,5 @@
 app.controller('HomeController', function ($scope, $state, promptBunkerCreate, BunkerStateFactory, AuthService) {
+  console.log('IN HOME CONTROLLER')
   // assigns resolved promptBunkerCreate boolean to $scope
   angular.extend($scope, {promptBunkerCreate})
 

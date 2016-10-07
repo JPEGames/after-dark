@@ -29,7 +29,7 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
     }
   }
 
-  $scope.$on('updateAR', (event, data) => console.log(data))
+  // $scope.$on('updateAR', (event, data) => console.log(data))
   // toggles AR menu
   $scope.menuVisible = () => {
     ArFactory.showMenu()

@@ -10,3 +10,4 @@ let lootTable = {
 }
 
 module.exports = lootTable
+

@@ -70,7 +70,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   }
   // Making the grid
   function makeGrid () {
-    let grid = GridFactory.makeGrid()
+    let grid = GridFactory.makeGrid(center)
     return $http.post('/api/grid', {grid})
       .then(visited => foundPoints.concat(visited))
   }
@@ -94,6 +94,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
 
   // Converting cummulated geofire objects to our data
   function updatePhaser () {
+    console.log(pointsOfInterest)
     $rootScope.$broadcast('updateAR', pointsOfInterest.filter(inMapBounds).map(toXY))
   }
 
@@ -108,7 +109,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   // y = % from top of map
   function toXY (point) {
     let coords = point.coords
-    let [id, type] = point.id.split('_')
+    let [type, id] = point.id.split('_')
     let [NE, SW] = getIntersects(nw, coords)
     // returns {height, width} corresponding to rectangle with
     // its top-left : map top-left corner, bottom-right: point coordinates

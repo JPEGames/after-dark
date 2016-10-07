@@ -17,12 +17,10 @@ let eventSelector = (eventTable) => {
   for (let i = 0; i < probThresholds.length; i++) {
     if (randomProb <= probThresholds[i]) {
       chosenEvent = eventTable[probThresholds[i]]
-      break;
+      break
     }
   }
   return chosenEvent
 }
 
 module.exports = eventAttach
-
-

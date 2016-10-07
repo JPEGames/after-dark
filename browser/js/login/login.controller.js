@@ -6,8 +6,7 @@ app.controller('LoginCtrl', function ($scope, AuthService, $state) {
     $scope.error = null
 
     AuthService.login(loginInfo).then(function () {
-      // $state.go('master.navbar.tasks')
-      $state.go('master.navbar.home')
+      $state.go('master.navbar.characterOverview')
     }).catch(function () {
       $scope.error = 'Invalid login credentials.'
     })

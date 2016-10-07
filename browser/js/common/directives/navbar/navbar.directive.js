@@ -29,30 +29,38 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
         })
       }
 
-      var setUser = function () {
-        AuthService.getLoggedInUser().then(function (user) {
-          scope.user = user
-          let strUserId = user.id.toString()
-          // get game state associated with user
-          // GameViewFactory.getUserState()
-          // TODO: This isn't secure at all! Use Firebase Auth?
-          /*          FbFactory.getFirebaseRef().child('users').once('value')
-                      .then(snapshot => {
-                        // if user isn't in firebase db yet, add him/her
-                        if (!Object.keys(snapshot.val()).includes(strUserId)) {
-                          console.log('setting up user in database!')
-                          FbFactory.getFirebaseRef().child(`users/${user.id}`).set({
-                            email: user.email,
-                            Location: 'here'
-                          })
-                        }
-                      })*/
-          if (user) {
-            $state.go('master.navbar.characterOverview')
-          }
-        })
+      var goToCharacterOverview = function () {
+        $state.go('master.navbar.characterOverview')
       }
 
+      var setUser = function () {
+        AuthService.getLoggedInUser().then(function (user) {
+          console.log('hi im logging in!')
+          console.log()
+          if (user) {
+            scope.user = user
+            console.log('going to character!')
+            goToCharacterOverview()
+          }
+          // get game state associated with user
+          // GameViewFactory.getUserState()
+          // FbFactory.getFirebaseRef().child('users').once('value')
+          //             .then(snapshot => {
+          //               // if user isn't in firebase db yet, add him/her
+          //               if (!Object.keys(snapshot.val()).includes(strUserId)) {
+          //                 console.log('setting up user in database!')
+          //                 FbFactory.getFirebaseRef().child(`users/${user.id}`).set({
+          //                   email: user.email,
+          //                   Location: 'here'
+          //                 })
+          //               }
+          //             })
+          // if (user) {
+          //   console.log('going to characteroverview!')
+          //   $state.go('master.navbar.characterOverview')
+          // }
+        })
+      }
       var removeUser = function () {
         scope.user = null
       }

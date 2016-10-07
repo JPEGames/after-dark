@@ -35,17 +35,17 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
           // get game state associated with user
           // GameViewFactory.getUserState()
           // TODO: This isn't secure at all! Use Firebase Auth?
-          FbFactory.getFirebaseRef().child('users').once('value')
-            .then(snapshot => {
-              // if user isn't in firebase db yet, add him/her
-              if (!Object.keys(snapshot.val()).includes(strUserId)) {
-                console.log('setting up user in database!')
-                FbFactory.getFirebaseRef().child(`users/${user.id}`).set({
-                  email: user.email,
-                  Location: 'here'
-                })
-              }
-            })
+          // FbFactory.getFirebaseRef().child('users').once('value')
+          //   .then(snapshot => {
+          //     // if user isn't in firebase db yet, add him/her
+          //     if (!Object.keys(snapshot.val()).includes(strUserId)) {
+          //       console.log('setting up user in database!')
+          //       FbFactory.getFirebaseRef().child(`users/${user.id}`).set({
+          //         email: user.email,
+          //         Location: 'here'
+          //       })
+          //     }
+          //   })
         })
       }
 

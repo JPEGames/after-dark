@@ -56,7 +56,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   function getIntersects (point1, point2) {
     return [{lat: point1.lat, lng: point2.lng}, {lat: point2.lat, lng: point1.lng}]
   }
-  // returns {height: (meters), width: (meters)} for rectangle with 3 points
+  // returns {height: (meters), width: (meters)} for rectangle with 3 point
   /*
   middleCorner __________horizontal
   |                                |

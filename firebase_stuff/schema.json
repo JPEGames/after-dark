@@ -1,13 +1,8 @@
 {
-  "users": {
-    "Eliot": {
-      "Location": "Canada"
+  "locations": {
+    "ratAttack_1": {
+      "g": "someGeoFireKey",
+      "l": [40.704877", -74.008669"]
     }
-  },
-  "bunkers": {
-  	"19293": {
-  		"lat": "0",
-  		"lng": "0"
-  	}
   }
 }

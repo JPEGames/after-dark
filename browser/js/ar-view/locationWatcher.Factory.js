@@ -1,4 +1,4 @@
-app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafletData, DistanceFactory, $rootScope) {
+app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafletData, DistanceFactory, $rootScope, GridFactory, $http) {
   /* GLOBALS */
   const mapReloadDistance = 200 // distance moved (meters) before panning map to new center
   const dataReloadDistance = 1000 // distance moved before making GeoFire query for bunkers + other markers...
@@ -9,7 +9,8 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   let ne // " top-right corner (lat/long)
   let sw // " bottom-left corner (lat/long)
   let size // total size of map, represented by object with height(h) and width(w) in meters
-  let bunkers = []
+  let pointsOfInterest = []
+  let foundPoints = []
 
   // exported watcher function, runs all map code
   let watch = function () {
@@ -43,7 +44,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
         nw = getIntersects(ne, sw)[0]
         size = getSize(nw, ne, sw)
         // only does GeoFire query if movement > dataReloadDistance
-        if (diff(center, lastFetchedCenter, dataReloadDistance)) queryBunkers(center)
+        if (diff(center, lastFetchedCenter, dataReloadDistance)) makeGrid(center).then(() => queryPoints(center))
         else updatePhaser() // send payload to phaser without making query, for updating which markers/bunkers are in bounds
       })
   }
@@ -55,7 +56,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   function getIntersects (point1, point2) {
     return [{lat: point1.lat, lng: point2.lng}, {lat: point2.lat, lng: point1.lng}]
   }
-  // returns {height: (meters), width: (meters)} for rectangle with 3 points
+  // returns {height: (meters), width: (meters)} for rectangle with 3 point
   /*
   middleCorner __________horizontal
   |                                |
@@ -67,16 +68,23 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
       w: DistanceFactory.convertToMeters(middleCorner, horizontal)
     }
   }
+  // Making the grid
+  function makeGrid () {
+    let grid = GridFactory.makeGrid(center)
+    return $http.post('/api/grid', {grid})
+      .then(visited => foundPoints.concat(visited))
+  }
+
   // Querying geoFire
-  function queryBunkers (geoObj) {
+  function queryPoints (geoObj) {
     lastFetchedCenter = geoObj
-    bunkers = []
+    pointsOfInterest = []
     let query = GeoFireFactory.query({
       center: [geoObj.lat, geoObj.lng],
       radius: 2
     })
     query.on('key_entered', (id, latlng, dist) => {
-      bunkers.push({id, coords: GeoFireFactory.convertResultstoObj(latlng)})
+      pointsOfInterest.push({id, coords: GeoFireFactory.convertResultstoObj(latlng)})
     })
     query.on('ready', () => {
       updatePhaser()
@@ -86,26 +94,28 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
 
   // Converting cummulated geofire objects to our data
   function updatePhaser () {
-    $rootScope.$broadcast('updateAR', bunkers.filter(inMapBounds).map(toXY))
+    console.log(pointsOfInterest)
+    $rootScope.$broadcast('updateAR', pointsOfInterest.filter(inMapBounds).map(toXY))
   }
 
   // checks if given bunker {coords: {lat, lng}} should show on map
-  function inMapBounds (bunker) {
-    let lat = bunker.coords.lat
-    let lng = bunker.coords.lng
+  function inMapBounds (point) {
+    let lat = point.coords.lat
+    let lng = point.coords.lng
     return (sw.lat <= lat && sw.lng <= lng) && (ne.lat >= lat && ne.lng >= lng)
   }
 
   // convert bunker coordinates to x, y where x = % from left of map
   // y = % from top of map
-  function toXY (bunker) {
-    let point = bunker.coords
-    let [NE, SW] = getIntersects(nw, point)
+  function toXY (point) {
+    let coords = point.coords
+    let [type, id] = point.id.split('_')
+    let [NE, SW] = getIntersects(nw, coords)
     // returns {height, width} corresponding to rectangle with
     // its top-left : map top-left corner, bottom-right: point coordinates
     let pointDist = getSize(nw, NE, SW)
-    let coords = {x: pointDist.w / size.w, y: pointDist.h / size.h}
-    return {id: bunker.id, pos: coords, type: 'bunker'}
+    let pos = {x: pointDist.w / size.w, y: pointDist.h / size.h}
+    return {id, type, pos}
   }
 
   return {watch}

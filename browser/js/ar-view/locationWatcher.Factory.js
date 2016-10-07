@@ -70,22 +70,18 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   // Querying geoFire
   function queryBunkers (geoObj) {
     lastFetchedCenter = geoObj
-    bunkers = GridFactory.makeGrid(geoObj).map((pos, i) => {
-      return {id: i, coords: pos}
+    bunkers = []
+    let query = GeoFireFactory.query({
+      center: [geoObj.lat, geoObj.lng],
+      radius: 2
     })
-    updatePhaser()
-  // bunkers = []
-  // let query = GeoFireFactory.query({
-  //   center: [geoObj.lat, geoObj.lng],
-  //   radius: 2
-  // })
-  // query.on('key_entered', (id, latlng, dist) => {
-  //   bunkers.push({id, coords: GeoFireFactory.convertResultstoObj(latlng)})
-  // })
-  // query.on('ready', () => {
-  //   updatePhaser()
-  //   query.cancel()
-  // })
+    query.on('key_entered', (id, latlng, dist) => {
+      bunkers.push({id, coords: GeoFireFactory.convertResultstoObj(latlng)})
+    })
+    query.on('ready', () => {
+      updatePhaser()
+      query.cancel()
+    })
   }
 
   // Converting cummulated geofire objects to our data

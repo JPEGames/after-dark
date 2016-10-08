@@ -26,7 +26,8 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
       lat: 40.7047842,
       lng: -74.0092346,
       zoom: 18
-    }
+    },
+    tileLayer: 'https://api.mapbox.com/styles/v1/jyyeh/ciu1o4t2l00a92jo1o2qavws6/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoianl5ZWgiLCJhIjoiY2l1MW8zdWh2MGQ5MDMwandsMTh1cXlpbiJ9.MCJltxs97I_CAkTq2Z-n0g'
   }
 
   $scope.$on('updateAR', (event, data) => console.log(data))

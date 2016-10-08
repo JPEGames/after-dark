@@ -14,9 +14,9 @@ app.factory('ArFactory', function (DistanceFactory) {
   ArFactory.getCurrentPosition = () => {
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition((position) => {
-        let latitude = position.coords.latitude
-        let longitude = position.coords.longitude
-        resolve({latitude, longitude})
+        let lat = position.coords.latitude
+        let lng = position.coords.longitude
+        resolve({lat, lng})
       }, () => {
         reject('We could not get your location.')
       })

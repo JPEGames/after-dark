@@ -1,6 +1,6 @@
 let lootTable = require('./loot.js')
 
-let eventAttach = (point, modifier) => {
+let eventAttach = (point, modifier = a => a) => {
   // probability ANY event will be attached to a given point
   let eventTable = modifier(lootTable)
   let generationProb = 0.3

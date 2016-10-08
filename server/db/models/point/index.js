@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../../_db')
+const GeoFire = require('geofire')
+const geofire = new GeoFire(require('../../firebase').child('locations'))
 
 module.exports = db.define('point', {
   lat: {
@@ -17,7 +19,10 @@ module.exports = db.define('point', {
 },
   {
     hooks: {
-      afterCreate: function (point) {}
+      afterCreate: function () {
+        let randomized = require('./eventConnector')(this)
+        if (randomized.event) return geofire.set(`${this.event}_${this.id}`, [parseFloat(this.lat), parseFloat(this.lng)])
+        return
+      }
     }
-
   })

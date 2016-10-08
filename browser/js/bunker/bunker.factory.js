@@ -17,14 +17,9 @@ app.factory('BunkerStateFactory', function ($http, ArFactory, $q, GeoFireFactory
   // create default bunker after user clicks 'Yes' after signup
   // prompt, stores current location in Firebase
   BunkerStateFactory.createBunker = (userId) => {
-    return $q.all([$http.get(`/api/bunkerstate/${userId}/newBunker`),
-      ArFactory.getCurrentPosition()])
-      .then(res => {
-        let bunkerID = res[0].data.id
-        let pos = res[1]
-        let geofied = {}
-        geofied[bunkerID] = [pos.latitude, pos.longitude]
-        return GeoFireFactory.set(geofied)
+    return ArFactory.getCurrentPosition()
+      .then(pos => {
+        $http.post(`/api/bunkerstate/${userId}`, pos)
       }).then(console.log)
   }
   return BunkerStateFactory

@@ -1,11 +1,22 @@
 const Sequelize = require('sequelize')
 const db = require('../../_db')
+const GeoFire = require('geofire')
+const firebaseRef = require('../../firebase')
+let geofireRef = new GeoFire(firebaseRef.child('locations'))
 
 module.exports = db.define('bunker', {
   savedBunkerState: {
     type: Sequelize.JSONB,
     allowNull: true,
     defaultValue: {}
+  },
+  lat: {
+    type: Sequelize.DECIMAL,
+    defaultValue: 0
+  },
+  lng: {
+    type: Sequelize.DECIMAL,
+    defaultValue: 0
   },
   money: {
     type: Sequelize.INTEGER,

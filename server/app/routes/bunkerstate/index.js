@@ -44,7 +44,8 @@ router.post('/:id', function (req, res, next) {
     .then(newBunker => {
       if (!newBunker) res.sendStatus(404)
       // update firebase locations with new bunker
-      geofireRef.set(`bunker_${newBunker.id}`, newBunker)
+      let bunkerCoordinates = [parseFloat(newBunker.lat), parseFloat(newBunker.lng)]
+      geofireRef.set(`bunker_${newBunker.id}`, bunkerCoordinates)
       res.send(newBunker)
     })
     .catch(next)

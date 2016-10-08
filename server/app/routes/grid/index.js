@@ -8,7 +8,6 @@ module.exports = router
 
 router.post('/', function (req, res, next) {
   co(function * () { // async function use of yield means await
-
     // convert coordinates of 4 closest points around user to string
     let cornerLats = new Set(req.body.corners.map(elem => elem.lat.toString()))
     let cornerLngs = new Set(req.body.corners.map(elem => elem.lng.toString()))
@@ -28,7 +27,7 @@ router.post('/', function (req, res, next) {
     // console.log(grid.filter(elem => !elem))
     let visited = yield req.user.getPoints()
     // console.log(visited)
-    // TODO: what is the point of filtering here?
+    //
     visited = visited.map(point => grid.indexOf(point.id)).filter(elem => !!elem)
     res.send({visited})
   }).catch(console.log)

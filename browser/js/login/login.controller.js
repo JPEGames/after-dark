@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', function ($scope, AuthService, $state) {
+app.controller('LoginCtrl', function ($scope, AuthService, $state, CharacterFactory) {
   $scope.login = {}
   $scope.error = null
 
@@ -7,8 +7,9 @@ app.controller('LoginCtrl', function ($scope, AuthService, $state) {
 
     AuthService.login(loginInfo).then(function () {
       $state.go('master.navbar.characterOverview')
-    }).catch(function () {
-      $scope.error = 'Invalid login credentials.'
+    }).catch(function (error) {
+      console.log(error)
+      $scope.error = 'Invalid login credentials OR no character'
     })
   }
 })

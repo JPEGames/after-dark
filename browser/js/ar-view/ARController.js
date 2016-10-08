@@ -29,7 +29,7 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
     }
   }
 
-  // $scope.$on('updateAR', (event, data) => console.log(data))
+  $scope.$on('updateAR', (event, data) => console.log(data))
   // toggles AR menu
   $scope.menuVisible = () => {
     ArFactory.showMenu()
@@ -48,6 +48,7 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
   // initialize watcher that executes callbacks to send all bunkers/positions of interest
   // if moved distance > some threshold - will send updated positions of interest
   // to Phaser AR-Canvas
+  LocationWatcherFactory.refresh()
   LocationWatcherFactory.watch()
 
   $scope.markers

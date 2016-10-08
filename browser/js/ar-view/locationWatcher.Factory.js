@@ -13,6 +13,9 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   let foundPoints = []
 
   // exported watcher function, runs all map code
+  function refresh () {
+    if (center) mapMover(center)
+  }
   let watch = function () {
     navigator.geolocation.watchPosition(success, console.warn, {enableHighAccuracy: true})
   }
@@ -132,5 +135,5 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
     return {x: pointDist.w / size.w, y: pointDist.h / size.h}
   }
 
-  return {watch}
+  return {watch, refresh}
 })

@@ -18,6 +18,9 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
   // maxBounds takes a northeast and southwest point and does not allow dragging outside of it.
 
   $scope.defaults = {
+    minZoom: 18,
+    maxZoom: 18,
+    maxNativeZoom: null,
     scrollWheelZoom: false,
     zoomControl: false,
     dragging: false,

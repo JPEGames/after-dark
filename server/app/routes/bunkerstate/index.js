@@ -12,9 +12,14 @@ module.exports = router
 router.param('id', function (req, res, next, id) {
   User.findById(id)
     .then(foundUser => {
-      !foundUser ? res.sendStatus(404) : req.requestedUser = foundUser.sanitize()
+      if (!foundUser) {
+        res.sendStatus(404)
+      } else {
+        req.requestedUser = foundUser.sanitize()
+      }
       next()
     })
+    .catch(next)
 })
 
 // for loading previously saved bunker state
@@ -25,30 +30,21 @@ router.get('/:id', function (req, res, next) {
     }
   })
     .then(userBunker => {
-      !userBunker ? res.sendStatus(404) : res.send(userBunker)
+      if (!userBunker) res.sendStatus(404)
+      else res.send(userBunker)
     })
     .catch(next)
 })
 
-// get or create a bunker associated with signed-in user
-// router.get('/:id/newBunker', function (req, res, next) {
-//   Bunker.findOne({
-//     where: {
-//       userId: req.requestedUser.id
-//     }
-//   })
-//     .then(userBunker => {
-//       !userBunker[0] ? res.sendStatus(500) : res.send(userBunker[0])
-//     })
-//     .catch(next)
-// })
-
 // makes new bunker
-router.post('/:id', function (req, res, next, id) {
+router.post('/', (req, res, next) => {
+  res.end()
+})
+router.post('/:id', function (req, res, next) {
   Bunker.create(req.body)
     .then(newBunker => {
       if (!newBunker) res.sendStatus(404)
-      geofireRef.set(`bunker_${newBunker.id}`, newBunker)
+      // geofireRef.set(`bunker_${newBunker.id}`, newBunker)
       res.send(newBunker)
     })
     .catch(next)

@@ -18,6 +18,7 @@ app.factory('ArFactory', function (DistanceFactory) {
         let lng = position.coords.longitude
         resolve({lat, lng})
       }, () => {
+        console.log('POSITION ERROR')
         reject('We could not get your location.')
       })
     })

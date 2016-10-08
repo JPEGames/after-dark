@@ -8,11 +8,18 @@ module.exports = router
 
 router.post('/', function (req, res, next) {
   co(function * () { // async function use of yield means await
+
+    // convert coordinates of 4 closest points around user to string
     let cornerLats = new Set(req.body.corners.map(elem => elem.lat.toString()))
     let cornerLngs = new Set(req.body.corners.map(elem => elem.lng.toString()))
+
+    // find or create all 400 points in created grid based on user location
     let grid = yield cf.map(function * (point) {
       let arr = yield Point.findOrCreate({where: {lat: point.lat, lng: point.lng}})
       let instance = arr[0] // geting out sequelize instance, don't care about created bool
+
+      // if found/created point matches 4 corners around user, associate them
+      // with user
       if (cornerLats.has(instance.lat) && cornerLngs.has(instance.lng)) {
         instance.addUser(req.user)
       }
@@ -21,6 +28,7 @@ router.post('/', function (req, res, next) {
     // console.log(grid.filter(elem => !elem))
     let visited = yield req.user.getPoints()
     // console.log(visited)
+    // TODO: what is the point of filtering here?
     visited = visited.map(point => grid.indexOf(point.id)).filter(elem => !!elem)
     res.send({visited})
   }).catch(console.log)

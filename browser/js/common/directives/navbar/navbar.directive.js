@@ -23,6 +23,10 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
         return AuthService.isAuthenticated()
       }
 
+      scope.openInventory = function () {
+        $('#myModal').modal('show')
+      }
+
       scope.logout = function () {
         AuthService.logout().then(function () {
           $state.go('master.navbar.home')
@@ -41,19 +45,19 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
             // TODO: DO WE EVEN NEED THIS?
             goToCharacterOverview()
           }
-          // get game state associated with user
-          // GameViewFactory.getUserState()
-          // FbFactory.getFirebaseRef().child('users').once('value')
-          //             .then(snapshot => {
-          //               // if user isn't in firebase db yet, add him/her
-          //               if (!Object.keys(snapshot.val()).includes(strUserId)) {
-          //                 console.log('setting up user in database!')
-          //                 FbFactory.getFirebaseRef().child(`users/${user.id}`).set({
-          //                   email: user.email,
-          //                   Location: 'here'
-          //                 })
-          //               }
-          //             })
+        // get game state associated with user
+        // GameViewFactory.getUserState()
+        // FbFactory.getFirebaseRef().child('users').once('value')
+        //             .then(snapshot => {
+        //               // if user isn't in firebase db yet, add him/her
+        //               if (!Object.keys(snapshot.val()).includes(strUserId)) {
+        //                 console.log('setting up user in database!')
+        //                 FbFactory.getFirebaseRef().child(`users/${user.id}`).set({
+        //                   email: user.email,
+        //                   Location: 'here'
+        //                 })
+        //               }
+        //             })
         })
       }
       var removeUser = function () {

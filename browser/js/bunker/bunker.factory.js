@@ -19,7 +19,6 @@ app.factory('BunkerStateFactory', function ($http, ArFactory, $q, GeoFireFactory
   BunkerStateFactory.createBunker = (userId) => {
     return ArFactory.getCurrentPosition()
       .then(pos => {
-        console.log('POSTING BUNKER')
         return $http.post(`/api/bunkerstate/${userId}`, pos)
       }).then(res => res.data)
       .catch(console.warn)

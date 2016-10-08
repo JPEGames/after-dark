@@ -37,14 +37,15 @@ router.get('/:id', function (req, res, next) {
 })
 
 // makes new bunker
-router.post('/', (req, res, next) => {
-  res.end()
-})
 router.post('/:id', function (req, res, next) {
+  // associates bunker with recently signed-up user
+  req.body.userId = req.user.id
   Bunker.create(req.body)
     .then(newBunker => {
       if (!newBunker) res.sendStatus(404)
-      // geofireRef.set(`bunker_${newBunker.id}`, newBunker)
+      // update firebase locations with new bunker
+      let bunkerCoordinates = [parseFloat(newBunker.lat), parseFloat(newBunker.lng)]
+      geofireRef.set(`bunker_${newBunker.id}`, bunkerCoordinates)
       res.send(newBunker)
     })
     .catch(next)

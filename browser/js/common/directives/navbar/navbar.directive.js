@@ -37,6 +37,8 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
         AuthService.getLoggedInUser().then(function (user) {
           if (user) {
             scope.user = user
+
+            // TODO: DO WE EVEN NEED THIS?
             goToCharacterOverview()
           }
           // get game state associated with user

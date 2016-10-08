@@ -1,3 +1,5 @@
+// <-- FIREBASE CONFIG FOR SERVER -->
+// TODO: NEEDS TO GO INTO GITIGNORE BEFORE DEPLOYMENT
 const Firebase = require('firebase')
 let config = {
   apiKey: 'AIzaSyBta3VMqrzMP5tCWcixB0wlEat5pvz_GcY',

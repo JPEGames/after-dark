@@ -60,16 +60,18 @@ describe('Bunker Route', function () {
             newUser = user
           })
     })
+
+    // TODO: this doesn't work with associating the bunker with an user!!
     it('successfully adds a new bunker to the db', function (done) {
-      let fakeBunker = {lat: '42.5', lng: '56.4'}
-      console.log('NEW USER: ', newUser.id)
-      agent.post(`/api/bunkerstate/${newUser.id}`).send(fakeBunker)
-        .end(function (err, res) {
-        if (err) return done(err)
-        console.log('POSTED~~~~~~~~~~')
-        expect(res.body.lat).to.equal('42.5')
-        done()
-      })
+      let fakeBunker = {userId: newUser.id, lat: '42.5', lng: '56.4'}
+      return agent.post(`/api/bunkerstate/${newUser.id}`)
+        .send(fakeBunker)
+        .expect(201)
+        .end(function(err, res) {
+            if (err) return done(err)
+            expect(res.body.userId).to.equal(3)
+            done()
+        })
     })
   })
 })

@@ -9,10 +9,13 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     gameAR.destroy()
   })
 
+  // Attempt for responsiveness - does not work.
+  /*  
   $(window).resize(function () {
     gameAR.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
     gameAR.scale.refresh()
   })
+  */
 
   // To test markers - for this to be fully functional - the objects passed in will also need an id for us to use on the way back out, and an opacity to visually show if it is found or not.
   const testObj = [{
@@ -76,9 +79,10 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
     // Add physics system for future animation.
     gameAR.physics.startSystem(Phaser.Physics.ARCADE)
-  // To add listener testing on mouse click.
-  // gameAR.inputEnabled = true
-  // gameAR.input.onDown.add(testMarker, this)
+    // To add listener testing on mouse click.
+    // gameAR.inputEnabled = true
+    // gameAR.input.onDown.add(testMarker, this)
+    createACloudGrid(mapToGrid())
   }
 
   // What happens every 1/60th a second?
@@ -161,16 +165,32 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
   // takes a height and width in number of clouds and an array of objects of xy percentages representing where to hide clouds,
   // returns a matrix of 1 (cloud) 0 no clouds
-  function mapToGrid (width, height, pointsArr) {
-    let matrix = Array(height).fill(1)
-    for (let i = 0; i < matrix.length; i++) {
-      matrix[i] = Array(width).fill(1)
+  function mapToGrid (pointsArr) {
+    let width = 6
+    let height = 4
+
+    console.log('Here!')
+
+    let matrix = Array.from(Array(height + 1), (a, i) => Array.from(Array(width + 1), (b, j) => {
+      return {
+        cloud: true,
+        x: scope.width * (j / width),
+        y: scope.height * (i / height)
+      }
+    }))
+
+    console.log('Here!')
+    console.log(matrix)
+
+    if (pointsArr) {
+      pointsArr.forEach((elem, index) => {
+        let xGrid = Math.floor(width * elem.x)
+        let yGrid = Math.floor(height * elem.y)
+        console.log('X: ' + xGrid, 'Y: ' + yGrid)
+        matrix[yGrid][xGrid].cloud = false
+      })
     }
-    pointsArr.forEach((elem, index) => {
-      let xGrid = Math.floor(width * elem.x)
-      let yGrid = Math.floor(height * elem.y)
-      matrix[yGrid][xGrid] = 0
-    })
+
     return matrix
   }
 
@@ -180,6 +200,17 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     graphicsLayer.add(tempSprite)
     tempSprite.scale.setTo(width, height)
     cloudArray.push(tempSprite)
+  }
+
+  // Create a cloud grid.
+  function createACloudGrid (aMatrix) {
+    aMatrix.forEach(function (aRow) {
+      aRow.forEach(function (aCloud) {
+        if (aCloud.cloud) {
+          createACloud(aCloud.x - 200, aCloud.y - 300, 1, 1.3)
+        }
+      })
+    })
   }
 
   // Delete all clouds.
@@ -211,8 +242,8 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
   scope.$on('updateAR', (event, data) => {
     clearMarkers()
-    console.log('no clouds here: ', data.visited)
-    console.log(mapToGrid(16, 9, data.visited))
+    deleteClouds()
+    createACloudGrid(mapToGrid(data.visited))
     addMarkers(data.locations)
   })
 }

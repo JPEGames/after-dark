@@ -159,6 +159,21 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     console.log(sprite)
   }
 
+  // takes a height and width in number of clouds and an array of objects of xy percentages representing where to hide clouds,
+  // returns a matrix of 1 (cloud) 0 no clouds
+  function mapToGrid (width, height, pointsArr) {
+    let matrix = Array(height).fill(1)
+    for (let i = 0; i < matrix.length; i++) {
+      matrix[i] = Array(width).fill(1)
+    }
+    pointsArr.forEach((elem, index) => {
+      let xGrid = Math.floor(width * elem.x)
+      let yGrid = Math.floor(height * elem.y)
+      matrix[yGrid][xGrid] = 0
+    })
+    return matrix
+  }
+
   // Create an individual cloud.
   function createACloud (x, y, width, height) {
     let tempSprite = new Phaser.Sprite(gameAR, x, y, 'cloud')
@@ -197,6 +212,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   scope.$on('updateAR', (event, data) => {
     clearMarkers()
     console.log('no clouds here: ', data.visited)
+    console.log(mapToGrid(16, 9, data.visited))
     addMarkers(data.locations)
   })
 }

@@ -14,13 +14,13 @@ router.post('/', function (req, res, next) {
 
     // find or create all 400 points in created grid based on user location
     let grid = yield cf.map(function * (point) {
-      let arr = yield Point.findOrCreate({where: {lat: point.lat, lng: point.lng}})
+      let arr = yield Point.findOrCreate({where: {lat: point.lat, lng: point.lng}}).catch(console.log)
       let instance = arr[0] // geting out sequelize instance, don't care about created bool
 
       // if found/created point matches 4 corners around user, associate them
       // with user
       if (cornerLats.has(instance.lat) && cornerLngs.has(instance.lng)) {
-        instance.addUser(req.user)
+        yield instance.addUser(req.user)
       }
       return instance.id
     }, req.body.grid)

@@ -1,8 +1,4 @@
 {
   "locations": {
-    "ratAttack_1": {
-      "g": "someGeoFireKey",
-      "l": [40.704877", -74.008669"]
-    }
   }
 }

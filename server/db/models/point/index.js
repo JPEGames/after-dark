@@ -13,8 +13,7 @@ module.exports = db.define('point', {
     allowNull: false
   },
   event: {
-    type: Sequelize.STRING,
-    defaultValue: 'none'
+    type: Sequelize.STRING
   }
 },
   {
@@ -22,7 +21,7 @@ module.exports = db.define('point', {
       afterCreate: function (point) {
         // console.log('POINT BEING MODIFIED: ', point)
         let randomized = require('./eventConnector')(point)
-        if (randomized.event !== 'none') return geofire.set(`${point.event}_${point.id}`, [parseFloat(point.lat), parseFloat(point.lng)])
+        if (randomized.event) return geofire.set(`${point.event}_${point.id}`, [parseFloat(point.lat), parseFloat(point.lng)])
         return
       }
     }

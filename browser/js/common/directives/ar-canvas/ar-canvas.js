@@ -9,6 +9,11 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     gameAR.destroy()
   })
 
+  $(window).resize(function () {
+    gameAR.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
+    gameAR.scale.refresh()
+  })
+
   // To test markers - for this to be fully functional - the objects passed in will also need an id for us to use on the way back out, and an opacity to visually show if it is found or not.
   const testObj = [{
     pos: {
@@ -63,11 +68,11 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     graphicsLayer = gameAR.add.group()
     graphicsLayer.z = 1
 
-    this.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
+    gameAR.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
 
-    this.scale.pageAlignHorizontally = true
+    gameAR.scale.pageAlignHorizontally = true
 
-    this.scale.pageAlignVertically = true
+    gameAR.scale.pageAlignVertically = true
 
     // Add physics system for future animation.
     gameAR.physics.startSystem(Phaser.Physics.ARCADE)

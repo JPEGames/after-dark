@@ -129,7 +129,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     anArray.forEach(function (newMark) {
       let perToX = newMark.pos.x * gameAR.world.width
       let perToY = newMark.pos.y * gameAR.world.height
-      addAMarker(perToX, perToY, 0.3, 0.3, newMark.type)
+      addAMarker(perToX, perToY, 0.3, 0.3, newMark.type, newMark.id)
     })
   }
 
@@ -140,32 +140,46 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     })
   }
 
+  // HELPER FUNCTION FOR addAMarker()
+  function markerSetter (markerType, id, xCoord, yCoord) {
+    let imageType
+    // TODO: THIS IS TEMPORARY! should be just imageType = markerType
+    markerType !== 'bunker' ? imageType = 'ore' : imageType = markerType
+    let sprite = new Phaser.Sprite(gameAR, xCoord - 20, yCoord - 20, imageType)
+    sprite['markerType'] = markerType
+    sprite['id'] = id
+    return sprite
+  }
+  // TODO: need to add ID to tempSprite
   // Add an individual marker to the map.
   function addAMarker (x, y, width, height, type, id, found) {
     let tempSprite
-    if (type === 'bunker') {
-      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'bunker')
-    }
-    if (type === 'scrap metal') {
-      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    }
-    if (type === 'rat attack') {
-      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    }
-    if (type === 'information') {
-      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    }
-    if (type === 'dust storm') {
-      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    }
-    if (type === 'mutant attack') {
-      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    }
-    if (type === 'rare relic') {
-      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    }
+    tempSprite = markerSetter(type, id, x, y)
+    // if (type === 'bunker') {
+    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'bunker')
+    // }
+    // if (type === 'scrap metal') {
+    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    // }
+    // if (type === 'rat attack') {
+    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    // }
+    // if (type === 'information') {
+    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    // }
+    // if (type === 'dust storm') {
+    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    // }
+    // if (type === 'mutant attack') {
+    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    // }
+    // if (type === 'rare relic') {
+    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    // }
     console.log('Attempting to add marker!')
     console.log(type)
+    tempSprite['markerType'] = type
+    console.log('SPRITE AFTER TYPE: ', tempSprite)
     markerLayer.add(tempSprite)
     if (type === 'bunker') {
       tempSprite.scale.setTo(width, height)
@@ -173,7 +187,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
       tempSprite.scale.setTo(0.1, 0.1)
     }
     /*
-    tempSprite.id = id
+
     if(found) {
       tempSprite.opacity = 0.5
     }
@@ -186,13 +200,14 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // Listener on pressing a marker.
   function markerPress (sprite, pointer) {
     console.log(sprite)
+    scope.$emit('gameEvent', {type: sprite['markerType'], id: sprite['id']})
   }
 
   // takes a height and width in number of clouds and an array of objects of xy percentages representing where to hide clouds,
   // returns a matrix of 1 (cloud) 0 no clouds
   function mapToGrid (pointsArr) {
-    let width = 6
-    let height = 4
+    let width = 3
+    let height = 3
 
     console.log('Here!')
 

@@ -1,4 +1,4 @@
-app.controller('ARController', function ($window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory) {
+app.controller('ARController', function ($window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory) {
   // display game upon transition to game view
   $scope.mapHeight = $window.innerHeight
   $scope.mapWidth = $window.innerWidth
@@ -38,6 +38,10 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
   $scope.menuVisible = () => {
     ArFactory.showMenu()
   }
+
+  $scope.$on('gameEvent', (event, data) => {
+    EventFactory.resourceToBackpack(data)
+  })
 
   // takes player back to bunker view
   $scope.backToBunker = () => {

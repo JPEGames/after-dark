@@ -25,6 +25,7 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
     zoomControl: false,
     dragging: false,
     keyboard: false,
+    attributionControl: false,
     center: {
       lat: 40.7047842,
       lng: -74.0092346,

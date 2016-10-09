@@ -57,7 +57,6 @@ describe('Bunker Route', function () {
         var makeUser = User.create({email: 'test@fsa.com', password: '1234'})
         return Promise.resolve(makeUser)
           .then(user => {
-            console.log('new user made for post test!')
             newUser = user
           })
     })

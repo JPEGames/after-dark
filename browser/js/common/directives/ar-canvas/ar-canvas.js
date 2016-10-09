@@ -170,7 +170,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     if (type === 'bunker') {
       tempSprite.scale.setTo(width, height)
     } else {
-      tempSprite.scale.setTo(-3, -3)
+      tempSprite.scale.setTo(0.1, 0.1)
     }
     /*
     tempSprite.id = id

@@ -61,6 +61,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   function preload () {
     gameAR.load.image('cloud', '/pimages/cloud2.png')
     gameAR.load.image('bunker', '/pimages/vault.png')
+    gameAR.load.image('ore', '/pimages/ore.png')
   }
 
   // Create systems and assets.
@@ -145,8 +146,32 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     if (type === 'bunker') {
       tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'bunker')
     }
+    if (type === 'scrap metal') {
+      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    }
+    if (type === 'rat attack') {
+      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    }
+    if (type === 'information') {
+      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    }
+    if (type === 'dust storm') {
+      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    }
+    if (type === 'mutant attack') {
+      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    }
+    if (type === 'rare relic') {
+      tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
+    }
+    console.log('Attempting to add marker!')
+    console.log(type)
     markerLayer.add(tempSprite)
-    tempSprite.scale.setTo(width, height)
+    if (type === 'bunker') {
+      tempSprite.scale.setTo(width, height)
+    } else {
+      tempSprite.scale.setTo(0.1, 0.1)
+    }
     /*
     tempSprite.id = id
     if(found) {

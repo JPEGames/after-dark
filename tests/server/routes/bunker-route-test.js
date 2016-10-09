@@ -17,9 +17,38 @@ describe('Bunker Route', function () {
     return db.sync({force: true})
   })
   beforeEach('Create users', function () {
-
+    var users = [{
+      email: 'testing@test.com',
+      password: 'sup'
+    },
+      {
+        email: 'testing2@test.com',
+        password: 'hi'
+      }]
+    var creatingUsers = users.map(user => User.create(user))
+    return Promise.all(creatingUsers)
+      .then((result) => {
+        var bunkerCreation = [Bunker.create({lat: '42.2', lng: '42.3', userId: 1}),
+          Bunker.create({lat: '22.2', lng: '24.2', userId: 2})]
+        return Promise.all(bunkerCreation)
+          .then(() => {
+            console.log('done')
+          })
+      })
   })
-  beforeEach('Create bunkers and associate', function () {
 
+  describe('GET /api/bunkerstate/:id', function () {
+
+    it('retrieve correct bunker for user', function (done) {
+      agent.get('/api/bunkerstate/1').expect(200).end(function (err, res) {
+        if (err) return done(err)
+        expect(res.body.userId).to.equal(1)
+        expect(res.body.lat).to.equal('42.2')
+        expect(res.body.lng).to.equal('42.3')
+        done()
+      })
+    })
   })
+
+  // describe('PUT /api/')
 })

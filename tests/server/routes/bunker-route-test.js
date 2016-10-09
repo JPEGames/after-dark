@@ -48,7 +48,29 @@ describe('Bunker Route', function () {
         done()
       })
     })
+
   })
 
-  // describe('PUT /api/')
+  describe('POST /api/bunkerstate/:id', function () {
+    var newUser
+    beforeEach('make new user', function () {
+        var makeUser = User.create({email: 'test@fsa.com', password: '1234'})
+        return Promise.resolve(makeUser)
+          .then(user => {
+            console.log('new user made for post test!')
+            newUser = user
+          })
+    })
+    it('successfully adds a new bunker to the db', function (done) {
+      let fakeBunker = {lat: '42.5', lng: '56.4'}
+      console.log('NEW USER: ', newUser.id)
+      agent.post(`/api/bunkerstate/${newUser.id}`).send(fakeBunker)
+        .end(function (err, res) {
+        if (err) return done(err)
+        console.log('POSTED~~~~~~~~~~')
+        expect(res.body.lat).to.equal('42.5')
+        done()
+      })
+    })
+  })
 })

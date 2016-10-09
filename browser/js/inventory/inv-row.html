@@ -8,7 +8,7 @@
 	<h4> Backpack </h4>
 	<div class="progress" style="text-align: center">
 		<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{data.pquantity}}"
-			aria-valuemin="0" aria-valuemax="{{data.pmax}}" style="width:0%">
+			aria-valuemin="0" aria-valuemax="{{data.pmax}}" ng-style="data.myProgress">
 		</div>
 		<span style="font-weight: bold; color: black">{{data.pquantity}}/{{data.pmax}}</span>
 	</div>
@@ -17,7 +17,7 @@
 	<h4> Bunker </h4>
 	<div class="progress" style="text-align: center">
 		<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{data.bquantity}}"
-			aria-valuemin="0" aria-valuemax="{{data.bmax}}" style="width:0%">
+			aria-valuemin="0" aria-valuemax="{{data.bmax}}" ng-style="data.myProgress">
 		</div>
 		<span style="font-weight: bold; color: black">{{data.bquantity}}/{{data.bmax}}</span>
 	</div>

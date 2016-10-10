@@ -33,6 +33,8 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
 
       scope.logout = function () {
         AuthService.logout().then(function () {
+          // reset hasCharacter, hasBunker in NavbarFactory
+          NavbarFactory.setter(false, false)
           $state.go('master', {}, {reload: true})
         })
       }

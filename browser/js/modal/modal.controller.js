@@ -1,13 +1,19 @@
 app.controller('ModalController', function ($scope) {
   $scope.mode = 'notify'
+  $scope.default = 'inventory'
   $scope.castData = {}
 
   $scope.$on('modeChange', function (event, data) {
     $scope.mode = data.newMode
+    console.log('Detected Change!')
     if (data) {
-      $scope.castData = data
+      $scope.castData = data.newContent
     }
-    $scope.digest()
+  })
+
+  $scope.$on('modeReset', function () {
+    $scope.mode = $scope.default
+    $scope.castData = {}
   })
 
   $scope.resources = [

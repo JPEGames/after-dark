@@ -32,3 +32,11 @@ router.post('/', function (req, res, next) {
     res.send({visited})
   }).catch(console.log)
 })
+
+router.put('/', function (req, res, next) {
+  cf.map(function * (point) {
+    let found = yield Point.findOne({where: point})
+    yield found.addUser(req.user)
+  }, req.body.newNearest)
+    .then(() => res.sendStatus(201))
+})

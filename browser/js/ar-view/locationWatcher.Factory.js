@@ -13,11 +13,18 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   let foundPoints = []
 
   // exported watcher function, runs all map code
-  function refresh () {
-    if (center) mapMover(center)
-  }
+  // function refresh () {
+  //   console.log('refresh called!')
+  //   if (center) {
+  //     console.log(center)
+  //     mapMover(center)
+  //   }
+  // }
   let watch = function () {
-    navigator.geolocation.watchPosition(success, console.warn, {enableHighAccuracy: true})
+    if (!center) {
+      console.log('makeing watcher')
+      navigator.geolocation.watchPosition(success, console.warn, {enableHighAccuracy: true})
+    } else mapMover(center)
   }
 
   // callback used by navigator.geolocation.watchPosition, decides to execute callback chain
@@ -48,10 +55,17 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
         size = getSize(nw, ne, sw)
         // only does GeoFire query if movement > dataReloadDistance
         if (diff(center, lastFetchedCenter, dataReloadDistance)) {
+          if (lastFetchedCenter) updatePhaser()
           makeGrid(center)
             .then(() => queryPoints(center))
             .then(() => updatePhaser())
-        } else updatePhaser() // send payload to phaser without making query, for updating which markers/bunkers are in bounds
+        } else {
+          let newNearest = GridFactory.getNearestPoints(center)
+          $http.put('/api/grid', {newNearest}).catch(console.log)
+          foundPoints.concat(newNearest)
+          foundPoints = _.uniq(foundPoints)
+          updatePhaser() // send payload to phaser without making query, for updating which markers/bunkers are in bounds
+        }
       })
   }
 
@@ -78,6 +92,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   function makeGrid () {
     let grid = GridFactory.makeGrid(center)
     let corners = GridFactory.getNearestPoints(center)
+    console.log('POSTING GRID')
     return $http.post('/api/grid', {grid, corners})
       .then(res => res.data.visited)
       .then(arr => arr.forEach(elem => {
@@ -135,5 +150,5 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
     return {x: pointDist.w / size.w, y: pointDist.h / size.h}
   }
 
-  return {watch, refresh}
+  return {watch}
 })

@@ -16,6 +16,7 @@ var chalk = require('chalk')
 var db = require('./server/db')
 var User = db.model('user')
 var GameState = db.model('gamestate')
+const Character = db.model('character')
 var Promise = require('sequelize').Promise
 const Firebase = require('./server/db/firebase/')
 
@@ -33,6 +34,7 @@ var seedUsers = function () {
 
   var creatingUsers = users.map(function (userObj) {
     return User.create(userObj)
+      .then(u => Character.create({perk: 'miner', userId: u.id}))
   })
 
   return Promise.all(creatingUsers)

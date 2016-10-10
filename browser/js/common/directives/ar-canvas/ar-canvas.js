@@ -44,6 +44,8 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // Only allows test to run once.
   let ranTest = false
 
+  let firstUpdate = true // only emits on first event cycle
+
   // All this stuff has to do with creating a ring of clouds - again - a system that will change once we implement markers accurately.
   let randCount = 180
   let randFrequency = 180
@@ -101,7 +103,10 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
           randCount = 0
         }
     */
-
+    if (firstUpdate) {
+      firstUpdate = false
+      scope.$emit('PhaserReady')
+    }
   // If I havent run a test on markers...
   // if (!ranTest) {
   // Add test markers.
@@ -186,10 +191,17 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // takes a height and width in number of clouds and an array of objects of xy percentages representing where to hide clouds,
   // returns a matrix of 1 (cloud) 0 no clouds
   function mapToGrid (pointsArr) {
-    let width = 3
-    let height = 3
+    let hFact = 200
+    let wFact = 200
+    for (var i = 150; i <= scope.width; i++) {
+      if (!scope.height % i) hFact = i
+      if (!scope.width % i) wFact = i
+    }
+    let shift = 0.0
+    let width = Math.floor(scope.width / wFact)
+    let height = Math.floor(scope.height / hFact)
 
-    console.log('Here!')
+    console.log('Clouds h: ' + height + ' w: ' + width)
 
     let matrix = Array.from(Array(height + 1), (a, i) => Array.from(Array(width + 1), (b, j) => {
       return {
@@ -204,8 +216,8 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
     if (pointsArr) {
       pointsArr.forEach((elem, index) => {
-        let xGrid = Math.floor(width * elem.x)
-        let yGrid = Math.floor(height * elem.y)
+        let xGrid = Math.floor(width * (elem.x + shift))
+        let yGrid = Math.floor(height * (elem.y + shift))
         console.log('X: ' + xGrid, 'Y: ' + yGrid)
         matrix[yGrid][xGrid].cloud = false
       })
@@ -239,7 +251,6 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
       cloud.destroy()
     })
   }
-
   // Mathematically create cloud ring - hardcoded numbers are for weird anchor offset problem (i.e. center of objext is its top left)
   function cloudRing (cloudNum = 20) {
     for (let i = 0; i < cloudNum; i++) {

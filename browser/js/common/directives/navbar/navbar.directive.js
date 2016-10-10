@@ -1,15 +1,19 @@
-app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state, GameViewFactory, FbFactory) {
+app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state, GameViewFactory, FbFactory, CharacterFactory, BunkerStateFactory, NavbarFactory) {
   return {
     restrict: 'E',
     scope: {},
     templateUrl: 'js/common/directives/navbar/navbar.html',
     link: function (scope) {
+      scope.hasCharacter = NavbarFactory.getter().hasCharacter
+      scope.hasBunker = NavbarFactory.getter().hasBunker
+      console.log('hasCharacter: ', scope.hasCharacter, 'hasBunker: ', scope.hasBunker)
+
       scope.items = [
-        {label: 'Bunker', state: 'master.navbar.game', auth: true},
-        {label: 'Wasteland', state: 'master.navbar.gamear', auth: true},
-        {label: 'Account', state: 'master.navbar.signup-settings', auth: true},
-        {label: 'Character Creation', state: 'master.navbar.characterCreate', auth: true},
-        {label: 'Character Overview', state: 'master.navbar.characterOverview', auth: true}
+        { label: 'Bunker', state: 'master.navbar.game', auth: true },
+        { label: 'Wasteland', state: 'master.navbar.gamear', auth: true },
+        { label: 'Account', state: 'master.navbar.signup-settings', auth: true },
+        { label: 'Character Creation', state: 'master.navbar.characterCreate', auth: true },
+        { label: 'Character Overview', state: 'master.navbar.characterOverview', auth: true }
       ]
 
       // displaying in-game menu option in nav-bar
@@ -29,7 +33,7 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
 
       scope.logout = function () {
         AuthService.logout().then(function () {
-          $state.go('master.navbar.home')
+          $state.go('master', {}, {reload: true})
         })
       }
 
@@ -37,27 +41,31 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
         $state.go('master.navbar.characterOverview')
       }
 
+      var goToBunkerCreate = function () {
+        $state.go('master.navbar.home')
+      }
+
+      var goToCharacterCreate = function () {
+        $state.go('master.navbar.characterCreate')
+      }
+
       var setUser = function () {
         AuthService.getLoggedInUser().then(function (user) {
           if (user) {
             scope.user = user
-
-            // TODO: DO WE EVEN NEED THIS?
-            goToCharacterOverview()
+            console.log('USER: ', scope.user)
+            if (scope.hasCharacter && scope.hasBunker) {
+              goToCharacterOverview()
+            } else {
+              if (scope.hasCharacter && !scope.hasBunker) {
+                console.log('Going to bunker create in navbar!')
+                goToBunkerCreate()
+              } else {
+                console.log('Going to character create in navbar!')
+                goToCharacterCreate()
+              }
+            }
           }
-        // get game state associated with user
-        // GameViewFactory.getUserState()
-        // FbFactory.getFirebaseRef().child('users').once('value')
-        //             .then(snapshot => {
-        //               // if user isn't in firebase db yet, add him/her
-        //               if (!Object.keys(snapshot.val()).includes(strUserId)) {
-        //                 console.log('setting up user in database!')
-        //                 FbFactory.getFirebaseRef().child(`users/${user.id}`).set({
-        //                   email: user.email,
-        //                   Location: 'here'
-        //                 })
-        //               }
-        //             })
         })
       }
       var removeUser = function () {

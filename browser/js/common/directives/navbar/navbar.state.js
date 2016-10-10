@@ -1,8 +1,31 @@
 app.config(function ($stateProvider) {
   $stateProvider.state('master.navbar', {
     templateUrl: 'js/common/directives/navbar/navbar-state.html',
-    controller: function ($state, $scope, AuthService) {
-      $state.go('master.navbar.home')
+    controller: 'NavbarController',
+    resolve: {
+      hasCharacter: function (AuthService, CharacterFactory) {
+        return AuthService.getLoggedInUser()
+          .then(user => {
+            if (user) {
+              return CharacterFactory.getCharacter()
+            } else {
+              console.log('NO CHARACTER IN RESOLVE')
+              return {foundCharacter: false}
+            }
+          })
+      },
+      hasBunker: function (AuthService, BunkerStateFactory) {
+        return AuthService.getLoggedInUser()
+          .then(user => {
+            if (user) {
+              return BunkerStateFactory.getBunkerState(user.id)
+            } else {
+              console.log('NO BUNKER IN NAVBAR RESOLVE')
+              return {noBunker: true}
+            }
+          })
+      }
     }
+
   })
 })

@@ -1,7 +1,7 @@
 app.directive('invRow', function ($state) {
   return {
     restrict: 'E',
-    templateUrl: 'js/inventory/inv-row.html',
+    templateUrl: 'js/modal/inv-row.html',
     scope: {
       data: '='
     }

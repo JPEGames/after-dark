@@ -20,6 +20,9 @@ app.factory('ArFactory', function (DistanceFactory) {
       }, () => {
         console.log('POSITION ERROR')
         reject('We could not get your location.')
+      }, {
+        enableHighAccuracy: true,
+        timeout: 4000
       })
     })
   }

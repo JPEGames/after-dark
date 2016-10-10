@@ -6,6 +6,9 @@ app.factory('ModalFactory', function ($http, $rootScope) {
     },
     resetModal: function () {
       $rootScope.$broadcast('modeReset')
+    },
+    markRead: function (aMessage) {
+      $rootScope.$broadcast('messageRead', aMessage)
     }
   }
 })

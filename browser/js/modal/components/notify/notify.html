@@ -7,6 +7,9 @@
   </div>
   <div class="modal-body" style="padding-top: 0; padding-bottom: 0">
     <notify-message ng-repeat="message in notifications" data="message"></notify-message>
+    <div style="text-align: center" ng-show="notifications.length === 0">
+      <h4> There are no messages. </h4>
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" style="display: block; margin: 0 auto" class="btn btn-secondary" data-dismiss="modal">Close</button>

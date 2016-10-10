@@ -7,7 +7,8 @@ app.directive('message', function ($state, ModalFactory) {
     },
     link: function (scope) {
       // Should also mark as read and remove from list.
-      scope.exitMessage = function () {
+      scope.exitMessage = function (aMessage) {
+        ModalFactory.markRead(aMessage)
         ModalFactory.resetModal()
       }
     }

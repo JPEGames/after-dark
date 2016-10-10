@@ -1,8 +1,9 @@
 app.controller('ModalController', function ($scope, $interval) {
   $scope.mode = 'notify'
-  $scope.default = 'inventory'
+  $scope.default = 'notify'
   $scope.castData = {}
 
+  // LISTENING FOR FACTORY
   $scope.$on('modeChange', function (event, data) {
     $scope.mode = data.newMode
     console.log('Detected Change!')
@@ -13,6 +14,22 @@ app.controller('ModalController', function ($scope, $interval) {
 
   $scope.$on('modeReset', function () {
     $interval(resetVars, 1000, 1)
+  })
+
+  $scope.$on('messageRead', function (event, aMessage) {
+    let indexToRemove = null
+    $scope.messages.forEach(function (mes, index) {
+      if (mes.id === aMessage.id) {
+        indexToRemove = index
+      }
+    })
+    if (indexToRemove !== null) {
+      $scope.messages.splice(indexToRemove, 1)
+      console.log('Removed Message!')
+    } else {
+      console.log('Could not find message to remove.')
+      console.log(aMessage)
+    }
   })
 
   function resetVars () {
@@ -33,13 +50,15 @@ app.controller('ModalController', function ($scope, $interval) {
       title: 'An Event',
       description: 'Something somewhere happened to someone.',
       eventType: 'confirm',
-      source: '/pimages/message.png'
+      source: '/pimages/message.png',
+      id: 1
     },
     {
       title: 'Another Event',
       description: 'Something somewhere happened to someone else!',
       eventType: 'yes/no',
-      source: '/pimages/message.png'
+      source: '/pimages/message.png',
+      id: 2
     }
   ]
 })

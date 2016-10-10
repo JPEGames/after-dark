@@ -12,14 +12,14 @@
  name in the environment files.
  */
 
-var chalk = require('chalk');
-var db = require('./server/db');
-var User = db.model('user');
-var GameState = db.model('gamestate');
-var Promise = require('sequelize').Promise;
+var chalk = require('chalk')
+var db = require('./server/db')
+var User = db.model('user')
+var GameState = db.model('gamestate')
+var Promise = require('sequelize').Promise
+const Firebase = require('./server/db/firebase/')
 
 var seedUsers = function () {
-
   var users = [
     {
       email: 'testing@fsa.com',
@@ -29,24 +29,25 @@ var seedUsers = function () {
       email: 'obama@gmail.com',
       password: 'potus'
     }
-  ];
+  ]
 
   var creatingUsers = users.map(function (userObj) {
-    return User.create(userObj);
-  });
+    return User.create(userObj)
+  })
 
-  return Promise.all(creatingUsers);
-};
-
-db.sync({ force: true })
+  return Promise.all(creatingUsers)
+}
+Firebase.child('locations').remove()
+  .then(() => Firebase.child('locations'))
+  .then(() => db.sync({ force: true }))
   .then(function () {
-    return seedUsers();
+    return seedUsers()
   })
   .then(function () {
-    console.log(chalk.green('Seed successful!'));
-    process.exit(0);
+    console.log(chalk.green('Seed successful!'))
+    process.exit(0)
   })
   .catch(function (err) {
-    console.error(err);
-    process.exit(1);
-  });
+    console.error(err)
+    process.exit(1)
+  })

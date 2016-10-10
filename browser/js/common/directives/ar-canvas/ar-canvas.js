@@ -200,6 +200,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // Listener on pressing a marker.
   function markerPress (sprite, pointer) {
     console.log(sprite)
+    // send event type and id upon click
     scope.$emit('gameEvent', {type: sprite['markerType'], id: sprite['id']})
   }
 

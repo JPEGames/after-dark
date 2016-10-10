@@ -39,6 +39,7 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
     ArFactory.showMenu()
   }
 
+  // move clicked resource to user backpack
   $scope.$on('gameEvent', (event, data) => {
     EventFactory.resourceToBackpack(data)
   })

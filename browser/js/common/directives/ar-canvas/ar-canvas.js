@@ -155,27 +155,6 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   function addAMarker (x, y, width, height, type, id, found) {
     let tempSprite
     tempSprite = markerSetter(type, id, x, y)
-    // if (type === 'bunker') {
-    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'bunker')
-    // }
-    // if (type === 'scrap metal') {
-    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    // }
-    // if (type === 'rat attack') {
-    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    // }
-    // if (type === 'information') {
-    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    // }
-    // if (type === 'dust storm') {
-    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    // }
-    // if (type === 'mutant attack') {
-    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    // }
-    // if (type === 'rare relic') {
-    //   tempSprite = new Phaser.Sprite(gameAR, x - 20, y - 20, 'ore')
-    // }
     console.log('Attempting to add marker!')
     console.log(type)
     tempSprite['markerType'] = type

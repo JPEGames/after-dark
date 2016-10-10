@@ -7,7 +7,7 @@ module.exports = db.define('backpack', {
     defaultValue: 0
   },
   electricity: {
-    type: Sequelize.INTEGER
+    type: Sequelize.INTEGER,
     defaultValue: 0
   }
 })

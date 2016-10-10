@@ -1,18 +1,33 @@
 <div class="modal fade autoModal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 100010;" >
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header" style="text-align: center">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-        <h3 class="modal-title" id="myModalLabel">Inventory</h3>
-      </div>
-      <div class="modal-body" style="padding-top: 0; padding-bottom: 0">
+      <div id="myInventory" ng-show="mode === 'inventory'">
+        <div class="modal-header" style="text-align: center">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="myModalLabel">Inventory</h3>
+        </div>
+        <div class="modal-body" style="padding-top: 0; padding-bottom: 0">
           <inv-row ng-repeat="resource in resources" data="resource" style="max-height: 8em"></inv-row>
+        </div>
+        <div class="modal-footer">
+          <button type="button" style="display: block; margin: 0 auto" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" style="display: block; margin: 0 auto" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <div id="myPrompt" ng-show="mode === 'prompt'">
+        <div class="modal-header" style="text-align: center">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="myModalLabel">{{title}}</h3>
+        </div>
+        <div class="modal-body" style="padding-top: 0; padding-bottom: 0">
+          {{description}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" style="display: block; margin: 0 auto" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
-</div>

@@ -8,8 +8,7 @@
   <div class="modal-body" style="padding-top: 0; padding-bottom: 0">
     {{content.description}}
   </div>
-  <div class="modal-footer">
-
-    <button type="button" style="display: block; margin: 0 auto" class="btn btn-secondary" ng-click="exitMessage(content)" data-dismiss="modal">Close</button>
+  <div class="modal-footer">   
+    <event-emitter content="content"></event-emitter>
   </div>
 </div>

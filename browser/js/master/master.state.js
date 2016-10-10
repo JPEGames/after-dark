@@ -5,7 +5,7 @@ app.config(function ($stateProvider) {
        </div>
     `,
     controller: function ($scope, $state) {
-      $state.go('master.navbar.home')
+      $state.go('master.navbar')
     }
   })
 })

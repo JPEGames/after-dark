@@ -30,7 +30,7 @@ router.get('/:id', function (req, res, next) {
     }
   })
     .then(userBunker => {
-      if (!userBunker) res.sendStatus(404)
+      if (!userBunker) res.send({noBunker: true})
       else res.send(userBunker)
     })
     .catch(next)

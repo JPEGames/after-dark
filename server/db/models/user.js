@@ -5,6 +5,7 @@ const Sequelize = require('sequelize')
 const db = require('../_db')
 const GameState = require('./gamestate')
 const Bunker = require('./bunker')
+const Backpack = require('./backpack')
 const Promise = require('sequelize').Promise
 
 module.exports = db.define('user', {
@@ -53,6 +54,8 @@ module.exports = db.define('user', {
         user.password = user.Model.encryptPassword(user.password, user.salt)
       }
     },
-    afterCreate: user => GameState.create({})
+    afterCreate: function (user) {
+      return Promise.all([GameState.create({}), Backpack.create({userId: user.id})])
+    }
   }
 })

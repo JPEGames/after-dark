@@ -7,6 +7,7 @@ router.use('/bunkerstate', require('./bunkerstate'))
 router.use('/users', require('./users'))
 router.use('/characters', require('./characters'))
 router.use('/grid', require('./grid'))
+router.use('/backpack', require('./backpack'))
 // router.use('/members', require('./members'))
 
 // Make sure this is after all of

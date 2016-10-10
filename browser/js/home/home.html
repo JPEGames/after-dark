@@ -1,8 +1,6 @@
-<div id="home" style="padding-top: 3em; overflow-y: auto;">
-    <h3 id="home-header" ng-show="hasBunker || !user"> HOMEPAGE </h3>
-    <create-bunker-prompt ng-show="!hasBunker && user"></create-bunker-prompt>
+<div id="home" style="padding-top: 3em; height: 100%">
+	<div style="overflow-y: auto; height: 100%">
+		<h3 id="home-header" ng-show="hasBunker || !user"> HOMEPAGE </h3>
+		<create-bunker-prompt ng-show="!hasBunker && user"></create-bunker-prompt>
+	</div>
 </div>
-
-
-
-

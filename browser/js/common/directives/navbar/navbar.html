@@ -24,6 +24,9 @@
         <li ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">
             <a ui-sref-active="active" ui-sref="{{ item.state }}">{{ item.label }}</a>
         </li>
+        <!--<li ng-show="hasCharacter()">-->
+            <!--<a>Wasteland 2</a>-->
+        <!--</li>-->
         <li ng-show="isLoggedIn()">
             <a style="cursor: pointer" ng-click="openInventory()"> Inventory </a>
         </li>

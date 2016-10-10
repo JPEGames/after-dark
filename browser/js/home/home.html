@@ -1,22 +1,6 @@
-<div id="home" style="padding-top: 3em">
-
-    <h3 id="home-header" ng-show="!promptBunkerCreate"> HOMEPAGE </h3>
-    <!--<hr id="content-hr">-->
-    <!--<br>-->
-    <!--<div class="row">-->
-    <!--<div class="col-1">-->
-    <!--</div>-->
-    <!--<div style="max-width: 70%; margin: 0 auto;">-->
-    <!--<div class="col-10">-->
-    <!--<p> Are you sick of not being successful? Of watching the people around you get more and more money? Perhaps just sick of living with your parents? Well, we all know the reason. Procrastinating. We know you love it. Its why you're here.</p>-->
-    <!--<br>-->
-    <!--<p> Here at Ritual, we've designed a real time assistant to force you to quit your bulls**t. It's time to get up and get out there. It's time to develop some rituals. </p>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="col-1">-->
-    <!--</div>-->
-    <!--</div>-->
-    <create-bunker-prompt ng-show="promptBunkerCreate"></create-bunker-prompt>
+<div id="home" style="padding-top: 3em; overflow-y: auto;">
+    <h3 id="home-header" ng-show="hasBunker || !user"> HOMEPAGE </h3>
+    <create-bunker-prompt ng-show="!hasBunker && user"></create-bunker-prompt>
 </div>
 
 

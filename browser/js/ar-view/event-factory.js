@@ -6,6 +6,7 @@ app.factory('EventFactory', function ($http, AuthService, FbFactory, GeoFireFact
   EventFactory.resourceToBackpack = (eventData) => {
     if (resources.includes(eventData.type)) {
       console.log('in backpack: ', eventData.type)
+      // return $http.put()
     }
   }
   return EventFactory

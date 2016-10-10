@@ -1,4 +1,4 @@
-app.controller('ModalController', function ($scope) {
+app.controller('ModalController', function ($scope, $interval) {
   $scope.mode = 'notify'
   $scope.default = 'inventory'
   $scope.castData = {}
@@ -12,9 +12,14 @@ app.controller('ModalController', function ($scope) {
   })
 
   $scope.$on('modeReset', function () {
+    $interval(resetVars, 1000, 1)
+  })
+
+  function resetVars () {
     $scope.mode = $scope.default
     $scope.castData = {}
-  })
+    console.log('Reset Modal.')
+  }
 
   $scope.resources = [
     {title: 'Metal', source: '/pimages/ore.png', pquantity: 0, pmax: 100, bquantity: 0, bmax: 100, myProgress: {'width': 0 + '%'}},

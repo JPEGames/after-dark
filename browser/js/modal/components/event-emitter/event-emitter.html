@@ -9,3 +9,11 @@
 		<button type="button" style="display: inline; margin-left: 1em" class="btn btn-success" ng-click="confirmMessage(content)">Yes</button>
 	</div>
 </div>
+<div ng-show="content.eventType === 'variadic'">
+	<div style="text-align: center">
+		<button type="button" style="display: inline; margin-right: 1em;" class="btn" ng-click="submitAnswer(content, content.options[0].action)" ng-show="content.options.length >= 1">{{content.options[0].title}}</button>
+		<button type="button" style="display: inline; margin-right: 1em;" class="btn" ng-click="submitAnswer(content, content.options[1].action)" ng-show="content.options.length >= 2">{{content.options[1].title}}</button>
+		<button type="button" style="display: inline; margin-right: 1em;" class="btn" ng-click="submitAnswer(content, content.options[2].action)" ng-show="content.options.length >= 3">{{content.options[2].title}}</button>
+		<button type="button" style="display: inline; margin-right: 1em;" class="btn" ng-click="submitAnswer(content, content.options[3].action)" ng-show="content.options.length >= 4">{{content.options[3].title}}</button>
+	</div>
+</div>

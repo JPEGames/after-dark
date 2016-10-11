@@ -1,4 +1,4 @@
-app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory) {
+app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory, NavbarFactory) {
   $scope.mode = 'notify'
   $scope.default = 'inventory'
   $scope.castData = {}
@@ -86,6 +86,20 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       type: 'resource',
       source: '/pimages/ore.png',
       status: 'success'
+    },
+    {
+      title: 'Earthling Assault!',
+      description: 'A group of earthlings has appeared out of the dust with intentions of attacking you! What will you do?',
+      eventType: 'variadic',
+      options: [
+        {title: 'Run', req: false, action: 1},
+        {title: 'Fight', req: false, action: 2},
+        {title: 'Talk', req: false, action: 3}
+      ],
+      id: 4,
+      type: 'general',
+      source: '/pimages/message.png',
+      status: 'neutral'
     }
   ]
 

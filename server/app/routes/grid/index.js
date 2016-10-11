@@ -28,7 +28,8 @@ router.post('/', function (req, res, next) {
     let visited = yield req.user.getPoints()
     // console.log(visited)
     //
-    visited = visited.map(point => grid.indexOf(point.id)).filter(elem => !!elem)
+    visited = visited.map(point => grid.indexOf(point.id)).filter(elem => elem >= 0)
+    console.log('sending: ', visited)
     res.send({visited})
   }).catch(console.log)
 })

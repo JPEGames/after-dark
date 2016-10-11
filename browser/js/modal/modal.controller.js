@@ -64,6 +64,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       description: 'Something somewhere happened to someone.',
       eventType: 'confirm',
       source: '/pimages/message.png',
+      type: 'general',
       id: 1
     },
     {
@@ -71,7 +72,17 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       description: 'Something somewhere happened to someone else!',
       eventType: 'yes/no',
       source: '/pimages/message.png',
+      type: 'general',
       id: 2
+    },
+    {
+      title: 'Metal Found',
+      description: 'You gathered some metal.',
+      quantity: 17,
+      eventType: 'confirm',
+      id: 3,
+      type: 'resource',
+      source: '/pimages/ore.png'
     }
   ]
 

@@ -64,6 +64,9 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     gameAR.load.image('cloud', '/pimages/cloud2.png')
     gameAR.load.image('bunker', '/pimages/vault.png')
     gameAR.load.image('ore', '/pimages/ore.png')
+    gameAR.load.image('water', '/pimages/water.png')
+    gameAR.load.image('air', '/pimages/oxygen.png')
+    gameAR.load.image('electricity', '/pimages/electricity.png')
   }
 
   // Create systems and assets.
@@ -147,10 +150,10 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
   // HELPER FUNCTION FOR addAMarker()
   function markerSetter (markerType, id, xCoord, yCoord) {
-    let imageType
+    // let imageType
     // TODO: THIS IS TEMPORARY! should be just imageType = markerType
-    markerType !== 'bunker' ? imageType = 'ore' : imageType = markerType
-    let sprite = new Phaser.Sprite(gameAR, xCoord - centerShift, yCoord - centerShift, imageType)
+    // markerType !== 'bunker' ? imageType = 'ore' : imageType = markerType
+    let sprite = new Phaser.Sprite(gameAR, xCoord - centerShift, yCoord - centerShift, markerType)
     sprite['markerType'] = markerType
     sprite['id'] = id
     return sprite
@@ -164,7 +167,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     console.log('Attempting to add marker!')
     console.log(type)
     tempSprite['markerType'] = type
-    console.log('SPRITE AFTER TYPE: ', tempSprite)
+    console.log('SPRITE AFTER TYPE: ', tempSprite['markerType'])
     markerLayer.add(tempSprite)
     if (type === 'bunker') {
       tempSprite.scale.setTo(width, height)

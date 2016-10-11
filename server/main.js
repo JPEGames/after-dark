@@ -4,10 +4,12 @@ var db = require('./db')
 var https = require('https')
 var fs = require('fs')
 var path = require('path')
-
+var io
 // Create a node server instance! cOoL!
 // var server = require('http').createServer()
-
+function getIO () {
+  return io
+}
 var options = {
   key: fs.readFileSync(path.join(__dirname, '/../ssl/key.pem')),
   ca: fs.readFileSync(path.join(__dirname, '/../ssl/csr.pem')),
@@ -15,27 +17,19 @@ var options = {
   rejectUnauthorized: false
 }
 
-var app = require('./app')(db)
+var app = require('./app')(db, getIO)
 var PORT = process.env.PORT || 1337
 var server = https.createServer(options)
 
 var createApplication = function () {
   server.on('request', app) // Attach the Express application.
-  require('./io')(server) // Attach socket.io.
+  io = require('./io')(server) // Attach socket.io.
 }
 
 var startServer = server
   .listen(PORT, '', null, function () {
     console.log(chalk.blue('Server started on port', chalk.magenta(PORT)))
   })
-
-// var startServer = function () {
-  //   var PORT = process.env.PORT || 1337
-
-//   server.listen(PORT, function () {
-  //     console.log(chalk.blue('Server started on port', chalk.magenta(PORT)))
-  //   })
-  // }
 
 db.sync()
   .then(createApplication)

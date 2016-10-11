@@ -1,9 +1,11 @@
 <!-- CONFIRM -->
 <div ng-show="content.eventType === 'confirm'">
-	<button type="button" style="display: block; margin: 0 auto" class="btn btn-secondary" ng-click="exitMessage(content)" data-dismiss="modal">OK!</button>
+	<button type="button" style="display: block; margin: 0 auto" class="btn btn-secondary" ng-click="exitMessage(content)">OK!</button>
 </div>
 <!-- YES/NO -->
 <div ng-show="content.eventType === 'yes/no'">
-	<button type="button" style="display: inline; margin: 0 auto; margin-right: 1em;" class="btn btn-danger" ng-click="denyMessage(content)" data-dismiss="modal">No</button>
-	<button type="button" style="display: inline; margin: 0 auto; margin-left: 1em" class="btn btn-success" ng-click="confirmMessage(content)" data-dismiss="modal">Yes</button>
+	<div style="text-align: center">
+		<button type="button" style="display: inline; margin-right: 1em;" class="btn btn-danger" ng-click="denyMessage(content)">No</button>
+		<button type="button" style="display: inline; margin-left: 1em" class="btn btn-success" ng-click="confirmMessage(content)">Yes</button>
+	</div>
 </div>

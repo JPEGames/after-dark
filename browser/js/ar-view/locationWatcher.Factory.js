@@ -32,6 +32,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   function success (geoObj) {
     let loc = {lat: geoObj.coords.latitude, lng: geoObj.coords.longitude}
     if (diff(loc, center, mapReloadDistance)) {
+      console.log('mapMover!')
       mapMover(loc)
     }
   }
@@ -55,7 +56,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
         size = getSize(nw, ne, sw)
         // only does GeoFire query if movement > dataReloadDistance
         if (diff(center, lastFetchedCenter, dataReloadDistance)) {
-          if (lastFetchedCenter) updatePhaser()
+          // if (lastFetchedCenter) updatePhaser()
           makeGrid(center)
             .then(() => queryPoints(center))
             .then(() => updatePhaser())
@@ -96,6 +97,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
     return $http.post('/api/grid', {grid, corners})
       .then(res => res.data.visited)
       .then(arr => arr.forEach(elem => {
+        console.log(elem)
         foundPoints.push(grid[elem])
       }))
   }
@@ -125,6 +127,9 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
 
   // Converting cummulated geofire objects to our data
   function updatePhaser () {
+    console.log('***************UPDATING PHASER FROM MAP*******************')
+    console.log(pointsOfInterest)
+    console.log(foundPoints)
     $rootScope.$broadcast('updateAR', {locations: pointsOfInterest.filter(x => inMapBounds(x.coords)).map(formatMarker), visited: foundPoints.filter(inMapBounds).map(toXY)})
   }
 

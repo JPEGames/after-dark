@@ -1,7 +1,7 @@
 window.createGameAR = function (ele, scope, players, mapId, injector) {
   let height = scope.height
   let width = scope.width
-
+  const centerShift = 20
   const gameAR = new Phaser.Game(width, height, Phaser.CANVAS, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
 
   // Deals with canvas glitch involving invincible phaser instance.
@@ -150,15 +150,16 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     let imageType
     // TODO: THIS IS TEMPORARY! should be just imageType = markerType
     markerType !== 'bunker' ? imageType = 'ore' : imageType = markerType
-    let sprite = new Phaser.Sprite(gameAR, xCoord - 20, yCoord - 20, imageType)
+    let sprite = new Phaser.Sprite(gameAR, xCoord - centerShift, yCoord - centerShift, imageType)
     sprite['markerType'] = markerType
     sprite['id'] = id
     return sprite
   }
   // TODO: need to add ID to tempSprite
   // Add an individual marker to the map.
-  function addAMarker (x, y, width, height, type, id, found) {
+  function addAMarker (xCoord, yCoord, width, height, type, id, found) {
     let tempSprite
+    let [x, y] = spaceMarker(xCoord, yCoord)
     tempSprite = markerSetter(type, id, x, y)
     console.log('Attempting to add marker!')
     console.log(type)
@@ -179,6 +180,17 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     tempSprite.inputEnabled = true
     tempSprite.events.onInputDown.add(markerPress, this)
     markerArray.push(tempSprite)
+  }
+
+  function spaceMarker (x, y) {
+    let spacing = 30
+    markerArray.forEach(a => {
+      let horizDir = Math.random() < 0.5 ? -1 : 1
+      let vertDir = Math.random() < 0.5 ? -1 : 1
+      while (Math.abs(a.x + centerShift - x) < spacing) x += horizDir
+      while (Math.abs(a.y + centerShift - y) < spacing) y += vertDir
+    })
+    return [x, y]
   }
 
   // Listener on pressing a marker.

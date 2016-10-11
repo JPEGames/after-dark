@@ -10,6 +10,12 @@ app.factory('ModalFactory', function ($http, $rootScope) {
     },
     markRead: function (aMessage) {
       $rootScope.$broadcast('messageRead', aMessage)
+    },
+    openModal: function () {
+      $('#myModal').modal('show')
+    },
+    closeModal: function () {
+      $('#myModal').modal('hide')
     }
   }
 })

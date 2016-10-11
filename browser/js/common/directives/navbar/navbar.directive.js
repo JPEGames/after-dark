@@ -1,4 +1,4 @@
-app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state, GameViewFactory, FbFactory, CharacterFactory, BunkerStateFactory, NavbarFactory) {
+app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService, AUTH_EVENTS, $state, GameViewFactory, FbFactory, CharacterFactory, BunkerStateFactory, NavbarFactory) {
   return {
     restrict: 'E',
     scope: {},

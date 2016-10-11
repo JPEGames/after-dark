@@ -1,6 +1,6 @@
-app.controller('ModalController', function ($scope, $interval) {
+app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory) {
   $scope.mode = 'notify'
-  $scope.default = 'notify'
+  $scope.default = 'inventory'
   $scope.castData = {}
 
   // LISTENING FOR FACTORY
@@ -61,4 +61,8 @@ app.controller('ModalController', function ($scope, $interval) {
       id: 2
     }
   ]
+
+  if ($scope.messages.length > 0) {
+    ModalFactory.openModal()
+  }
 })

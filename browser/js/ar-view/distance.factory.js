@@ -2,7 +2,6 @@ app.factory('DistanceFactory', function (GeoFireFactory) {
   // returns boolean, is true if distance between 2 coordinates
   // is greater than some sensitivity (3rd parameter)
   function greaterThanXM (loc1, loc2, meters) {
-    console.log(loc1, loc2)
     return convertToMeters(loc1, loc2) > meters
   }
 

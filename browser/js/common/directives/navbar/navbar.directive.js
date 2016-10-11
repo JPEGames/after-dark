@@ -1,4 +1,4 @@
-app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, $state, GameViewFactory, FbFactory, CharacterFactory, BunkerStateFactory, NavbarFactory) {
+app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService, AUTH_EVENTS, $state, GameViewFactory, FbFactory, CharacterFactory, BunkerStateFactory, NavbarFactory) {
   return {
     restrict: 'E',
     scope: {},
@@ -13,7 +13,8 @@ app.directive('navbar', function ($rootScope, Socket, AuthService, AUTH_EVENTS, 
         { label: 'Wasteland', state: 'master.navbar.gamear', auth: true },
         { label: 'Account', state: 'master.navbar.signup-settings', auth: true },
         { label: 'Character Creation', state: 'master.navbar.characterCreate', auth: true },
-        { label: 'Character Overview', state: 'master.navbar.characterOverview', auth: true }
+        { label: 'Character Overview', state: 'master.navbar.characterOverview', auth: true },
+        {label: 'Home', state: 'master.navbar.home', auth: true}
       ]
 
       // displaying in-game menu option in nav-bar

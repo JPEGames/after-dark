@@ -1,4 +1,4 @@
-app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory) {
+app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory, NavbarFactory) {
   $scope.mode = 'notify'
   $scope.default = 'inventory'
   $scope.castData = {}
@@ -64,14 +64,42 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       description: 'Something somewhere happened to someone.',
       eventType: 'confirm',
       source: '/pimages/message.png',
-      id: 1
+      type: 'general',
+      id: 1,
+      status: 'neutral'
     },
     {
       title: 'Another Event',
       description: 'Something somewhere happened to someone else!',
       eventType: 'yes/no',
       source: '/pimages/message.png',
-      id: 2
+      type: 'general',
+      id: 2,
+      status: 'danger'
+    },
+    {
+      title: 'Metal Found',
+      description: 'You gathered some metal.',
+      quantity: 17,
+      eventType: 'confirm',
+      id: 3,
+      type: 'resource',
+      source: '/pimages/ore.png',
+      status: 'success'
+    },
+    {
+      title: 'Earthling Assault!',
+      description: 'A group of earthlings has appeared out of the dust with intentions of attacking you! What will you do?',
+      eventType: 'variadic',
+      options: [
+        {title: 'Run', req: false, action: 1},
+        {title: 'Fight', req: false, action: 2},
+        {title: 'Talk', req: false, action: 3}
+      ],
+      id: 4,
+      type: 'general',
+      source: '/pimages/message.png',
+      status: 'neutral'
     }
   ]
 

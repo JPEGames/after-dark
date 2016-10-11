@@ -9,6 +9,7 @@
 		<button type="button" style="display: inline; margin-left: 1em" class="btn btn-success" ng-click="confirmMessage(content)">Yes</button>
 	</div>
 </div>
+<!--  VARIADIC -->
 <div ng-show="content.eventType === 'variadic'">
 	<div style="text-align: center">
 		<button type="button" style="display: inline; margin-right: 1em;" class="btn" ng-click="submitAnswer(content, content.options[0].action)" ng-show="content.options.length >= 1">{{content.options[0].title}}</button>

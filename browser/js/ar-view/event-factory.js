@@ -2,7 +2,7 @@ app.factory('EventFactory', function ($http, AuthService, FbFactory, GeoFireFact
   let EventFactory = {}
   const resources = [ 'metal', 'water', 'electricity', 'air' ]
 
-  // adds resource to database
+  // adds resource to database, send backpack back to front
   EventFactory.resourceToBackpack = (eventData) => {
     if (resources.includes(eventData.type)) {
       console.log('in backpack: ', eventData.type)

@@ -20,7 +20,11 @@ router.get('/:id', function (req, res, next) {
     }
   })
     .then(userCharacter => {
-      !userCharacter ? res.send({foundCharacter: false}) : res.send(userCharacter)
+      if (!userCharacter) {
+        res.send({foundCharacter: false})
+      } else {
+        res.send(userCharacter)
+      }
     })
     .catch(next)
 })

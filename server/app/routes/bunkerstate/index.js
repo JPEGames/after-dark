@@ -5,7 +5,6 @@ const Bunker = db.model('bunker')
 const User = db.model('user')
 const GeoFire = require('geofire')
 const firebaseRef = require('../../../db/firebase')
-const newIO = require('../../../io')
 let geofireRef = new GeoFire(firebaseRef.child('locations'))
 module.exports = router
 
@@ -34,8 +33,6 @@ router.get('/:id', function (req, res, next) {
       if (!userBunker) {
         res.send({noBunker: true})
       } else {
-        var io = newIO()
-        io.communicate({id: req.requestedUser.id}, 'test', {})
         res.send(userBunker)
       }
     })

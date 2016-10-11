@@ -42,7 +42,10 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
 
   // move clicked resource to user backpack
   $scope.$on('gameEvent', (event, data) => {
-    EventFactory.resourceToBackpack(data)
+    return EventFactory.resourceToBackpack(data)
+      .then(newBackpack => {
+        console.log('new backpack: ', newBackpack)
+      })
   })
 
   // takes player back to bunker view

@@ -1,14 +1,44 @@
 .notifyDanger {
+	border: solid 1px black;
+	box-shadow: 1px 1px 14px -3px black;
 	background-color: #B71C1C;
 	color: #263238;
 }
 
+.notifyDanger:hover {
+	background-color: lighten(#B71C1C, 10%);
+}
+
 .notifySuccess {
+	border: solid 1px black;
+	box-shadow: 1px 1px 14px -3px black;
 	background-color: #2E7D32;
 	color: #263238;
 }
 
+.notifySuccess:hover {
+	background-color: lighten(#2E7D32, 10%);
+}
+
 .notifyNeutral {
+	border: solid 1px black;
+	box-shadow: 1px 1px 14px -3px black;
 	background-color: #CFD8DC;
 	color: #263238;
+}
+
+.notifyNeutral:hover {
+	background-color: lighten(#CFD8DC, 10%);
+}
+
+#myModal {
+	transition: height 1s;
+}
+
+.modal-content {
+	transition: height 1s, transform 1s;
+}
+
+.modal-body {
+	transition: height 1s, transform 1s;
 }

@@ -15,14 +15,24 @@ app.directive('eventEmitter', function ($state, ModalFactory) {
 
       scope.confirmMessage = function (aMessage) {
         console.log('Confirmed!')
+        aMessage.response = true
         ModalFactory.markRead(aMessage)
         ModalFactory.changeModal('notify', {})
       }
 
       scope.denyMessage = function (aMessage) {
         console.log('Denied!')
+        aMessage.response = false
         ModalFactory.markRead(aMessage)
         ModalFactory.changeModal('notify', {})
+      }
+
+      scope.submitAnswer = function (aMessage, aResponse) {
+        console.log('Recieved response to variadic.')
+        aMessage.response = aResponse
+        console.log('Response is: ', aMessage.response)
+        ModalFactory.submitResponse(aResponse)
+        ModalFactory.markRead(aMessage)
       }
     }
   }

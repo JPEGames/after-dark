@@ -82,6 +82,12 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
       $rootScope.$on(AUTH_EVENTS.loginSuccess, setUser)
       $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser)
       $rootScope.$on(AUTH_EVENTS.sessionTimeout, removeUser)
+
+      // SOCKET LISTENERS
+      $rootScope.socket.on('test', function () {
+        console.log('Got emit from backend communicate!')
+        ModalFactory.openModal()
+      })
     }
 
   }

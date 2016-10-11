@@ -18,7 +18,7 @@ module.exports = function (server) {
       console.log('Found recipient ' + recipient.username + ' Sent Message ' + message)
     }
     io.findUser = function (userId) {
-      for (let i = 0; i < currentUsers; i++) {
+      for (let i = 0; i < currentUsers.length; i++) {
         if (currentUsers[i].userId === userId) {
           console.log('User found with ID: ', userId)
           return currentUsers[i]

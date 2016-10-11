@@ -30,9 +30,7 @@ module.exports = function (app, db) {
 
   // A POST /login route is created to handle login.
   app.post('/login', function (req, res, next) {
-    console.log('IO~~~')
     var newIO = io()
-    console.log(newIO)
     newIO.sockets.emit('testing')
     var authCb = function (err, user) {
       if (err) return next(err)

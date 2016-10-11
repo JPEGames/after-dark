@@ -10,8 +10,20 @@
                     {{ error }}
                 </alert>
                 <div class="form-group">
+                    <label>Username</label>
+                    <input name="username" type="username" ng-model="signup.username" class="form-control" placeholder="Username" ng-minlength="2" required>
+                </div>
+                <alert type="danger" ng-show="!signupForm.username.$valid && signupForm.username.$dirty">
+                    <span ng-show="signupForm.username.$error.required">
+                        An username is required.
+                    </span>
+                    <span ng-show="signupForm.username.$error.minlength">
+                        Must enter an username with length greater than 1 character.
+                    </span>
+                </alert>
+                <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" name="email" ng-model="signup.email" class="form-control" id="email" placeholder="EMail" ng-minlength='1' ng-required='true'>
+                    <input type="email" name="email" ng-model="signup.email" class="form-control" id="email" placeholder="Email" ng-minlength='1' ng-required='true'>
                 </div>
                 <alert type="danger" ng-show="!signupForm.email.$valid && signupForm.email.$dirty">
                     <span ng-show="signupForm.email.$error.required">

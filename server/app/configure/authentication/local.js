@@ -31,7 +31,6 @@ module.exports = function (app, db) {
   app.post('/login', function (req, res, next) {
     var authCb = function (err, user) {
       if (err) return next(err)
-
       if (!user) {
         var error = new Error('Invalid login credentials.')
         error.status = 401
@@ -60,6 +59,7 @@ module.exports = function (app, db) {
       .then(userExists => {
         if (!userExists) {
           User.create({
+            username: req.body.username,
             email: req.body.email,
             password: req.body.password
           })

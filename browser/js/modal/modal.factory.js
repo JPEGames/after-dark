@@ -2,6 +2,7 @@ app.factory('ModalFactory', function ($http, $rootScope) {
   return {
     changeModal: function (newMode, newData) {
       console.log('Called Factory Function!')
+      newData.newMode = newMode
       $rootScope.$broadcast('modeChange', newData)
     },
     resetModal: function () {
@@ -9,6 +10,12 @@ app.factory('ModalFactory', function ($http, $rootScope) {
     },
     markRead: function (aMessage) {
       $rootScope.$broadcast('messageRead', aMessage)
+    },
+    openModal: function () {
+      $('#myModal').modal('show')
+    },
+    closeModal: function () {
+      $('#myModal').modal('hide')
     }
   }
 })

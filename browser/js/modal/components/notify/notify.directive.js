@@ -7,8 +7,12 @@ app.directive('notify', function ($state, ModalFactory) {
       notifications: '='
     },
     link: function (scope) {
-      scope.exitNotify = function () {
-        ModalFactory.resetModal()
+      scope.exitNotify = function (data) {
+        if (data) {
+          ModalFactory.resetModal()
+        } else {
+          ModalFactory.resetModal(data)
+        }
       }
     }
   }

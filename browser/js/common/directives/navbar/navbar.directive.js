@@ -58,6 +58,7 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
         AuthService.getLoggedInUser().then(function (user) {
           if (user) {
             scope.user = user
+            // sending user information to backend!
             Socket.emit('loading', user)
             if (scope.hasCharacter && scope.hasBunker) {
               goToCharacterOverview()

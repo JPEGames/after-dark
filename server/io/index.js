@@ -17,6 +17,7 @@ module.exports = function (server) {
       io.sockets.connected[recipient.connection].emit(message, payload)
       console.log('Found recipient ' + recipient.username + ' Sent Message ' + message)
     }
+    // for finding correct user to send message + payload
     io.findUser = function (userId) {
       for (let i = 0; i < currentUsers.length; i++) {
         if (currentUsers[i].userId === userId) {
@@ -25,6 +26,11 @@ module.exports = function (server) {
         }
       }
       console.log('No user found for id received: ', userId)
+    }
+    io.receive = function (message, eventTable) {
+      socket.on(message, function (data) {
+        console.log('received emit from client backpack!')
+      })
     }
     // upon login through nav-bar client-side
     socket.on('loading', function (data) {
@@ -68,9 +74,12 @@ module.exports = function (server) {
       }
     })
 
-    socket.on('fromAngular', function () {
-      console.log('WE GOT STUFF FROM FRONT-END~~~~')
-    })
+    /* <------CLIENT EVENT HANDLING--------> */
+    io.receive('updateBackpack')
+
+    // socket.on('fromAngular', function () {
+    //   console.log('WE GOT STUFF FROM FRONT-END~~~~')
+    // })
   })
   return io
 }

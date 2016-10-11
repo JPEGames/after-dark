@@ -42,8 +42,9 @@ app.controller('ARController', function ($rootScope, $window, $scope, $localStor
 
   // move clicked resource to user backpack
   $scope.$on('gameEvent', (event, data) => {
-    $rootScope.socket.emit('fromAngular')
+    $rootScope.socket.emit('updateBackpack', data)
     // TODO: this needs to go after event sequence has completed
+    // also need to do error handling here...
     return EventFactory.resourceToBackpack(data)
       .then(newBackpack => {
         console.log('new backpack: ', newBackpack)

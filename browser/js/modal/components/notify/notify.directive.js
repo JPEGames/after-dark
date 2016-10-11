@@ -14,6 +14,11 @@ app.directive('notify', function ($state, ModalFactory) {
           ModalFactory.resetModal(data)
         }
       }
+
+      scope.goToMessage = function (messageData) {
+        console.log('Called function!')
+        ModalFactory.changeModal('message', {newContent: messageData})
+      }
     }
   }
 })

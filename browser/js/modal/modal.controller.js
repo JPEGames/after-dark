@@ -65,7 +65,8 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       eventType: 'confirm',
       source: '/pimages/message.png',
       type: 'general',
-      id: 1
+      id: 1,
+      status: 'neutral'
     },
     {
       title: 'Another Event',
@@ -73,7 +74,8 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       eventType: 'yes/no',
       source: '/pimages/message.png',
       type: 'general',
-      id: 2
+      id: 2,
+      status: 'danger'
     },
     {
       title: 'Metal Found',
@@ -82,7 +84,8 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       eventType: 'confirm',
       id: 3,
       type: 'resource',
-      source: '/pimages/ore.png'
+      source: '/pimages/ore.png',
+      status: 'success'
     }
   ]
 

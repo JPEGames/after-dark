@@ -19,7 +19,6 @@ module.exports = db.define('point', {
   {
     hooks: {
       afterCreate: function (point) {
-        console.log('POINT BEING MODIFIED: ', point)
         let randomized = require('./eventConnector')(point)
         if (randomized.event) return geofire.set(`${point.event}_${point.id}`, [parseFloat(point.lat), parseFloat(point.lng)])
         return

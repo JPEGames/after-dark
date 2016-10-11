@@ -1,4 +1,4 @@
-app.controller('ARController', function ($window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory) {
+app.controller('ARController', function ($rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory) {
   // display game upon transition to game view
   $scope.mapHeight = $window.innerHeight
   $scope.mapWidth = $window.innerWidth
@@ -42,6 +42,8 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
 
   // move clicked resource to user backpack
   $scope.$on('gameEvent', (event, data) => {
+    $rootScope.socket.emit('fromAngular')
+    // TODO: this needs to go after event sequence has completed
     return EventFactory.resourceToBackpack(data)
       .then(newBackpack => {
         console.log('new backpack: ', newBackpack)

@@ -26,6 +26,7 @@ module.exports = function (server) {
       }
       console.log('No user found for id received: ', userId)
     }
+    // upon login through nav-bar client-side
     socket.on('loading', function (data) {
       let duplicate = false
       var userInformation = { username: data.username, userId: data.id, connection: socket.id, eventHistory: [] }
@@ -50,7 +51,7 @@ module.exports = function (server) {
       }
       console.log('Current Users: ', currentUsers)
     })
-
+    // on client refreshes
     socket.on('disconnect', function () {
       let removeId = socket.id
       let removedUser = false
@@ -65,6 +66,10 @@ module.exports = function (server) {
       if (!removedUser) {
         console.log('Unable to remove user.')
       }
+    })
+
+    socket.on('fromAngular', function () {
+      console.log('WE GOT STUFF FROM FRONT-END~~~~')
     })
   })
   return io

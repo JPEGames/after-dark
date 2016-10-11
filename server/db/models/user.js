@@ -9,6 +9,10 @@ const Backpack = require('./backpack')
 const Promise = require('sequelize').Promise
 
 module.exports = db.define('user', {
+  username: {
+    type: Sequelize.STRING,
+    unique: true
+  },
   email: {
     type: Sequelize.STRING
   },

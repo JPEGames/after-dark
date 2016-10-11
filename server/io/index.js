@@ -62,7 +62,7 @@ module.exports = function (server) {
           break
         }
       }
-      if (removedUser) {
+      if (!removedUser) {
         console.log('Unable to remove user.')
       }
     })

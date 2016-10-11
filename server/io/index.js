@@ -19,6 +19,3 @@ module.exports = function (server) {
   })
   return io
 }
-
-
-

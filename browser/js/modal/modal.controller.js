@@ -64,14 +64,28 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       description: 'Something somewhere happened to someone.',
       eventType: 'confirm',
       source: '/pimages/message.png',
-      id: 1
+      type: 'general',
+      id: 1,
+      status: 'neutral'
     },
     {
       title: 'Another Event',
       description: 'Something somewhere happened to someone else!',
       eventType: 'yes/no',
       source: '/pimages/message.png',
-      id: 2
+      type: 'general',
+      id: 2,
+      status: 'danger'
+    },
+    {
+      title: 'Metal Found',
+      description: 'You gathered some metal.',
+      quantity: 17,
+      eventType: 'confirm',
+      id: 3,
+      type: 'resource',
+      source: '/pimages/ore.png',
+      status: 'success'
     }
   ]
 

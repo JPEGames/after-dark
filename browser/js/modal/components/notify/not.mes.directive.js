@@ -5,11 +5,6 @@ app.directive('notifyMessage', function ($state, ModalFactory) {
     scope: {
       data: '='
     },
-    link: function (scope) {
-      scope.goToMessage = function (messageData) {
-        console.log('Called function!')
-        ModalFactory.changeModal('message', {newContent: messageData})
-      }
-    }
+    link: function (scope) {}
   }
 })

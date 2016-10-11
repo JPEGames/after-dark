@@ -47,7 +47,9 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
       var goToBunkerCreate = function () {
         $state.go('master.navbar.home')
       }
-
+      $rootScope.socket.on('testing', function () {
+        console.log('Got socket emit!')
+      })
       var goToCharacterCreate = function () {
         $state.go('master.navbar.characterCreate')
       }
@@ -56,7 +58,7 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
         AuthService.getLoggedInUser().then(function (user) {
           if (user) {
             scope.user = user
-            console.log('USER: ', scope.user)
+            Socket.emit('loading', user)
             if (scope.hasCharacter && scope.hasBunker) {
               goToCharacterOverview()
             } else {

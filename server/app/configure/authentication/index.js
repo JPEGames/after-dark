@@ -3,6 +3,7 @@ var path = require('path')
 var session = require('express-session')
 var passport = require('passport')
 var SequelizeStore = require('connect-session-sequelize')(session.Store)
+var io = require('../../../io')
 
 var ENABLED_AUTH_STRATEGIES = [
   'local'

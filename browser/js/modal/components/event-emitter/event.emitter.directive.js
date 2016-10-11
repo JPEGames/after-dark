@@ -33,6 +33,7 @@ app.directive('eventEmitter', function ($state, ModalFactory) {
         console.log('Response is: ', aMessage.response)
         ModalFactory.submitResponse(aResponse)
         ModalFactory.markRead(aMessage)
+        ModalFactory.changeModal('notify', {})
       }
     }
   }

@@ -34,7 +34,7 @@ router.get('/:id', function (req, res, next) {
       if (!userBunker) {
         res.send({noBunker: true})
       } else {
-        let io = newIO()
+        var io = newIO()
         io.communicate({id: req.requestedUser.id}, 'test', {})
         res.send(userBunker)
       }

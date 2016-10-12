@@ -14,6 +14,7 @@ module.exports = function (server) {
 
     // function for use inside of route
     io.communicate = function (user, message, payload) {
+      console.log('payload', payload)
       let recipient = io.findUser(user.id)
       if (!recipient) {
         console.log('Communicate cannot operate before you set the user.')
@@ -88,14 +89,14 @@ module.exports = function (server) {
       let {userId, resourceInfo} = data
       console.log('USER ID: ', userId)
       console.log('RESOURCE INFO: ', resourceInfo)
-      processResource(resourceInfo.type, io.communicate, userId)
+      processResource(resourceInfo.type, io.communicate, userId, resourceInfo.id)
     })
   })
   return io
 }
 
-function processResource (type, ioMethod, userId) {
+function processResource (type, ioMethod, userId, markerId) {
   let resourceEvent = backpackEvents[type]
   let emittedEvent = `send_${type}`
-  ioMethod({id: userId}, emittedEvent, resourceEvent)
+  ioMethod({id: userId}, emittedEvent, {event: resourceEvent, markerId: markerId, markerType: type})
 }

@@ -1,4 +1,52 @@
 app.factory('ModalFactory', function ($http, $rootScope) {
+  // NEW DUMMY OBJECTS - BACKEND PPL CHECK IT OUT
+  let testMessages = [
+    {
+      title: 'An Event',
+      description: 'Something somewhere happened to someone.',
+      eventType: 'confirm',
+      source: '/pimages/message.png',
+      type: 'general',
+      id: 1,
+      status: 'neutral',
+      // exitType: 'load', if activated - will cause a load state
+      next: 'Any Event'
+    },
+    {
+      title: 'Another Event',
+      description: 'Something somewhere happened to someone else!',
+      eventType: 'yes/no',
+      source: '/pimages/message.png',
+      type: 'general',
+      id: 2,
+      status: 'danger'
+    },
+    {
+      title: 'Metal Found',
+      description: 'You gathered some metal.',
+      quantity: 17,
+      eventType: 'confirm',
+      id: 3,
+      type: 'resource',
+      source: '/pimages/ore.png',
+      status: 'success'
+    },
+    {
+      title: 'Earthling Assault!',
+      description: 'A group of earthlings has appeared out of the dust with intentions of attacking you! What will you do?',
+      eventType: 'variadic',
+      options: [
+        {title: 'Run', req: false, action: 1},
+        {title: 'Fight', req: false, action: 2},
+        {title: 'Talk', req: false, action: 3}
+      ],
+      id: 4,
+      type: 'general',
+      source: '/pimages/message.png',
+      status: 'neutral'
+    }
+  ]
+
   return {
     // Change the modal to any mode. Can accept data.
     changeModal: function (newMode, newData) {
@@ -29,6 +77,39 @@ app.factory('ModalFactory', function ($http, $rootScope) {
       // This is where we would be sending some information to a server.
       console.log('Submitted Response Below')
       console.log(aResponse)
+    },
+    getMessages: function () {
+      return testMessages
+    },
+    deleteMessage: function (aMessage) {
+      let indexToRemove = null
+      testMessages.forEach(function (mes, index) {
+        if (mes.id === aMessage.id) {
+          indexToRemove = index
+        }
+      })
+      if (indexToRemove !== null) {
+        testMessages.splice(indexToRemove, 1)
+        console.log('Removed Message!')
+      } else {
+        console.log('Could not find message to remove.')
+        console.log(aMessage)
+      }
+    },
+    lastMessage: function () {
+      if (testMessages.length < 1) {
+        console.log('Last message in batch. #', testMessages.length)
+        return true
+      } else {
+        console.log('Not last message in batch. #', testMessages.length)
+        return false
+      }
+    },
+    startLoading: function (loadData) {
+      if (!loadData) {
+        loadData = {}
+      }
+      $rootScope.$broadcast('startLoad', loadData)
     }
   }
 })

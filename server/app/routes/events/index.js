@@ -1,6 +1,6 @@
 // <-- ROUTING FOR EVENTS -->
 const db = require('../../../db')
-const User = db.model('user')
+// const User = db.model('user')
 const Events = db.model('events')
 
 module.exports = function (getIO) {
@@ -31,4 +31,3 @@ module.exports = function (getIO) {
   })
   return router
 }
-

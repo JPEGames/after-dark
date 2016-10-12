@@ -1,7 +1,7 @@
 app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafletData, DistanceFactory, $rootScope, GridFactory, $http) {
   /* GLOBALS */
-  const mapReloadDistance = 200 // distance moved (meters) before panning map to new center
-  const dataReloadDistance = 1000 // distance moved before making GeoFire query for bunkers + other markers...
+  const mapReloadDistance = 2 // distance moved (meters) before panning map to new center
+  const dataReloadDistance = 2// distance moved before making GeoFire query for bunkers + other markers...
   let center
   let lastFetchedCenter // this is the last center used to make a GeoFire query
 
@@ -133,7 +133,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   // Converting cummulated geofire objects to our data
   function updatePhaser () {
     console.log('***************UPDATING PHASER FROM MAP*******************')
-    console.log(pointsOfInterest)
+    console.table(pointsOfInterest.filter(x => inMapBounds(x.coords)).map(formatMarker))
     console.log(foundPoints)
     $rootScope.$broadcast('updateAR', {locations: pointsOfInterest.filter(x => inMapBounds(x.coords)).map(formatMarker), visited: foundPoints.filter(inMapBounds).map(toXY)})
   }

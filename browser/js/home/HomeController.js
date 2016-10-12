@@ -12,7 +12,7 @@ app.controller('HomeController', function ($scope, $state, BunkerStateFactory, A
     createBunker: () => {
       AuthService.getLoggedInUser()
         .then(user => BunkerStateFactory.createBunker(user.id))
-        .then(() => $state.go('master.navbar.gamear'))
+        .then(() => $state.go('master', {}, {reload: true}))
     },
     logout: () => {
       AuthService.logout()

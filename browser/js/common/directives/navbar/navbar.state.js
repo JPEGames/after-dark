@@ -15,6 +15,7 @@ app.config(function ($stateProvider) {
           })
       },
       hasBunker: function (AuthService, BunkerStateFactory) {
+        console.log('FIRING HASBUNKER IN NAVBAR')
         return AuthService.getLoggedInUser()
           .then(user => {
             if (user) {

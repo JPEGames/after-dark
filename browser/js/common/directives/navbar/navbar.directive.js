@@ -22,7 +22,7 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
 
       scope.user = null
 
-      $rootScope.socket = Socket
+      // $rootScope.socket = Socket
 
       scope.isLoggedIn = function () {
         return AuthService.isAuthenticated()
@@ -47,9 +47,7 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
       var goToBunkerCreate = function () {
         $state.go('master.navbar.home')
       }
-      $rootScope.socket.on('testing', function () {
-        console.log('Got socket emit from character route!')
-      })
+
       var goToCharacterCreate = function () {
         $state.go('master.navbar.characterCreate')
       }
@@ -59,7 +57,7 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
           if (user) {
             scope.user = user
             // sending user information to backend!
-            Socket.emit('loading', user)
+            // $rootScope.socket.emit('loading', user)
             if (scope.hasCharacter && scope.hasBunker) {
               goToCharacterOverview()
             } else {
@@ -85,10 +83,13 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
       $rootScope.$on(AUTH_EVENTS.sessionTimeout, removeUser)
 
       // SOCKET LISTENERS
-      $rootScope.socket.on('test', function () {
-        console.log('Got emit from backend communicate!')
-        ModalFactory.openModal()
-      })
+      // $rootScope.socket.on('test', function () {
+      //   console.log('Got emit from backend communicate!')
+      //   ModalFactory.openModal()
+      // })
+      // $rootScope.socket.on('testing', function () {
+      //   console.log('Got socket emit from character route!')
+      // })
     }
 
   }

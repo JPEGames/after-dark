@@ -8,6 +8,7 @@ module.exports = function (getIO) {
   router.use('/grid', require('./grid'))
   router.use('/backpack', require('./backpack'))
   router.use('/events', require('./events')(getIO))
+  router.use('/points', require('./point')(getIO))
   // router.use('/members', require('./members'))
 
   // Make sure this is after all of

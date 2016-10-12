@@ -15,6 +15,10 @@ module.exports = function (server) {
     // function for use inside of route
     io.communicate = function (user, message, payload) {
       let recipient = io.findUser(user.id)
+      if (!recipient) {
+        console.log('Communicate cannot operate before you set the user.')
+        return false
+      }
       io.sockets.connected[recipient.connection].emit(message, payload)
       console.log('Found recipient ' + recipient.username + ' Sent Message ' + message)
     }
@@ -26,7 +30,9 @@ module.exports = function (server) {
           return currentUsers[i]
         }
       }
+
       console.log('No user found for id received: ', userId)
+      return false
     }
     // io.receive = function (message, eventTable) {
     //   socket.on(message, function (data) {

@@ -89,6 +89,9 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   // LISTENERS
   // Need to modify this to its own controller - so that something else handles
   // all event related communication.
+  // Needs to be removed later - ELIOT
+  $rootScope.socket.emit('loading', currentUser)
+
   $rootScope.socket.on('send_metal', function (eventObj) {
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {

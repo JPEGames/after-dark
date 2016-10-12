@@ -12,6 +12,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   $scope.$on('modeChange', function (event, data) {
     $scope.mode = data.newMode
     console.log('Detected Change!')
+    console.log('Mode is now: ', $scope.mode)
     if (data) {
       $scope.castData = data.newContent
     }

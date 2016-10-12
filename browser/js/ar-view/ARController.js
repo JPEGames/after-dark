@@ -1,4 +1,4 @@
-app.controller('ARController', function ($rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory) {
+app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory) {
   // display game upon transition to game view
   $scope.mapHeight = $window.innerHeight
   $scope.mapWidth = $window.innerWidth
@@ -91,9 +91,8 @@ app.controller('ARController', function ($rootScope, $window, $scope, $localStor
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('notify', {newContent: eventObj})
-      //
-      $scope.$digest()
-      ModalFactory.openModal()
+      // TODO: this is hacky - implement loading!
+      $timeout(ModalFactory.openModal(), 1000)
     }
   })
 })

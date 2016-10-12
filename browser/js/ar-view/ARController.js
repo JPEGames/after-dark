@@ -43,6 +43,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   // move clicked resource to user backpack
   $scope.$on('gameEvent', (event, data) => {
     let payload
+    console.log('Data: ', data)
     return EventFactory.createOrFindEvent(data)
       .then(event => {
         if (event.userId) {
@@ -92,7 +93,8 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   // Needs to be removed later - ELIOT
   $rootScope.socket.emit('loading', currentUser)
 
-  $rootScope.socket.on('send_metal', function (eventObj) {
+  $rootScope.socket.on('send_metal', function (event) {
+    let eventObj = event.event
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', {newContent: eventObj})
@@ -101,7 +103,8 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     }
   })
 
-  $rootScope.socket.on('send_electricity', function (eventObj) {
+  $rootScope.socket.on('send_electricity', function (event) {
+    let eventObj = event.event
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', {newContent: eventObj})
@@ -110,7 +113,8 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     }
   })
 
-  $rootScope.socket.on('send_water', function (eventObj) {
+  $rootScope.socket.on('send_water', function (event) {
+    let eventObj = event.event
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', {newContent: eventObj})
@@ -119,7 +123,8 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     }
   })
 
-  $rootScope.socket.on('send_air', function (eventObj) {
+  $rootScope.socket.on('send_air', function (event) {
+    let eventObj = event.event
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', {newContent: eventObj})

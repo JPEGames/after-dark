@@ -1,4 +1,4 @@
-app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory) {
+app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory, BunkerStateFactory) {
   // display game upon transition to game view
   $scope.mapHeight = $window.innerHeight
   $scope.mapWidth = $window.innerWidth
@@ -43,6 +43,10 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   // move clicked resource to user backpack
   $scope.$on('gameEvent', (event, data) => {
     let payload
+    console.log('received data: ', data)
+    if (data['markerType'] === 'bunker') {
+      return
+    }
     return EventFactory.createOrFindEvent(data)
       .then(event => {
         if (event.userId) {

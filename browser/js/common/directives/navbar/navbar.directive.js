@@ -29,7 +29,7 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
       }
 
       scope.openInventory = function () {
-        $('#myModal').modal('show')
+        ModalFactory.openModal()
       }
 
       scope.logout = function () {

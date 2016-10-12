@@ -47,6 +47,8 @@ app.factory('ModalFactory', function ($http, $rootScope) {
     }
   ]
 
+  let modalOpen = false
+
   return {
     // Change the modal to any mode. Can accept data.
     changeModal: function (newMode, newData) {
@@ -68,10 +70,15 @@ app.factory('ModalFactory', function ($http, $rootScope) {
     // Open modal from anywhere.
     openModal: function () {
       $('#myModal').modal('show')
+      modalOpen = true
     },
     // Close modal from anywhere.
     closeModal: function () {
       $('#myModal').modal('hide')
+      modalOpen = false
+    },
+    getModalOpen: function () {
+      return modalOpen
     },
     submitResponse: function (aResponse) {
       // This is where we would be sending some information to a server.

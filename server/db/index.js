@@ -9,6 +9,7 @@ const Character = require('./models/character')
 const Point = require('./models/point')
 const Backpack = require('./models/backpack')
 const Upgrades = require('./models/bunker-upgrades')
+const Events = require('./models/events')
 
 // Associations
 GameState.belongsTo(User)
@@ -18,3 +19,4 @@ Point.belongsToMany(User, {through: 'visited'})
 User.belongsToMany(Point, {through: 'visited'})
 Backpack.belongsTo(User)
 Upgrades.belongsTo(Bunker)
+Events.belongsTo(User)

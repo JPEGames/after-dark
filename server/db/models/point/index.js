@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const db = require('../../_db')
+const Events = require('../events')
 const GeoFire = require('geofire')
 const geofire = new GeoFire(require('../../firebase').child('locations'))
 

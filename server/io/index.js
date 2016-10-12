@@ -27,11 +27,11 @@ module.exports = function (server) {
       }
       console.log('No user found for id received: ', userId)
     }
-    io.receive = function (message, eventTable) {
-      socket.on(message, function (data) {
-        console.log('received emit from client backpack!')
-      })
-    }
+    // io.receive = function (message, eventTable) {
+    //   socket.on(message, function (data) {
+    //     console.log('received emit from client backpack!')
+    //   })
+    // }
     // upon login through nav-bar client-side
     socket.on('loading', function (data) {
       let duplicate = false
@@ -74,7 +74,9 @@ module.exports = function (server) {
     })
 
     /* <------CLIENT EVENT HANDLING--------> */
-    io.receive('updateBackpack')
+    socket.on('updateBackpack', function (data) {
+      console.log('getting emit from updateBackpack!')
+    })
 
     // socket.on('fromAngular', function () {
     //   console.log('WE GOT STUFF FROM FRONT-END~~~~')
@@ -82,3 +84,4 @@ module.exports = function (server) {
   })
   return io
 }
+

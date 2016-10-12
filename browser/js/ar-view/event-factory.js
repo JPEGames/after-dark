@@ -18,5 +18,16 @@ app.factory('EventFactory', function ($http, AuthService, FbFactory, GeoFireFact
         })
     }
   }
+  EventFactory.getBackpack = () => {
+    return AuthService.getLoggedInUser()
+      .then(user => {
+        return $http.get(`api/backpack/${user.id}`)
+      })
+      .then(res => res.data)
+  }
+  EventFactory.createOrFindEvent = (event) => {
+    return $http.post('api/events/', event)
+      .then(res => res.data)
+  }
   return EventFactory
 })

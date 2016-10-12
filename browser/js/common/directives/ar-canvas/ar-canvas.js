@@ -63,7 +63,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   function preload () {
     gameAR.load.image('cloud', '/pimages/cloud2.png')
     gameAR.load.image('bunker', '/pimages/vault.png')
-    gameAR.load.image('ore', '/pimages/ore.png')
+    gameAR.load.image('metal', '/pimages/ore.png')
     gameAR.load.image('water', '/pimages/water.png')
     gameAR.load.image('air', '/pimages/oxygen.png')
     gameAR.load.image('electricity', '/pimages/electricity.png')
@@ -151,6 +151,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // HELPER FUNCTION FOR addAMarker()
   function markerSetter (markerType, id, xCoord, yCoord) {
     // let imageType
+    console.log('MARKER TYPE: ', markerType)
     // TODO: THIS IS TEMPORARY! should be just imageType = markerType
     // markerType !== 'bunker' ? imageType = 'ore' : imageType = markerType
     let sprite = new Phaser.Sprite(gameAR, xCoord - centerShift, yCoord - centerShift, markerType)
@@ -291,6 +292,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     deleteClouds()
     createACloudGrid(mapToGrid(data.visited))
     addMarkers(data.locations)
+    console.log('DATA LOCATIONS IN AR: ', data.locations)
   })
 }
 

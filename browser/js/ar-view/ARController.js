@@ -42,13 +42,22 @@ app.controller('ARController', function ($rootScope, $window, $scope, $localStor
 
   // move clicked resource to user backpack
   $scope.$on('gameEvent', (event, data) => {
-    $rootScope.socket.emit('updateBackpack', data)
+    return EventFactory.createOrFindEvent(data)
+      .then(event => {
+        if (event.userId) {
+          console.log('Already Found!')
+        } else {
+          console.log('Event has no user yet!')
+          $rootScope.socket.emit('sendBackpackEvent')
+        }
+      })
     // TODO: this needs to go after event sequence has completed
     // also need to do error handling here...
-    return EventFactory.resourceToBackpack(data)
-      .then(newBackpack => {
-        console.log('new backpack: ', newBackpack)
-      })
+    // return EventFactory.resourceToBackpack(data)
+    //   .then(newBackpack => {
+    //     console.log('new backpack: ', newBackpack)
+    //   })
+    //   .catch(console.log)
   })
 
   // takes player back to bunker view

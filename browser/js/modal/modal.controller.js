@@ -53,7 +53,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   ]
 
   // Force modal open if there are things to say.
-  if ($scope.messages.length > 0) {
-    ModalFactory.openModal()
-  }
+  // if ($scope.messages.length > 0) {
+  //   ModalFactory.openModal()
+  // }
 })

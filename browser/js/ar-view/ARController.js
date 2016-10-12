@@ -44,20 +44,28 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   $scope.$on('gameEvent', (event, data) => {
     let payload
     console.log('received data: ', data)
-    if (data['markerType'] === 'bunker') {
-      return
+    console.log('current user: ', currentUser)
+    if (data['type'] === 'bunker') {
+      BunkerStateFactory.getBunkerUser(data.id)
+        .then(bunkerUser => {
+          if (bunkerUser === currentUser.username) {
+            $state.go('master.navbar.game')
+          }
+        })
+    } else {
+      return EventFactory.createOrFindEvent(data)
+        .then(event => {
+          if (event.userId) {
+            console.log('Already Found!')
+          } else {
+            console.log('Event has no user yet!')
+            console.log('Received from AR: ', data)
+            payload = {userId: currentUser.id, resourceInfo: data}
+            $rootScope.socket.emit('sendBackpackEvent', payload)
+          }
+        })
     }
-    return EventFactory.createOrFindEvent(data)
-      .then(event => {
-        if (event.userId) {
-          console.log('Already Found!')
-        } else {
-          console.log('Event has no user yet!')
-          console.log('Received from AR: ', data)
-          payload = {userId: currentUser.id, resourceInfo: data}
-          $rootScope.socket.emit('sendBackpackEvent', payload)
-        }
-      })
+
   // TODO: this needs to go after event sequence has completed
   // also need to do error handling here...
   // return EventFactory.resourceToBackpack(data)

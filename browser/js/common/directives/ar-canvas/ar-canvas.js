@@ -163,7 +163,9 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // Add an individual marker to the map.
   function addAMarker (xCoord, yCoord, width, height, type, id, found) {
     let tempSprite
-    let [x, y] = spaceMarker(xCoord, yCoord)
+    // TODO:
+    let [x, y] = [xCoord, yCoord]
+    // let [x, y] = spaceMarker(xCoord, yCoord)
     tempSprite = markerSetter(type, id, x, y)
     console.log('Attempting to add marker!')
     console.log(type)

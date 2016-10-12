@@ -23,5 +23,10 @@ app.factory('BunkerStateFactory', function ($http, ArFactory, $q, GeoFireFactory
       }).then(res => res.data)
       .catch(console.warn)
   }
+  // get user associated with clicked-on bunker
+  BunkerStateFactory.getBunkerUser = (bunkerId) => {
+    return $http.get(`/api/bunkerstate/getUserName/${bunkerId}`)
+      .then(res => res.data)
+  }
   return BunkerStateFactory
 })

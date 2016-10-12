@@ -9,7 +9,7 @@ module.exports = {
     type: 'resource',
     source: '/pimages/electricity.png',
     status: 'success',
-    exitType: 'load'
+    exitType: 'immediate'
   },
   'metal': {
     title: 'Metal Found',
@@ -20,7 +20,7 @@ module.exports = {
     type: 'resource',
     source: '/pimages/ore.png',
     status: 'success',
-    exitType: 'load'
+    exitType: 'immediate'
   }
 
 }

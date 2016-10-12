@@ -8,7 +8,7 @@ app.factory('ModalFactory', function ($http, $rootScope) {
       type: 'general',
       id: 1,
       status: 'neutral',
-      exitType: 'immediat'
+      exitType: 'load'
     },
     {
       title: 'Another Event',
@@ -102,6 +102,12 @@ app.factory('ModalFactory', function ($http, $rootScope) {
         console.log('Not last message in batch. #', testMessages.length)
         return false
       }
+    },
+    startLoading: function (loadData) {
+      if (!loadData) {
+        loadData = {}
+      }
+      $rootScope.$broadcast('startLoad', loadData)
     }
   }
 })

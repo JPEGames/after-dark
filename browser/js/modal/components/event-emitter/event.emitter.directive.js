@@ -8,19 +8,23 @@ app.directive('eventEmitter', function ($state, ModalFactory) {
     },
     link: function (scope) {
       function nextModal (aMessage) {
-        if (ModalFactory.lastMessage()) {
-          ModalFactory.resetModal()
-          ModalFactory.closeModal()
+        if (aMessage.exitType === 'load') {
+          ModalFactory.startLoading(aMessage.next)
         } else {
-          if (aMessage.exitType) {
-            if (aMessage.exitType === 'immediate') {
-              ModalFactory.resetModal()
-              ModalFactory.closeModal()
+          if (ModalFactory.lastMessage()) {
+            ModalFactory.resetModal()
+            ModalFactory.closeModal()
+          } else {
+            if (aMessage.exitType) {
+              if (aMessage.exitType === 'immediate') {
+                ModalFactory.resetModal()
+                ModalFactory.closeModal()
+              } else {
+                ModalFactory.changeModal('notify', {})
+              }
             } else {
               ModalFactory.changeModal('notify', {})
             }
-          } else {
-            ModalFactory.changeModal('notify', {})
           }
         }
       }

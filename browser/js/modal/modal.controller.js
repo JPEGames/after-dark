@@ -33,6 +33,11 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     $scope.messages = ModalFactory.getMessages()
   })
 
+  $scope.$on('startLoad', function (event, loadData) {
+    $scope.mode = 'loading'
+    $scope.castData = loadData
+  })
+
   function resetVars () {
     $scope.mode = $scope.default
     $scope.castData = {}

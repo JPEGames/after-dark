@@ -1,4 +1,5 @@
 app.factory('ModalFactory', function ($http, $rootScope) {
+  // NEW DUMMY OBJECTS - BACKEND PPL CHECK IT OUT
   let testMessages = [
     {
       title: 'An Event',
@@ -8,7 +9,8 @@ app.factory('ModalFactory', function ($http, $rootScope) {
       type: 'general',
       id: 1,
       status: 'neutral',
-      exitType: 'loa'
+      // exitType: 'load', if activated - will cause a load state
+      next: 'Any Event'
     },
     {
       title: 'Another Event',

@@ -9,7 +9,7 @@ app.directive('eventEmitter', function ($state, ModalFactory) {
     link: function (scope) {
       function nextModal (aMessage) {
         if (aMessage.exitType === 'load') {
-          ModalFactory.startLoading(aMessage.next)
+          ModalFactory.startLoading({title: aMessage.next})
         } else {
           if (ModalFactory.lastMessage()) {
             ModalFactory.resetModal()

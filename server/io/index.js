@@ -37,7 +37,6 @@ module.exports = function (server) {
       let duplicate = false
       var userInformation = { username: data.username, userId: data.id, connection: socket.id, eventHistory: [] }
       for (let i = 0; i < currentUsers.length; i++) {
-        // TODO: check against socket ID - modify username and ID to reflect new user logging in on same session
         if (currentUsers[i].userId === data.id) {
           console.log('Detected duplicate!')
           duplicate = true

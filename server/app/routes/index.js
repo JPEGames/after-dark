@@ -4,7 +4,7 @@ module.exports = function (getIO) {
   router.use('/gamestate', require('./gamestate'))
   router.use('/bunkerstate', require('./bunkerstate')(getIO))
   router.use('/users', require('./users'))
-  router.use('/characters', require('./characters'))
+  router.use('/characters', require('./characters')(getIO))
   router.use('/grid', require('./grid'))
   router.use('/backpack', require('./backpack'))
   // router.use('/members', require('./members'))

@@ -48,7 +48,7 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
         $state.go('master.navbar.home')
       }
       $rootScope.socket.on('testing', function () {
-        console.log('Got socket emit!')
+        console.log('Got socket emit from character route!')
       })
       var goToCharacterCreate = function () {
         $state.go('master.navbar.characterCreate')

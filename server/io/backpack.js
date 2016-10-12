@@ -8,8 +8,8 @@ module.exports = {
     id: 5,
     type: 'resource',
     source: '/pimages/electricity.png',
-    status: 'success',
-    exitType: 'load'
+    status: 'success'
+    // exitType: 'load'
   },
   'metal': {
     title: 'Metal Found',
@@ -19,8 +19,7 @@ module.exports = {
     id: 6,
     type: 'resource',
     source: '/pimages/ore.png',
-    status: 'success',
-    exitType: 'load'
+    status: 'success'
+    // exitType: 'load'
   }
-
 }

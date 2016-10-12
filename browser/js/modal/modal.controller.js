@@ -13,6 +13,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       newInventory.push(data[resource])
     }
     $scope.resources = newInventory
+    console.log('SCOPE RESOURCES: ', $scope.resources)
   })
 
   // I want to change what 'mode' the modal is portraying at given moment. 

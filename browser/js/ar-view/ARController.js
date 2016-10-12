@@ -198,7 +198,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
         console.log('USER BACKPACK AFTER SOCKET EMIT: ', userBackpack)
         for (let resource in templateObjs) {
           templateObjs[ resource ][ 'pquantity' ] = userBackpack[ resource ]
-          templateObjs[ resource ][ 'myProgress' ] = {'width': Math.floor(templateObjs[ resource ][ 'pquantity' ] / templateObjs[ resource ][ 'pmax' ]) + '%'}
+          templateObjs[ resource ][ 'myProgress' ] = {'width': templateObjs[ resource ][ 'pquantity' ] / templateObjs[ resource ][ 'pmax' ] * 100 + '%'}
           console.log('RESOURCE: ', resource, 'QUANTITY: ', templateObjs[ resource ][ 'pquantity' ])
         }
         ModalFactory.updateInventory(templateObjs)

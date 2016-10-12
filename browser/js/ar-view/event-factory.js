@@ -2,7 +2,7 @@ app.factory('EventFactory', function ($http, AuthService, FbFactory, GeoFireFact
   let EventFactory = {}
   const resources = [ 'metal', 'water', 'electricity', 'air' ]
 
-  // adds resource to database
+  // adds resource to database, send backpack back to front
   EventFactory.resourceToBackpack = (eventData) => {
     if (resources.includes(eventData.type)) {
       console.log('in backpack: ', eventData.type)
@@ -17,6 +17,17 @@ app.factory('EventFactory', function ($http, AuthService, FbFactory, GeoFireFact
             })
         })
     }
+  }
+  EventFactory.getBackpack = () => {
+    return AuthService.getLoggedInUser()
+      .then(user => {
+        return $http.get(`api/backpack/${user.id}`)
+      })
+      .then(res => res.data)
+  }
+  EventFactory.createOrFindEvent = (event) => {
+    return $http.post('api/events/', event)
+      .then(res => res.data)
   }
   return EventFactory
 })

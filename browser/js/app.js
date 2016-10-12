@@ -13,7 +13,13 @@ app.config(function ($urlRouterProvider, $locationProvider) {
 })
 
 // This app.run is for controlling access to specific states.
-app.run(function ($rootScope, AuthService, $state, FbFactory) {
+app.run(function ($rootScope, Socket, AuthService, $state, FbFactory) {
+  $rootScope.socket = Socket
+  AuthService.getLoggedInUser().then(user => {
+    console.log('EMITTING LOADING TO BACK WITH USER: ', user)
+    if (user) $rootScope.socket.emit('loading', user)
+  })
+
   // initialize Firebase Connection here!
   if (!window.isTesting) {
     FbFactory.initialize()

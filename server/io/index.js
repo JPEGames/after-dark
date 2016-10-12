@@ -3,6 +3,7 @@ var socketio = require('socket.io')
 var io = null
 var currentUsers = []
 let userTotal = 0
+var backpackEvents = require('./backpack')
 module.exports = function (server) {
   if (io) return io
 
@@ -17,6 +18,7 @@ module.exports = function (server) {
       io.sockets.connected[recipient.connection].emit(message, payload)
       console.log('Found recipient ' + recipient.username + ' Sent Message ' + message)
     }
+    // for finding correct user to send message + payload
     io.findUser = function (userId) {
       for (let i = 0; i < currentUsers.length; i++) {
         if (currentUsers[i].userId === userId) {
@@ -26,11 +28,16 @@ module.exports = function (server) {
       }
       console.log('No user found for id received: ', userId)
     }
+    // io.receive = function (message, eventTable) {
+    //   socket.on(message, function (data) {
+    //     console.log('received emit from client backpack!')
+    //   })
+    // }
+    // upon login through nav-bar client-side
     socket.on('loading', function (data) {
       let duplicate = false
       var userInformation = { username: data.username, userId: data.id, connection: socket.id, eventHistory: [] }
       for (let i = 0; i < currentUsers.length; i++) {
-        // TODO: check against socket ID - modify username and ID to reflect new user logging in on same session
         if (currentUsers[i].userId === data.id) {
           console.log('Detected duplicate!')
           duplicate = true
@@ -50,7 +57,7 @@ module.exports = function (server) {
       }
       console.log('Current Users: ', currentUsers)
     })
-
+    // on client refreshes
     socket.on('disconnect', function () {
       let removeId = socket.id
       let removedUser = false
@@ -66,6 +73,23 @@ module.exports = function (server) {
         console.log('Unable to remove user.')
       }
     })
+
+    /* <------CLIENT EVENT HANDLING--------> */
+    socket.on('sendBackpackEvent', function (data) {
+      console.log('received Backpack Event!')
+      console.log('backpack data: ', data)
+      // io.communicate({id: data.id}, 'emitBackpackEvent', {})
+      let {userId, resourceInfo} = data
+      console.log('USER ID: ', userId)
+      console.log('RESOURCE INFO: ', resourceInfo)
+      processResource(resourceInfo.type, io.communicate, userId)
+    })
   })
   return io
+}
+
+function processResource (type, ioMethod, userId) {
+  let resourceEvent = backpackEvents[type]
+  let emittedEvent = `send_${type}`
+  ioMethod({id: userId}, emittedEvent, resourceEvent)
 }

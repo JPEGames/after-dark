@@ -6,6 +6,9 @@ app.config(function ($stateProvider) {
     resolve: {
       showAR: function () {
         return true
+      },
+      currentUser: function (AuthService) {
+        return AuthService.getLoggedInUser()
       }
     }
   })

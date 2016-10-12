@@ -34,7 +34,9 @@ module.exports = function (getIO) {
         if (!userBunker) {
           res.send({noBunker: true})
         } else {
-          getIO().communicate({id: req.requestedUser.id}, 'test', {})
+          // TODO: this interferes with hasBunker - socket connects slower than resolve on nav-bar state
+          // getIO().communicate({id: req.requestedUser.id}, 'test', {})
+          // console.log('SENDING BUNKER UP')
           res.send(userBunker)
         }
       })

@@ -6,28 +6,28 @@ module.exports = db.define('backpack', {
     type: Sequelize.INTEGER,
     defaultValue: 0,
     validate: {
-      max: 2
+      max: 100
     }
   },
   electricity: {
     type: Sequelize.INTEGER,
     defaultValue: 0,
     validate: {
-      max: 2
+      max: 100
     }
   },
   water: {
     type: Sequelize.INTEGER,
     defaultValue: 0,
     validate: {
-      max: 20
+      max: 100
     }
   },
   money: {
     type: Sequelize.INTEGER,
     defaultValue: 0,
     validate: {
-      max: 20
+      max: 100
     }
   },
   information: {
@@ -37,7 +37,7 @@ module.exports = db.define('backpack', {
     type: Sequelize.INTEGER,
     defaultValue: 0,
     validate: {
-      max: 2
+      max: 100
     }
   }
 })

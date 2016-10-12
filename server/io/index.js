@@ -3,7 +3,8 @@ var socketio = require('socket.io')
 var io = null
 var currentUsers = []
 let userTotal = 0
-var backpackEvents = require('./backpack')
+const backpackEvents = require('./backpack')
+const Backpack = require('../db/models/backpack')
 module.exports = function (server) {
   if (io) return io
 
@@ -99,5 +100,17 @@ function processResource (type, ioMethod, userId, markerId) {
   let resourceEvent = backpackEvents[type]
   resourceEvent.quantity = Math.floor(Math.random() * 20)
   let emittedEvent = `send_${type}`
+  Backpack.find({where: {
+    userId: userId
+  }})
+    .then(backpack => {
+      console.log('UPDATING BACKPACK: ', backpack)
+      console.log('TYPE: ', typeof type, 'QUANTITY: ', resourceEvent.quantity)
+      backpack[type] = backpack[type] + resourceEvent.quantity
+      return backpack.save()
+    })
+    .then(updatedBackpack => {
+      ioMethod({id: userId}, 'updateBackpack', {})
+    })
   ioMethod({id: userId}, emittedEvent, {event: resourceEvent, markerId: markerId, markerType: type})
 }

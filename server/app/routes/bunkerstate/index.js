@@ -22,7 +22,19 @@ module.exports = function (getIO) {
       })
       .catch(next)
   })
-
+  router.get('/getUserName/:bunkerId', function (req, res, next) {
+    Bunker.findById(req.params.bunkerId, {include: [User]})
+      .then(bunker => {
+        if (!bunker) {
+          let err = new Error('not found')
+          err.status = 404
+          next(err)
+        } else {
+          res.send(bunker.user.username)
+        }
+      })
+      .catch(next)
+  })
   // for loading previously saved bunker state
   router.get('/:id', function (req, res, next) {
     Bunker.findOne({

@@ -1,4 +1,43 @@
-app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory) {
+app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory, BunkerStateFactory) {
+  let templateObjs = {
+    'metal': {
+      title: 'Metal',
+      source: '/pimages/ore.png',
+      pquantity: 0,
+      pmax: 100,
+      bquantity: 0,
+      bmax: 100,
+      myProgress: { 'width': 0 + '%' }
+    },
+    'water': {
+      title: 'H2O',
+      source: '/pimages/water.png',
+      pquantity: 0,
+      pmax: 100,
+      bquantity: 0,
+      bmax: 100,
+      myProgress: { 'width': 0 + '%' }
+    },
+    'air': {
+      title: 'O2',
+      source: '/pimages/oxygen.png',
+      pquantity: 0,
+      pmax: 100,
+      bquantity: 0,
+      bmax: 100,
+      myProgress: { 'width': 0 + '%' }
+    },
+    'electricity': {
+      title: 'Electricity',
+      source: '/pimages/electricity.png',
+      pquantity: 0,
+      pmax: 100,
+      bquantity: 0,
+      bmax: 100,
+      myProgress: { 'width': 0 + '%' }
+    }
+  }
+
   // display game upon transition to game view
   $scope.mapHeight = $window.innerHeight
   $scope.mapWidth = $window.innerWidth
@@ -43,25 +82,36 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   // move clicked resource to user backpack
   $scope.$on('gameEvent', (event, data) => {
     let payload
-    console.log('Data: ', data)
-    return EventFactory.createOrFindEvent(data)
-      .then(event => {
-        if (event.userId) {
-          console.log('Already Found!')
-        } else {
-          console.log('Event has no user yet!')
-          console.log('Received from AR: ', data)
-          payload = {userId: currentUser.id, resourceInfo: data}
-          $rootScope.socket.emit('sendBackpackEvent', payload)
-        }
-      })
-  // TODO: this needs to go after event sequence has completed
-  // also need to do error handling here...
-  // return EventFactory.resourceToBackpack(data)
-  //   .then(newBackpack => {
-  //     console.log('new backpack: ', newBackpack)
-  //   })
-  //   .catch(console.log)
+    console.log('received data: ', data)
+    console.log('current user: ', currentUser)
+    if (data[ 'type' ] === 'bunker') {
+      BunkerStateFactory.getBunkerUser(data.id)
+        .then(bunkerUser => {
+          if (bunkerUser === currentUser.username) {
+            $state.go('master.navbar.game')
+          }
+        })
+    } else {
+      return EventFactory.createOrFindEvent(data)
+        .then(event => {
+          if (event.userId) {
+            console.log('Already Found!')
+          } else {
+            console.log('Event has no user yet!')
+            console.log('Received from AR: ', data)
+            payload = { userId: currentUser.id, resourceInfo: data }
+            $rootScope.socket.emit('sendBackpackEvent', payload)
+          }
+        })
+    }
+
+    // TODO: this needs to go after event sequence has completed
+    // also need to do error handling here...
+    // return EventFactory.resourceToBackpack(data)
+    //   .then(newBackpack => {
+    //     console.log('new backpack: ', newBackpack)
+    //   })
+    //   .catch(console.log)
   })
 
   // takes player back to bunker view
@@ -95,10 +145,10 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
 
   $rootScope.socket.on('send_metal', function (event) {
     let eventObj = event.event
-    let thisMarker = {id: event.markerId, type: event.markerType}
+    let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('message', {newContent: eventObj})
+      ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
@@ -107,10 +157,10 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
 
   $rootScope.socket.on('send_electricity', function (event) {
     let eventObj = event.event
-    let thisMarker = {id: event.markerId, type: event.markerType}
+    let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('message', {newContent: eventObj})
+      ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
@@ -119,10 +169,10 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
 
   $rootScope.socket.on('send_water', function (event) {
     let eventObj = event.event
-    let thisMarker = {id: event.markerId, type: event.markerType}
+    let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('message', {newContent: eventObj})
+      ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
@@ -131,13 +181,27 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
 
   $rootScope.socket.on('send_air', function (event) {
     let eventObj = event.event
-    let thisMarker = {id: event.markerId, type: event.markerType}
+    let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('message', {newContent: eventObj})
+      ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
     }
+  })
+
+  $rootScope.socket.on('updateBackpack', function (event) {
+    console.log('GOT UPDATE BACKPACK EVENT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    EventFactory.getBackpack()
+      .then(userBackpack => {
+        console.log('USER BACKPACK AFTER SOCKET EMIT: ', userBackpack)
+        for (let resource in templateObjs) {
+          templateObjs[ resource ][ 'pquantity' ] = userBackpack[ resource ]
+          templateObjs[ resource ][ 'myProgress' ] = {'width': templateObjs[ resource ][ 'pquantity' ] / templateObjs[ resource ][ 'pmax' ] * 100 + '%'}
+          console.log('RESOURCE: ', resource, 'QUANTITY: ', templateObjs[ resource ][ 'pquantity' ])
+        }
+        ModalFactory.updateInventory(templateObjs)
+      })
   })
 })

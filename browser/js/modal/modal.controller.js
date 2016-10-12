@@ -6,6 +6,15 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
 
   // LISTENING FOR FACTORY
   // Event driven modal. Only a few events right now.
+  $scope.$on('updateInventory', function (event, data) {
+    console.log('updating inventory!!!')
+    let newInventory = []
+    for (let resource in data) {
+      newInventory.push(data[resource])
+    }
+    $scope.resources = newInventory
+    console.log('SCOPE RESOURCES: ', $scope.resources)
+  })
 
   // I want to change what 'mode' the modal is portraying at given moment. 
   // A queue manager will have to handle this event.

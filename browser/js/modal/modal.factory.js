@@ -139,6 +139,9 @@ app.factory('ModalFactory', function ($http, $rootScope) {
       // TODO: this temporarily takes care of double addMessage call
       testMessages = _.uniq(testMessages)
       console.log('Test messages: ', testMessages)
+    },
+    updateInventory: function (newInventory) {
+      $rootScope.$broadcast('updateInventory', newInventory)
     }
   }
 })

@@ -8,7 +8,7 @@ app.factory('ModalFactory', function ($http, $rootScope) {
       type: 'general',
       id: 1,
       status: 'neutral',
-      exitType: 'load'
+      exitType: 'loa'
     },
     {
       title: 'Another Event',

@@ -1,4 +1,4 @@
-app.controller('ARController', function ($rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory) {
+app.controller('ARController', function ($rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser) {
   // display game upon transition to game view
   $scope.mapHeight = $window.innerHeight
   $scope.mapWidth = $window.innerWidth
@@ -48,7 +48,7 @@ app.controller('ARController', function ($rootScope, $window, $scope, $localStor
           console.log('Already Found!')
         } else {
           console.log('Event has no user yet!')
-          $rootScope.socket.emit('sendBackpackEvent')
+          $rootScope.socket.emit('sendBackpackEvent', currentUser)
         }
       })
     // TODO: this needs to go after event sequence has completed

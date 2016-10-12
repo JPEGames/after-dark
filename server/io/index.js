@@ -74,8 +74,9 @@ module.exports = function (server) {
     })
 
     /* <------CLIENT EVENT HANDLING--------> */
-    socket.on('updateBackpack', function (data) {
-      console.log('getting emit from updateBackpack!')
+    socket.on('sendBackpackEvent', function (data) {
+      console.log('received Backpack Event!')
+      io.communicate({id: data.id}, 'emitBackpackEvent', {})
     })
 
     // socket.on('fromAngular', function () {
@@ -84,4 +85,3 @@ module.exports = function (server) {
   })
   return io
 }
-

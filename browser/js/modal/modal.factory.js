@@ -50,8 +50,19 @@ app.factory('ModalFactory', function ($http, $rootScope) {
   */
 
   let modalOpen = false
+  let nextDeletion = {}
 
   return {
+    // Marker functions for presentation, need deleted - ELIOT
+    wipeMarker: function () {
+      console.log('Wiping a marker, id: ' + nextDeletion.id)
+      $rootScope.$emit('DeleteMarker', nextDeletion)
+      nextDeletion = {}
+    },
+    setMarker: function (aMarker) {
+      console.log('Setting next marker to delete to id: ' + aMarker.id)
+      nextDeletion = aMarker
+    },
     // Change the modal to any mode. Can accept data.
     changeModal: function (newMode, newData) {
       console.log('Called Factory Function!')
@@ -69,6 +80,7 @@ app.factory('ModalFactory', function ($http, $rootScope) {
         console.log('User response to prompt was: ', aMessage.response)
       }
       $rootScope.$broadcast('messageRead', aMessage)
+      this.wipeMarker()
     },
     // Open modal from anywhere.
     openModal: function () {

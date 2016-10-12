@@ -98,5 +98,5 @@ module.exports = function (server) {
 function processResource (type, ioMethod, userId, markerId) {
   let resourceEvent = backpackEvents[type]
   let emittedEvent = `send_${type}`
-  ioMethod({id: userId}, emittedEvent, {event: resourceEvent, markerId: markerId})
+  ioMethod({id: userId}, emittedEvent, {event: resourceEvent, markerId: markerId, markerType: type})
 }

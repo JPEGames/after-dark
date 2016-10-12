@@ -12,6 +12,11 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   let pointsOfInterest = []
   let foundPoints = []
 
+  $rootScope.$on('DeleteMarker', function (event, data) {
+    const key = `${data.type}_${data.id}`
+    _.remove(pointsOfInterest, point => point.id === key)
+    updatePhaser()
+  })
   // exported watcher function, runs all map code
   // function refresh () {
   //   console.log('refresh called!')

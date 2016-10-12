@@ -54,13 +54,13 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
           $rootScope.socket.emit('sendBackpackEvent', payload)
         }
       })
-    // TODO: this needs to go after event sequence has completed
-    // also need to do error handling here...
-    // return EventFactory.resourceToBackpack(data)
-    //   .then(newBackpack => {
-    //     console.log('new backpack: ', newBackpack)
-    //   })
-    //   .catch(console.log)
+  // TODO: this needs to go after event sequence has completed
+  // also need to do error handling here...
+  // return EventFactory.resourceToBackpack(data)
+  //   .then(newBackpack => {
+  //     console.log('new backpack: ', newBackpack)
+  //   })
+  //   .catch(console.log)
   })
 
   // takes player back to bunker view
@@ -87,7 +87,39 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     zoom: zoom
   }
   // LISTENERS
+  // Need to modify this to its own controller - so that something else handles
+  // all event related communication.
+  // Needs to be removed later - ELIOT
+  $rootScope.socket.emit('loading', currentUser)
+
   $rootScope.socket.on('send_metal', function (eventObj) {
+    ModalFactory.addMessage(eventObj)
+    if (ModalFactory.getMessages().length > 0) {
+      ModalFactory.changeModal('message', {newContent: eventObj})
+      // TODO: this is hacky - implement loading!
+      $timeout(ModalFactory.openModal(), 1000)
+    }
+  })
+
+  $rootScope.socket.on('send_electricity', function (eventObj) {
+    ModalFactory.addMessage(eventObj)
+    if (ModalFactory.getMessages().length > 0) {
+      ModalFactory.changeModal('message', {newContent: eventObj})
+      // TODO: this is hacky - implement loading!
+      $timeout(ModalFactory.openModal(), 1000)
+    }
+  })
+
+  $rootScope.socket.on('send_water', function (eventObj) {
+    ModalFactory.addMessage(eventObj)
+    if (ModalFactory.getMessages().length > 0) {
+      ModalFactory.changeModal('message', {newContent: eventObj})
+      // TODO: this is hacky - implement loading!
+      $timeout(ModalFactory.openModal(), 1000)
+    }
+  })
+
+  $rootScope.socket.on('send_air', function (eventObj) {
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', {newContent: eventObj})

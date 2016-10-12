@@ -1,53 +1,55 @@
 app.factory('ModalFactory', function ($http, $rootScope) {
   // NEW DUMMY OBJECTS - BACKEND PPL CHECK IT OUT
   let testMessages = []
-    /*
-    {
-      title: 'An Event',
-      description: 'Something somewhere happened to someone.',
-      eventType: 'confirm',
-      source: '/pimages/message.png',
-      type: 'general',
-      id: 1,
-      status: 'neutral',
-      // exitType: 'load', if activated - will cause a load state
-      next: 'Any Event'
-    },
-    {
-      title: 'Another Event',
-      description: 'Something somewhere happened to someone else!',
-      eventType: 'yes/no',
-      source: '/pimages/message.png',
-      type: 'general',
-      id: 2,
-      status: 'danger'
-    },
-    {
-      title: 'Metal Found',
-      description: 'You gathered some metal.',
-      quantity: 17,
-      eventType: 'confirm',
-      id: 3,
-      type: 'resource',
-      source: '/pimages/ore.png',
-      status: 'success'
-    },
-    {
-      title: 'Earthling Assault!',
-      description: 'A group of earthlings has appeared out of the dust with intentions of attacking you! What will you do?',
-      eventType: 'variadic',
-      options: [
-        {title: 'Run', req: false, action: 1},
-        {title: 'Fight', req: false, action: 2},
-        {title: 'Talk', req: false, action: 3}
-      ],
-      id: 4,
-      type: 'general',
-      source: '/pimages/message.png',
-      status: 'neutral'
-    }
+  /*
+  {
+    title: 'An Event',
+    description: 'Something somewhere happened to someone.',
+    eventType: 'confirm',
+    source: '/pimages/message.png',
+    type: 'general',
+    id: 1,
+    status: 'neutral',
+    // exitType: 'load', if activated - will cause a load state
+    next: 'Any Event'
+  },
+  {
+    title: 'Another Event',
+    description: 'Something somewhere happened to someone else!',
+    eventType: 'yes/no',
+    source: '/pimages/message.png',
+    type: 'general',
+    id: 2,
+    status: 'danger'
+  },
+  {
+    title: 'Metal Found',
+    description: 'You gathered some metal.',
+    quantity: 17,
+    eventType: 'confirm',
+    id: 3,
+    type: 'resource',
+    source: '/pimages/ore.png',
+    status: 'success'
+  },
+  {
+    title: 'Earthling Assault!',
+    description: 'A group of earthlings has appeared out of the dust with intentions of attacking you! What will you do?',
+    eventType: 'variadic',
+    options: [
+      {title: 'Run', req: false, action: 1},
+      {title: 'Fight', req: false, action: 2},
+      {title: 'Talk', req: false, action: 3}
+    ],
+    id: 4,
+    type: 'general',
+    source: '/pimages/message.png',
+    status: 'neutral'
+  }
   ]
   */
+
+  let modalOpen = false
 
   return {
     // Change the modal to any mode. Can accept data.
@@ -71,10 +73,15 @@ app.factory('ModalFactory', function ($http, $rootScope) {
     // Open modal from anywhere.
     openModal: function () {
       $('#myModal').modal('show')
+      modalOpen = true
     },
     // Close modal from anywhere.
     closeModal: function () {
       $('#myModal').modal('hide')
+      modalOpen = false
+    },
+    getModalOpen: function () {
+      return modalOpen
     },
     submitResponse: function (aResponse) {
       // This is where we would be sending some information to a server.

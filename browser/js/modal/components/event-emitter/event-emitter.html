@@ -1,17 +1,17 @@
 <!-- CONFIRM -->
 <div ng-show="content.eventType === 'confirm'">
-	<button type="button" style="display: block; margin: 0 auto" class="btn btn-secondary" ng-click="exitMessage(content)">OK!</button>
+	<button type="button" style="display: block; margin: 0 auto; color: #263238" class="btn btn-secondary" ng-click="exitMessage(content)">OK!</button>
 </div>
 <!-- YES/NO -->
 <div ng-show="content.eventType === 'yes/no'">
-	<div style="text-align: center">
+	<div style="text-align: center; color: #263238">
 		<button type="button" style="display: inline; margin-right: 1em;" class="btn btn-danger" ng-click="denyMessage(content)">No</button>
 		<button type="button" style="display: inline; margin-left: 1em" class="btn btn-success" ng-click="confirmMessage(content)">Yes</button>
 	</div>
 </div>
 <!--  VARIADIC -->
 <div ng-show="content.eventType === 'variadic'">
-	<div style="text-align: center">
+	<div style="text-align: center; color: #263238">
 		<button type="button" style="display: inline; margin-right: 1em;" class="btn" ng-click="submitAnswer(content, content.options[0].action)" ng-show="content.options.length >= 1">{{content.options[0].title}}</button>
 		<button type="button" style="display: inline; margin-right: 1em;" class="btn" ng-click="submitAnswer(content, content.options[1].action)" ng-show="content.options.length >= 2">{{content.options[1].title}}</button>
 		<button type="button" style="display: inline; margin-right: 1em;" class="btn" ng-click="submitAnswer(content, content.options[2].action)" ng-show="content.options.length >= 3">{{content.options[2].title}}</button>

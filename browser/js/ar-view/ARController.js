@@ -1,4 +1,4 @@
-app.controller('ARController', function ($window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory) {
+app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory) {
   // display game upon transition to game view
   $scope.mapHeight = $window.innerHeight
   $scope.mapWidth = $window.innerWidth
@@ -42,7 +42,25 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
 
   // move clicked resource to user backpack
   $scope.$on('gameEvent', (event, data) => {
-    EventFactory.resourceToBackpack(data)
+    let payload
+    return EventFactory.createOrFindEvent(data)
+      .then(event => {
+        if (event.userId) {
+          console.log('Already Found!')
+        } else {
+          console.log('Event has no user yet!')
+          console.log('Received from AR: ', data)
+          payload = {userId: currentUser.id, resourceInfo: data}
+          $rootScope.socket.emit('sendBackpackEvent', payload)
+        }
+      })
+    // TODO: this needs to go after event sequence has completed
+    // also need to do error handling here...
+    // return EventFactory.resourceToBackpack(data)
+    //   .then(newBackpack => {
+    //     console.log('new backpack: ', newBackpack)
+    //   })
+    //   .catch(console.log)
   })
 
   // takes player back to bunker view
@@ -68,4 +86,13 @@ app.controller('ARController', function ($window, $scope, $localStorage, $state,
     lng: 0,
     zoom: zoom
   }
+  // LISTENERS
+  $rootScope.socket.on('send_metal', function (eventObj) {
+    ModalFactory.addMessage(eventObj)
+    if (ModalFactory.getMessages().length > 0) {
+      ModalFactory.changeModal('message', {newContent: eventObj})
+      // TODO: this is hacky - implement loading!
+      $timeout(ModalFactory.openModal(), 1000)
+    }
+  })
 })

@@ -22,7 +22,7 @@ app.factory('ArFactory', function (DistanceFactory) {
         reject('We could not get your location.')
       }, {
         enableHighAccuracy: true,
-        timeout: 4000
+        timeout: 6000
       })
     })
   }

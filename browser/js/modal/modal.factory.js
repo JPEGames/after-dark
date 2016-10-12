@@ -1,4 +1,4 @@
-app.factory('ModalFactory', function ($http, $rootScope) {
+app.factory('ModalFactory', function ($state, $http, $rootScope) {
   // NEW DUMMY OBJECTS - BACKEND PPL CHECK IT OUT
   let testMessages = []
   /*
@@ -51,7 +51,7 @@ app.factory('ModalFactory', function ($http, $rootScope) {
 
   let modalOpen = false
   let nextDeletion = {}
-
+  let goToBunker = false
   return {
     // Marker functions for presentation, need deleted - ELIOT
     wipeMarker: function () {
@@ -80,6 +80,10 @@ app.factory('ModalFactory', function ($http, $rootScope) {
         console.log('User response to prompt was: ', aMessage.response)
       }
       $rootScope.$broadcast('messageRead', aMessage)
+      if (goToBunker) {
+        goToBunker = false
+        $state.go('master.navbar.game')
+      }
       this.wipeMarker()
     },
     // Open modal from anywhere.
@@ -142,6 +146,9 @@ app.factory('ModalFactory', function ($http, $rootScope) {
     },
     updateInventory: function (newInventory) {
       $rootScope.$broadcast('updateInventory', newInventory)
+    },
+    enterBunker: function () {
+      goToBunker = true
     }
   }
 })

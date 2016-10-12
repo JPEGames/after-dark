@@ -88,7 +88,22 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
       BunkerStateFactory.getBunkerUser(data.id)
         .then(bunkerUser => {
           if (bunkerUser === currentUser.username) {
-            $state.go('master.navbar.game')
+            ModalFactory.enterBunker()
+            ModalFactory.changeModal('message', {
+              newContent: {
+                title: `Enter ${currentUser.username}'s Bunker?`,
+                description: `You have arrived at your own bunker. Thankfully, still safe. Would you like to enter your bunker at the present moment?`,
+                eventType: 'yes/no',
+                source: '/pimages/vault.png',
+                type: 'general',
+                id: '10',
+                status: 'neutral',
+                exitType: 'load',
+                next: currentUser.username
+              }
+            })
+            ModalFactory.openModal()
+            // $state.go('master.navbar.game')
           }
         })
     } else {

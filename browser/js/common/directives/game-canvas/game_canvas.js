@@ -1,6 +1,6 @@
 // testing for phaser
 
-window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
+window.createGame = function (ele, scope, bunker, injector, MenuFactory, ModalFactory) {
   let height = scope.height
   // let width = parseInt(ele.css('width'), 10)
   var game = new Phaser.Game(960, height, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
@@ -221,6 +221,9 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       clearBunker()
       loadBunker(bunker.savedBunkerState)
     }
+
+    ModalFactory.resetModal()
+    ModalFactory.closeModal()
   // Alias keys - didnt work otherwise, dont ask.
   }
 
@@ -835,7 +838,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 }
 
 // custom directive to link phaser object to angular
-app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, AuthService) {
+app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, AuthService, ModalFactory) {
   return {
     scope: {
       data: '=',
@@ -847,7 +850,7 @@ app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, Au
       scope.height = $window.innerHeight
 
       if (scope.data) {
-        window.createGame(ele, scope, scope.bunker, $injector, MenuFactory)
+        window.createGame(ele, scope, scope.bunker, $injector, MenuFactory, ModalFactory)
       }
     }
   }

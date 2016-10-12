@@ -1,6 +1,7 @@
 app.factory('ModalFactory', function ($http, $rootScope) {
   // NEW DUMMY OBJECTS - BACKEND PPL CHECK IT OUT
-  let testMessages = [
+  let testMessages = []
+    /*
     {
       title: 'An Event',
       description: 'Something somewhere happened to someone.',
@@ -46,6 +47,7 @@ app.factory('ModalFactory', function ($http, $rootScope) {
       status: 'neutral'
     }
   ]
+  */
 
   return {
     // Change the modal to any mode. Can accept data.

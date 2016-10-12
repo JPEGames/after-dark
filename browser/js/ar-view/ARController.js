@@ -90,7 +90,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   $rootScope.socket.on('send_metal', function (eventObj) {
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('notify', {newContent: eventObj})
+      ModalFactory.changeModal('message', {newContent: eventObj})
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
     }

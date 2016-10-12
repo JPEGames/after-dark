@@ -96,39 +96,51 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   // Needs to be removed later - ELIOT
   $rootScope.socket.emit('loading', currentUser)
 
-  $rootScope.socket.on('send_metal', function (eventObj) {
+  $rootScope.socket.on('send_metal', function (event) {
+    let eventObj = event.event
+    let thisMarker = {id: event.markerId, type: event.markerType}
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', {newContent: eventObj})
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
+      ModalFactory.setMarker(thisMarker)
     }
   })
 
-  $rootScope.socket.on('send_electricity', function (eventObj) {
+  $rootScope.socket.on('send_electricity', function (event) {
+    let eventObj = event.event
+    let thisMarker = {id: event.markerId, type: event.markerType}
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', {newContent: eventObj})
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
+      ModalFactory.setMarker(thisMarker)
     }
   })
 
-  $rootScope.socket.on('send_water', function (eventObj) {
+  $rootScope.socket.on('send_water', function (event) {
+    let eventObj = event.event
+    let thisMarker = {id: event.markerId, type: event.markerType}
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', {newContent: eventObj})
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
+      ModalFactory.setMarker(thisMarker)
     }
   })
 
-  $rootScope.socket.on('send_air', function (eventObj) {
+  $rootScope.socket.on('send_air', function (event) {
+    let eventObj = event.event
+    let thisMarker = {id: event.markerId, type: event.markerType}
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', {newContent: eventObj})
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
+      ModalFactory.setMarker(thisMarker)
     }
   })
 })

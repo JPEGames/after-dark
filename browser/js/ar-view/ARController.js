@@ -1,4 +1,4 @@
-app.controller('ARController', function ($rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser) {
+app.controller('ARController', function ($rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory) {
   // display game upon transition to game view
   $scope.mapHeight = $window.innerHeight
   $scope.mapWidth = $window.innerWidth
@@ -42,13 +42,16 @@ app.controller('ARController', function ($rootScope, $window, $scope, $localStor
 
   // move clicked resource to user backpack
   $scope.$on('gameEvent', (event, data) => {
+    let payload
     return EventFactory.createOrFindEvent(data)
       .then(event => {
         if (event.userId) {
           console.log('Already Found!')
         } else {
           console.log('Event has no user yet!')
-          $rootScope.socket.emit('sendBackpackEvent', currentUser)
+          console.log('Received from AR: ', data)
+          payload = {userId: currentUser.id, resourceInfo: data}
+          $rootScope.socket.emit('sendBackpackEvent', payload)
         }
       })
     // TODO: this needs to go after event sequence has completed
@@ -83,4 +86,14 @@ app.controller('ARController', function ($rootScope, $window, $scope, $localStor
     lng: 0,
     zoom: zoom
   }
+  // LISTENERS
+  $rootScope.socket.on('send_metal', function (eventObj) {
+    ModalFactory.addMessage(eventObj)
+    if (ModalFactory.getMessages().length > 0) {
+      ModalFactory.changeModal('notify', {newContent: eventObj})
+      //
+      $scope.$digest()
+      ModalFactory.openModal()
+    }
+  })
 })

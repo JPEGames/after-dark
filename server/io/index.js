@@ -3,6 +3,7 @@ var socketio = require('socket.io')
 var io = null
 var currentUsers = []
 let userTotal = 0
+var backpackEvents = require('./backpack')
 module.exports = function (server) {
   if (io) return io
 
@@ -76,12 +77,19 @@ module.exports = function (server) {
     /* <------CLIENT EVENT HANDLING--------> */
     socket.on('sendBackpackEvent', function (data) {
       console.log('received Backpack Event!')
-      io.communicate({id: data.id}, 'emitBackpackEvent', {})
+      console.log('backpack data: ', data)
+      // io.communicate({id: data.id}, 'emitBackpackEvent', {})
+      let {userId, resourceInfo} = data
+      console.log('USER ID: ', userId)
+      console.log('RESOURCE INFO: ', resourceInfo)
+      processResource(resourceInfo.type, io.communicate, userId)
     })
-
-    // socket.on('fromAngular', function () {
-    //   console.log('WE GOT STUFF FROM FRONT-END~~~~')
-    // })
   })
   return io
+}
+
+function processResource (type, ioMethod, userId) {
+  let resourceEvent = backpackEvents[type]
+  let emittedEvent = `send_${type}`
+  ioMethod({id: userId}, emittedEvent, resourceEvent)
 }

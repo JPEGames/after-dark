@@ -51,6 +51,7 @@ app.factory('ModalFactory', function ($http, $rootScope) {
     // Change the modal to any mode. Can accept data.
     changeModal: function (newMode, newData) {
       console.log('Called Factory Function!')
+      console.log('Switching to new mode: ', newMode)
       newData.newMode = newMode
       $rootScope.$broadcast('modeChange', newData)
     },
@@ -110,6 +111,13 @@ app.factory('ModalFactory', function ($http, $rootScope) {
         loadData = {}
       }
       $rootScope.$broadcast('startLoad', loadData)
+    },
+    addMessage: function (message) {
+      console.log('Adding message: ', message)
+      testMessages.push(message)
+      // TODO: this temporarily takes care of double addMessage call
+      testMessages = _.uniq(testMessages)
+      console.log('Test messages: ', testMessages)
     }
   }
 })

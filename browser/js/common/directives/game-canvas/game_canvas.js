@@ -75,7 +75,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   var buildHere = false
   var upgradeHeight = 2
   var upgradeWidth = 2
-  var upgradePieces = [[99, 99], [99, 99]]
+  var upgradePieces = [[98, 99], [91, 92]]
   var upgradeData = {}
   var upgradeAction = 'test'
   var upgradeActions = []
@@ -294,12 +294,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     }
   }
 
-  function render () {
-    game.debug.cameraInfo(game.camera, 32, 32)
-    // Show camera info
-    game.debug.text('Tile Info: ' + log, 32, 570)
-  // Show selected tile
-  }
+  function render () {}
 
   // Move player down.
   function moveDown () {

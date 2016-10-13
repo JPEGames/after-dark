@@ -1,6 +1,6 @@
 // testing for phaser
 
-window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
+window.createGame = function (ele, scope, $interval, bunker, injector, MenuFactory, ModalFactory) {
   let height = scope.height
   // let width = parseInt(ele.css('width'), 10)
   var game = new Phaser.Game(960, height, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
@@ -221,6 +221,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       clearBunker()
       loadBunker(bunker.savedBunkerState)
     }
+
+    ModalFactory.closeModal()
   // Alias keys - didnt work otherwise, dont ask.
   }
 
@@ -795,21 +797,36 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   function compOne () {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
-      console.log('Computer One Activated.')
+      ModalFactory.changeModal('upgrades', {forceOpen: true})
+      console.log('Upgrade Computer Activated.')
     }
   }
 
   function compTwo () {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
-      console.log('Computer Two Activited')
+      ModalFactory.changeModal('message', {
+        newContent: {
+          title: 'Deposit Resources',
+          description: 'Would you like to deposit your resources in your bunkers cache for use in upgrading your equipment?',
+          eventType: 'yes/no',
+          source: '/pimages/message.png',
+          type: 'general',
+          id: 998,
+          status: 'neutral',
+          exitType: 'load',
+          next: 'New Storage'
+        },
+        forceOpen: true
+      })
+      console.log('Deposit Computer Activated.')
     }
   }
 
   function compThree () {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
-      console.log('Computer Three Activated')
+      console.log('Market Computer Activated.')
     }
   }
 
@@ -835,7 +852,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 }
 
 // custom directive to link phaser object to angular
-app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, AuthService) {
+app.directive('gameCanvas', function ($window, $injector, $interval, $http, MenuFactory, AuthService, ModalFactory) {
   return {
     scope: {
       data: '=',
@@ -847,7 +864,7 @@ app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, Au
       scope.height = $window.innerHeight
 
       if (scope.data) {
-        window.createGame(ele, scope, scope.bunker, $injector, MenuFactory)
+        window.createGame(ele, scope, $interval, scope.bunker, $injector, MenuFactory, ModalFactory)
       }
     }
   }

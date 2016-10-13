@@ -16,6 +16,7 @@ let eventSelector = (eventTable) => {
   // array of probabilities corresponding to loot table
   let probThresholds = Object.keys(eventTable).map(key => parseFloat(key)).sort()
 
+  // TODO: replace this with lodash filter and lte
   // randomly picks event in loot table based on random # generated
   for (let i = 0; i < probThresholds.length; i++) {
     if (randomProb <= probThresholds[i]) {

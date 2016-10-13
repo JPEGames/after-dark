@@ -1,6 +1,29 @@
-app.factory('ModalFactory', function ($http, $rootScope) {
+app.factory('ModalFactory', function ($state, $http, $rootScope) {
   // NEW DUMMY OBJECTS - BACKEND PPL CHECK IT OUT
   let testMessages = []
+  let testUpgrades = [
+    {
+      title: 'Upgrade 1',
+      description: 'This upgrade increases something, somewhere.',
+      source: '/pimages/electricity.png',
+      id: 999,
+      status: 'neutral',
+      exitType: 'load',
+      costs: [
+        {type: 'metal', quantity: 50},
+        {type: 'electricity', quantity: 20},
+        {type: 'water', quantity: 15},
+        {type: 'oxygen', quantity: 5}
+      ],
+      benefits: [
+        {type: 'capacity', category: 'oxygen', benefit: 'plus', quantity: '10'},
+        {type: 'capacity', category: 'water', benefit: 'plus', quantity: '10'},
+        {type: 'capacity', category: 'metal', benefit: 'plus', quantity: '10'},
+        {type: 'capacity', category: 'electricity', benefit: 'plus', quantity: '10'}
+
+      ]
+    }
+  ]
   /*
   {
     title: 'An Event',
@@ -49,8 +72,11 @@ app.factory('ModalFactory', function ($http, $rootScope) {
   ]
   */
 
+  // Right here begins my hacks - not ideal - but other solutions is eventing
+  // which is complex.
   let modalOpen = false
   let nextDeletion = {}
+  let goToBunker = false
 
   return {
     // Marker functions for presentation, need deleted - ELIOT
@@ -67,8 +93,14 @@ app.factory('ModalFactory', function ($http, $rootScope) {
     changeModal: function (newMode, newData) {
       console.log('Called Factory Function!')
       console.log('Switching to new mode: ', newMode)
-      newData.newMode = newMode
-      $rootScope.$broadcast('modeChange', newData)
+      if (newData) {
+        newData.newMode = newMode
+        $rootScope.$broadcast('modeChange', newData)
+      } else {
+        let newData = {}
+        newData.newMode = newMode
+        $rootScope.$broadcast('modeChange', newData)
+      }
     },
     // Reset modal to its default state.
     resetModal: function () {
@@ -80,6 +112,10 @@ app.factory('ModalFactory', function ($http, $rootScope) {
         console.log('User response to prompt was: ', aMessage.response)
       }
       $rootScope.$broadcast('messageRead', aMessage)
+      if (goToBunker) {
+        goToBunker = false
+        $state.go('master.navbar.game')
+      }
       this.wipeMarker()
     },
     // Open modal from anywhere.
@@ -139,6 +175,15 @@ app.factory('ModalFactory', function ($http, $rootScope) {
       // TODO: this temporarily takes care of double addMessage call
       testMessages = _.uniq(testMessages)
       console.log('Test messages: ', testMessages)
+    },
+    updateInventory: function (newInventory) {
+      $rootScope.$broadcast('updateInventory', newInventory)
+    },
+    enterBunker: function () {
+      goToBunker = true
+    },
+    getUpgrades: function () {
+      return testUpgrades
     }
   }
 })

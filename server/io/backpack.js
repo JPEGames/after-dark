@@ -44,5 +44,4 @@ module.exports = {
     status: 'success',
     exitType: 'immediate'
   }
-
 }

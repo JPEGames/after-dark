@@ -3,11 +3,15 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
   let testMessages = []
   let testUpgrades = [
     {
+      // HEADER
       title: 'Upgrade 1',
       description: 'This upgrade increases something, somewhere.',
       source: '/pimages/electricity.png',
+      // ARBITRARY
       id: 999,
+      // COLOR
       status: 'neutral',
+      // literally exit type
       exitType: 'load',
       costs: [
         {type: 'metal', quantity: 50},
@@ -20,8 +24,9 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
         {type: 'capacity', category: 'water', benefit: 'plus', quantity: '10'},
         {type: 'capacity', category: 'metal', benefit: 'plus', quantity: '10'},
         {type: 'capacity', category: 'electricity', benefit: 'plus', quantity: '10'}
-
-      ]
+      ],
+      // custom load message
+      next: ''
     }
   ]
   /*

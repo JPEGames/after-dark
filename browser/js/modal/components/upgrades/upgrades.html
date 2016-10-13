@@ -1,0 +1,14 @@
+<div id="myPrompt">
+  <div class="modal-header" style="text-align: center">
+    <h3 class="modal-title" id="myModalLabel" style="color: black">Upgrades Available</h3>
+  </div>
+  <div class="modal-body" style="padding-top: 0; padding-bottom: 0;">
+  <upgrade-row ng-repeat="upgrade in upgrades" data="upgrade" ng-click="goToUpgrade(upgrade)"></upgrade-row>
+    <div style="text-align: center" ng-show="upgrades.length === 0">
+      <h4> There are no upgrades currently available. </h4>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" style="display: block; margin: 0 auto" class="btn btn-secondary" ng-click="exitUpgrades()">Close</button>
+  </div>
+</div>

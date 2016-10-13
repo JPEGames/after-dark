@@ -1,6 +1,7 @@
 app.factory('ModalFactory', function ($state, $http, $rootScope) {
   // NEW DUMMY OBJECTS - BACKEND PPL CHECK IT OUT
   let testMessages = []
+  let testUpgrades = []
   /*
   {
     title: 'An Event',
@@ -49,9 +50,12 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
   ]
   */
 
+  // Right here begins my hacks - not ideal - but other solutions is eventing
+  // which is complex.
   let modalOpen = false
   let nextDeletion = {}
   let goToBunker = false
+
   return {
     // Marker functions for presentation, need deleted - ELIOT
     wipeMarker: function () {
@@ -149,6 +153,9 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     },
     enterBunker: function () {
       goToBunker = true
+    },
+    getUpgrades: function () {
+      return testUpgrades
     }
   }
 })

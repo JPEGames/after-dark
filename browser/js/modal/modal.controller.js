@@ -3,6 +3,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   $scope.default = 'inventory'
   $scope.castData = {}
   $scope.messages = ModalFactory.getMessages()
+  $scope.upgrades = ModalFactory.getUpgrades()
 
   // LISTENING FOR FACTORY
   // Event driven modal. Only a few events right now.
@@ -62,8 +63,8 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     {title: 'Electricity', source: '/pimages/electricity.png', pquantity: 0, pmax: 100, bquantity: 0, bmax: 100, myProgress: {'width': 0 + '%'}}
   ]
 
-  // Force modal open if there are things to say.
-  // if ($scope.messages.length > 0) {
-  //   ModalFactory.openModal()
-  // }
+// Force modal open if there are things to say.
+// if ($scope.messages.length > 0) {
+//   ModalFactory.openModal()
+// }
 })

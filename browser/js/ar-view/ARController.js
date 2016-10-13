@@ -73,7 +73,6 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     tileLayer: 'https://api.mapbox.com/styles/v1/jyyeh/ciu1o4t2l00a92jo1o2qavws6/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoianl5ZWgiLCJhIjoiY2l1MW8zdWh2MGQ5MDMwandsMTh1cXlpbiJ9.MCJltxs97I_CAkTq2Z-n0g'
   }
 
-  $scope.$on('updateAR', (event, data) => console.log(data))
   // toggles AR menu
   $scope.menuVisible = () => {
     ArFactory.showMenu()

@@ -1,4 +1,4 @@
-window.createGameAR = function (ele, scope, players, mapId, injector) {
+window.createGameAR = function (ele, scope, players, mapId, injector, $interval) {
   let height = scope.height
   let width = scope.width
   const centerShift = 20
@@ -163,7 +163,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // Add an individual marker to the map.
   function addAMarker (xCoord, yCoord, width, height, type, id, found) {
     let tempSprite
-    let [x, y] = spaceMarker(xCoord, yCoord)
+    let [x, y] = [xCoord, yCoord]
     tempSprite = markerSetter(type, id, x, y)
     console.log('Attempting to add marker!')
     console.log(type)
@@ -288,17 +288,18 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   }
 
   scope.$on('updateAR', (event, data) => {
-    clearMarkers()
-    deleteClouds()
-    createACloudGrid(mapToGrid(data.visited))
-    addMarkers(data.locations)
-    console.log('DATA LOCATIONS IN AR: ', data.locations)
+    console.log(data)
+    $interval(clearMarkers, 500, 1)
+    $interval(deleteClouds, 1000, 1)
+    $interval(createACloudGrid, 1500, 1, true, mapToGrid(data.visited))
+    $interval(addMarkers, 2000, 1, true, data.locations)
+    $interval(console.table, 2500, 1, true, data)
   })
 }
 
 // Part of a state that has an ARController as a parent - so broadcasts are available.
 // custom directive to link phaser object to angular
-app.directive('arCanvas', function ($injector, $window) {
+app.directive('arCanvas', function ($injector, $window, $interval) {
   return {
     scope: {
       data: '=',
@@ -316,7 +317,7 @@ app.directive('arCanvas', function ($injector, $window) {
       scope.width = $window.innerWidth
       scope.height = $window.innerHeight
       if (scope.data) {
-        window.createGameAR(ele, scope, scope.players, scope.mapId, $injector)
+        window.createGameAR(ele, scope, scope.players, scope.mapId, $injector, $interval)
       }
     }
   }

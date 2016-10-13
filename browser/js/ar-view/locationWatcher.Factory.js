@@ -1,25 +1,25 @@
 app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafletData, DistanceFactory, $rootScope, GridFactory, $http) {
   /* GLOBALS */
-  const mapReloadDistance = 200 // distance moved (meters) before panning map to new center
+  const mapReloadDistance = 100 // distance moved (meters) before panning map to new center
   const dataReloadDistance = 1000 // distance moved before making GeoFire query for bunkers + other markers...
   let center
   let lastFetchedCenter // this is the last center used to make a GeoFire query
 
-  let nw // coordinates of map top-left corner (lat/long)
-  let ne // " top-right corner (lat/long)
-  let sw // " bottom-left corner (lat/long)
-  let size // total size of map, represented by object with height(h) and width(w) in meters
+  // let nw // coordinates of map top-left corner (lat/long)
+  // let ne // " top-right corner (lat/long)
+  // let sw // " bottom-left corner (lat/long)
+  // let size // total size of map, represented by object with height(h) and width(w) in meters
   let pointsOfInterest = []
   let foundPoints = []
 
   $rootScope.$on('DeleteMarker', function (event, data) {
     const key = `${data.type}_${data.id}`
     _.remove(pointsOfInterest, point => point.id === key)
-    updatePhaser()
+    mapMover(center)
+  // updatePhaser()
   })
   // exported watcher function, runs all map code
   // function refresh () {
-  //   console.log('refresh called!')
   //   if (center) {
   //     console.log(center)
   //     mapMover(center)
@@ -27,8 +27,8 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   // }
   let watch = function () {
     if (!center) {
-      console.log('makeing watcher')
       navigator.geolocation.watchPosition(success, console.warn, {enableHighAccuracy: true})
+    // setInterval(updatePhaser, 1000)
     } else mapMover(center)
   }
 
@@ -37,8 +37,8 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   function success (geoObj) {
     let loc = {lat: geoObj.coords.latitude, lng: geoObj.coords.longitude}
     if (diff(loc, center, mapReloadDistance)) {
-      console.log('mapMover!')
       mapMover(loc)
+        .then(arr => updatePhaser(...arr))
     }
   }
 
@@ -55,22 +55,24 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
       .then(map => map.panTo(geoObj)) // move map view to new location on movement
       .then(map => map.getBounds())
       .then(bounds => { // updating global variables on movement
-        ne = bounds._northEast
-        sw = bounds._southWest
-        nw = getIntersects(ne, sw)[0]
-        size = getSize(nw, ne, sw)
+        const ne = bounds._northEast
+        const sw = bounds._southWest
+        const nw = getIntersects(ne, sw)[0]
+        const size = getSize(nw, ne, sw)
         // only does GeoFire query if movement > dataReloadDistance
-        if (diff(center, lastFetchedCenter, dataReloadDistance)) {
+        if (diff(geoObj, lastFetchedCenter, dataReloadDistance)) {
           // if (lastFetchedCenter) updatePhaser()
-          makeGrid(center)
-            .then(() => queryPoints(center))
-            .then(() => updatePhaser())
+          return makeGrid(geoObj)
+            .then(() => queryPoints(geoObj))
+            .then(() => [sw, ne, nw, size])
         } else {
-          let newNearest = GridFactory.getNearestPoints(center)
-          $http.put('/api/grid', {newNearest}).catch(console.log)
-          foundPoints.concat(newNearest)
+          console.table([ne, sw, nw])
+          // pointsOfInterest = Array.from(pointsOfInterest)
+          let newNearest = GridFactory.getNearestPoints(geoObj)
+          $http.put('/api/grid', {newNearest})
+          foundPoints = foundPoints.concat(newNearest)
           foundPoints = _.uniq(foundPoints)
-          updatePhaser() // send payload to phaser without making query, for updating which markers/bunkers are in bounds
+          return Promise.all([sw, ne, nw, size]) // send payload to phaser without making query, for updating which markers/bunkers are in bounds
         }
       })
   }
@@ -98,11 +100,10 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   function makeGrid () {
     let grid = GridFactory.makeGrid(center)
     let corners = GridFactory.getNearestPoints(center)
-    console.log('POSTING GRID')
+
     return $http.post('/api/grid', {grid, corners})
       .then(res => res.data.visited)
       .then(arr => arr.forEach(elem => {
-        console.log(elem)
         foundPoints.push(grid[elem])
       }))
   }
@@ -131,15 +132,17 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   }
 
   // Converting cummulated geofire objects to our data
-  function updatePhaser () {
-    console.log('***************UPDATING PHASER FROM MAP*******************')
-    console.log(pointsOfInterest)
-    console.log(foundPoints)
-    $rootScope.$broadcast('updateAR', {locations: pointsOfInterest.filter(x => inMapBounds(x.coords)).map(formatMarker), visited: foundPoints.filter(inMapBounds).map(toXY)})
+  function updatePhaser (sw, ne, nw, mapSize) {
+    let data = {
+      locations: pointsOfInterest.filter(x => inMapBounds(x.coords, sw, ne)).map(x => formatMarker(x, nw, mapSize)),
+      visited: foundPoints.filter(x => inMapBounds(x, sw, ne)).map(x => toXY(x, nw, mapSize))
+    }
+    console.table(data)
+    $rootScope.$broadcast('updateAR', data)
   }
 
   // checks if given bunker {coords: {lat, lng}} should show on map
-  function inMapBounds (point) {
+  function inMapBounds (point, sw, ne) {
     let lat = point.lat
     let lng = point.lng
     return (sw.lat <= lat && sw.lng <= lng) && (ne.lat >= lat && ne.lng >= lng)
@@ -147,18 +150,17 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
 
   // convert bunker coordinates to x, y where x = % from left of map
   // y = % from top of map
-  function formatMarker (point) {
+  function formatMarker (point, nw, mapSize) {
     let [type, id] = point.id.split('_')
-    let pos = toXY(point.coords)
+    let pos = toXY(point.coords, nw, mapSize)
     return {id, type, pos}
   }
-  function toXY (coords) {
+  function toXY (coords, nw, size) {
     let [NE, SW] = getIntersects(nw, coords)
     // returns {height, width} corresponding to rectangle with
     // its top-left : map top-left corner, bottom-right: point coordinates
     let pointDist = getSize(nw, NE, SW)
     return {x: pointDist.w / size.w, y: pointDist.h / size.h}
   }
-
   return {watch}
 })

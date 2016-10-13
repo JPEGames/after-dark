@@ -1,7 +1,5 @@
 'use strict'
 var path = require('path')
-var chalk = require('chalk')
-var util = require('util')
 
 var rootPath = path.join(__dirname, '../../../')
 var indexPath = path.join(rootPath, './server/app/views/index.html')

@@ -10,7 +10,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
   })
 
   // Attempt for responsiveness - does not work.
-  /*  
+  /*
   $(window).resize(function () {
     gameAR.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
     gameAR.scale.refresh()
@@ -96,7 +96,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
     // Increase counter for recreating clouds for shitty animation effect that needs work.
     randCount++
     // If the counter is above the set timer...
-    /*    
+    /*
     if (randCount >= randFrequency && randOn) {
           // Delete the clouds,
           deleteClouds()

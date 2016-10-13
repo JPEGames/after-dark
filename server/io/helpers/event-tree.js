@@ -1,4 +1,4 @@
-var traveler = require('./event-tree')
+var traveller = require('./event-tree')
 
 class EventTree {
   constructor (title, description, source, id, status, exitType, next) {

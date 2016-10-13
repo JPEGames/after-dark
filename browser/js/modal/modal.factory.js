@@ -11,7 +11,16 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       exitType: 'load',
       costs: [
         {type: 'metal', quantity: 50},
-        {type: 'electricity', quantity: 20}
+        {type: 'electricity', quantity: 20},
+        {type: 'water', quantity: 15},
+        {type: 'oxygen', quantity: 5}
+      ],
+      benefits: [
+        {type: 'capacity', category: 'oxygen', benefit: 'plus', quantity: '10'},
+        {type: 'capacity', category: 'water', benefit: 'plus', quantity: '10'},
+        {type: 'capacity', category: 'metal', benefit: 'plus', quantity: '10'},
+        {type: 'capacity', category: 'electricity', benefit: 'plus', quantity: '10'}
+
       ]
     }
   ]
@@ -84,8 +93,14 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     changeModal: function (newMode, newData) {
       console.log('Called Factory Function!')
       console.log('Switching to new mode: ', newMode)
-      newData.newMode = newMode
-      $rootScope.$broadcast('modeChange', newData)
+      if (newData) {
+        newData.newMode = newMode
+        $rootScope.$broadcast('modeChange', newData)
+      } else {
+        let newData = {}
+        newData.newMode = newMode
+        $rootScope.$broadcast('modeChange', newData)
+      }
     },
     // Reset modal to its default state.
     resetModal: function () {

@@ -5,11 +5,14 @@
 			<img ng-src="{{data.source}}" style="width: 100%; height: 100%; margin-left: 0.2em">
 		</div>
 	</div>
-	<div style="width: 40%; max-width: 40%; margin-top: 2em; margin-left: 1.5em; float: left">
-		<p> {{data.description}} </p>
-	</div>
-	<div style="width: 15%; max-width: 15%; margin-top: 1em; margin-left: 1em; float: left">
-		<p ng-repeat="cost in data.costs"><span>{{cost.quantity}}</span> <span>{{cost.type}}</span></p>
+	<div style="width: 60%; max-width: 60%; margin-top: 0.5em; margin-left: 1.5em; float: left">
+		<h5> {{data.description}} </h5>
+		<ul style="display: inline-block">
+		<li ng-repeat="cost in data.costs"><span>{{cost.quantity}}</span> <span>{{cost.type}}</span></li>
+		</ul>
+		<ul style="display: inline-block">
+		<li ng-repeat="benefit in data.benefits"><span>{{benefit.category}} {{benefit.type}}</span> <span>{{benefit.benefit}} {{benefit.quantity}}</span></li>
+		</ul>
 	</div>
 	<div>
 		<button class="btn btn-success" style="margin-top: 3.5em; float: right; margin-right: 0.5em">

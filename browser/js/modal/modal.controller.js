@@ -5,6 +5,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   $scope.messages = ModalFactory.getMessages()
   $scope.upgrades = ModalFactory.getUpgrades()
 
+  console.group('Modal Controller')
   // LISTENING FOR FACTORY
   // Event driven modal. Only a few events right now.
   $scope.$on('updateInventory', function (event, data) {
@@ -25,6 +26,10 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     console.log('Mode is now: ', $scope.mode)
     if (data) {
       $scope.castData = data.newContent
+      if (data.forceOpen) {
+        console.log('Modal Open forced by Modal Change.')
+        $interval(ModalFactory.openModal, 10, 1)
+      }
     }
   })
 
@@ -63,8 +68,9 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     {title: 'Electricity', source: '/pimages/electricity.png', pquantity: 0, pmax: 100, bquantity: 0, bmax: 100, myProgress: {'width': 0 + '%'}}
   ]
 
-// Force modal open if there are things to say.
-// if ($scope.messages.length > 0) {
-//   ModalFactory.openModal()
-// }
+  // Force modal open if there are things to say.
+  // if ($scope.messages.length > 0) {
+  //   ModalFactory.openModal()
+  // }
+  console.groupEnd('Modal Controller')
 })

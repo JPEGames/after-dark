@@ -132,11 +132,13 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     openModal: function () {
       $('#myModal').modal('show')
       modalOpen = true
+      $rootScope.$broadcast('pause')
     },
     // Close modal from anywhere.
     closeModal: function () {
       $('#myModal').modal('hide')
       modalOpen = false
+      $rootScope.$broadcast('resume')
     },
     getModalOpen: function () {
       return modalOpen

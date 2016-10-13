@@ -14,5 +14,5 @@ function resourceCheck (upgradeReqs, id) {
       // for (let resource in resources) {
       //
       // }
-        })
+    })
 }

@@ -36,7 +36,7 @@ class EventTree {
 }
 
 class UpgradeTree extends EventTree {
-  constructor(title, description, source, id, status, exitType, next, cost, benefit){
+  constructor (title, description, source, id, status, exitType, next, cost, benefit) {
     super(title, description, source, id, status, exitType, next)
     this.cost = cost
     this.benefit = benefit
@@ -50,8 +50,6 @@ console.log(firstUpgrades.contains())
 console.log(...newNode)
 firstUpgrades.insert(...newNode)
 console.log(firstUpgrades)
-
-
 
 // insert event as a possible outcome of an existing event
 // EventTree.prototype.insert = function (parentEvent, childEvent, childEventType) {

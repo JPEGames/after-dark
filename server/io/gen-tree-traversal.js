@@ -6,6 +6,6 @@ module.exports = function * travelTree (eventTree) {
   let choice = yield currentTree.event
 
   if (currentTree.outcomes.length > 0) {
-    yield *travelTree(currentTree.outcomes[choice])
+    yield * travelTree(currentTree.outcomes[choice])
   }
 }

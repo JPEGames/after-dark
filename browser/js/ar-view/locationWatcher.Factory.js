@@ -10,7 +10,6 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   // let ne // " top-right corner (lat/long)
   // let sw // " bottom-left corner (lat/long)
   // let size // total size of map, represented by object with height(h) and width(w) in meters
-  let lastbounds
   let pointsOfInterest = []
   let foundPoints = []
 

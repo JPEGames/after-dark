@@ -1,6 +1,5 @@
 app.factory('ArFactory', function (DistanceFactory) {
   let ArFactory = {}
-  let prevLoc
   let showMenu = false
 
   ArFactory.showMenu = () => {

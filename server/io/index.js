@@ -2,7 +2,6 @@
 var socketio = require('socket.io')
 var io = null
 var currentUsers = []
-let userTotal = 0
 const backpackEvents = require('./backpack')
 const Backpack = require('../db/models/backpack')
 module.exports = function (server) {

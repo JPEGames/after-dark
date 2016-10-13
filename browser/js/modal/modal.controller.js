@@ -18,7 +18,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     console.log('SCOPE RESOURCES: ', $scope.resources)
   })
 
-  // I want to change what 'mode' the modal is portraying at given moment. 
+  // I want to change what 'mode' the modal is portraying at given moment.
   // A queue manager will have to handle this event.
   $scope.$on('modeChange', function (event, data) {
     $scope.mode = data.newMode

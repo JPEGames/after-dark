@@ -1,4 +1,5 @@
-app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafletData, DistanceFactory, $rootScope, GridFactory, $http) {
+/* eslint no-debugger: "off" */
+app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafletData, DistanceFactory, $rootScope, GridFactory, $http, $interval) {
   /* GLOBALS */
   const mapReloadDistance = 100 // distance moved (meters) before panning map to new center
   const dataReloadDistance = 1000 // distance moved before making GeoFire query for bunkers + other markers...
@@ -9,6 +10,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   // let ne // " top-right corner (lat/long)
   // let sw // " bottom-left corner (lat/long)
   // let size // total size of map, represented by object with height(h) and width(w) in meters
+  let lastbounds
   let pointsOfInterest = []
   let foundPoints = []
 
@@ -38,7 +40,6 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
     let loc = {lat: geoObj.coords.latitude, lng: geoObj.coords.longitude}
     if (diff(loc, center, mapReloadDistance)) {
       mapMover(loc)
-        .then(arr => updatePhaser(...arr))
     }
   }
 
@@ -52,27 +53,33 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   function mapMover (geoObj) {
     center = geoObj // resets center to new position after movement
     return leafletData.getMap()
-      .then(map => map.panTo(geoObj)) // move map view to new location on movement
-      .then(map => map.getBounds())
-      .then(bounds => { // updating global variables on movement
+      .then(map => {
+        map.once('moveend', dataUpdate)
+        map.panTo(geoObj)
+      }) // move map view to new location on movement
+  }
+
+  function dataUpdate () {
+    return leafletData.getMap()
+      .then(map => {
+        let bounds = map.getBounds() // updating global variables on movement
         const ne = bounds._northEast
         const sw = bounds._southWest
         const nw = getIntersects(ne, sw)[0]
         const size = getSize(nw, ne, sw)
         // only does GeoFire query if movement > dataReloadDistance
-        if (diff(geoObj, lastFetchedCenter, dataReloadDistance)) {
+        if (diff(center, lastFetchedCenter, dataReloadDistance)) {
           // if (lastFetchedCenter) updatePhaser()
-          return makeGrid(geoObj)
-            .then(() => queryPoints(geoObj))
-            .then(() => [sw, ne, nw, size])
+          return makeGrid(center)
+            .then(() => queryPoints(center))
+            .then(() => updatePhaser(sw, ne, nw, size))
         } else {
-          console.table([ne, sw, nw])
           // pointsOfInterest = Array.from(pointsOfInterest)
-          let newNearest = GridFactory.getNearestPoints(geoObj)
+          let newNearest = GridFactory.getNearestPoints(center)
           $http.put('/api/grid', {newNearest})
           foundPoints = foundPoints.concat(newNearest)
           foundPoints = _.uniq(foundPoints)
-          return Promise.all([sw, ne, nw, size]) // send payload to phaser without making query, for updating which markers/bunkers are in bounds
+          updatePhaser(sw, ne, nw, size) // send payload to phaser without making query, for updating which markers/bunkers are in bounds
         }
       })
   }
@@ -137,7 +144,6 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
       locations: pointsOfInterest.filter(x => inMapBounds(x.coords, sw, ne)).map(x => formatMarker(x, nw, mapSize)),
       visited: foundPoints.filter(x => inMapBounds(x, sw, ne)).map(x => toXY(x, nw, mapSize))
     }
-    console.table(data)
     $rootScope.$broadcast('updateAR', data)
   }
 

@@ -288,12 +288,10 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
   }
 
   scope.$on('updateAR', (event, data) => {
-    console.log(data)
-    $interval(clearMarkers, 500, 1)
-    $interval(deleteClouds, 1000, 1)
-    $interval(createACloudGrid, 1500, 1, true, mapToGrid(data.visited))
-    $interval(addMarkers, 2000, 1, true, data.locations)
-    $interval(console.table, 2500, 1, true, data)
+    clearMarkers()
+    deleteClouds()
+    createACloudGrid(mapToGrid(data.visited))
+    addMarkers(data.locations)
   })
 }
 

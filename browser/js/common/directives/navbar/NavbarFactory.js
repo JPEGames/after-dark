@@ -30,7 +30,7 @@ app.factory('NavbarFactory', function ($http, $interval) {
     document.body.appendChild(newDiv)
 
     newDiv.innerHTML = '+' + expAmount + ' Exp'
-    newDiv.style = `z-index: 100011; top: ` + posy + `px; left: ` + (posx - 25) + `px; display: block; position: absolute; transition: top 3s, opacity 3s;`
+    newDiv.style = `z-index: 100011; top: ` + posy + `px; left: ` + (posx - 35) + `px; display: block; position: absolute; transition: top 3s, opacity 3s; color: red; font-size: 2em;`
 
     console.log(newDiv)
 

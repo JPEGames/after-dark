@@ -1,4 +1,4 @@
-app.directive('characterOverview', function (AuthService, $state, $rootScope) {
+app.directive('characterOverview', function (AuthService, $state, $rootScope, CharOverFactory) {
   return {
     restrict: 'E',
     templateUrl: 'js/common/directives/character-overview/char-dir-overview.html',
@@ -10,6 +10,9 @@ app.directive('characterOverview', function (AuthService, $state, $rootScope) {
           scope.myUsername = user.username
           $rootScope.socket.emit('loading', user)
         })
+
+      scope.myStats = CharOverFactory.getStats()
+      console.log('myStats', scope.myStats)
     }
   }
 })

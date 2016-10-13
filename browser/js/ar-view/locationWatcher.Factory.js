@@ -51,6 +51,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   // Does a bunch of stuff with location info
   function mapMover (geoObj) {
     center = geoObj // resets center to new position after movement
+    console.log('OLD NW: ', nw, 'OLD NE: ', ne)
     return leafletData.getMap()
       .then(map => map.panTo(geoObj)) // move map view to new location on movement
       .then(map => map.getBounds())
@@ -58,6 +59,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
         ne = bounds._northEast
         sw = bounds._southWest
         nw = getIntersects(ne, sw)[0]
+        console.log('NEW NW: ', nw, 'NEW NE: ', ne)
         size = getSize(nw, ne, sw)
         // only does GeoFire query if movement > dataReloadDistance
         if (diff(center, lastFetchedCenter, dataReloadDistance)) {

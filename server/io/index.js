@@ -104,8 +104,8 @@ function processResource (type, ioMethod, userId, markerId) {
     userId: userId
   }})
     .then(backpack => {
-      console.log('UPDATING BACKPACK: ', backpack)
-      console.log('TYPE: ', typeof type, 'QUANTITY: ', resourceEvent.quantity)
+      // console.log('UPDATING BACKPACK: ', backpack)
+      // console.log('TYPE: ', typeof type, 'QUANTITY: ', resourceEvent.quantity)
       backpack[type] = backpack[type] + resourceEvent.quantity
       return backpack.save()
     })

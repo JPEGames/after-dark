@@ -134,6 +134,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
   // Add an array of markers to the map.
   function addMarkers (anArray) {
+    console.warn('ADDING MARKERS')
     anArray.forEach(function (newMark) {
       let perToX = newMark.pos.x * gameAR.world.width
       let perToY = newMark.pos.y * gameAR.world.height
@@ -151,7 +152,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // HELPER FUNCTION FOR addAMarker()
   function markerSetter (markerType, id, xCoord, yCoord) {
     // let imageType
-    console.log('MARKER TYPE: ', markerType)
+    // console.log('MARKER TYPE: ', markerType)
     // TODO: THIS IS TEMPORARY! should be just imageType = markerType
     // markerType !== 'bunker' ? imageType = 'ore' : imageType = markerType
     let sprite = new Phaser.Sprite(gameAR, xCoord - centerShift, yCoord - centerShift, markerType)
@@ -163,14 +164,13 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // Add an individual marker to the map.
   function addAMarker (xCoord, yCoord, width, height, type, id, found) {
     let tempSprite
-    // TODO:
     let [x, y] = [xCoord, yCoord]
     // let [x, y] = spaceMarker(xCoord, yCoord)
     tempSprite = markerSetter(type, id, x, y)
-    console.log('Attempting to add marker!')
-    console.log(type)
+    // console.log('Attempting to add marker!')
+    // console.log(type)
     tempSprite['markerType'] = type
-    console.log('SPRITE AFTER TYPE: ', tempSprite['markerType'])
+    // console.log('SPRITE AFTER TYPE: ', tempSprite['markerType'])
     markerLayer.add(tempSprite)
     if (type === 'bunker') {
       tempSprite.scale.setTo(width, height)
@@ -254,6 +254,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
   // Create a cloud grid.
   function createACloudGrid (aMatrix) {
+    console.log('CREATING CLOUDS')
     aMatrix.forEach(function (aRow) {
       aRow.forEach(function (aCloud) {
         if (aCloud.cloud) {
@@ -290,11 +291,14 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   }
 
   scope.$on('updateAR', (event, data) => {
+    console.group('UPDATE AR')
+    console.table(data.visited)
+    console.table(data.locations)
+    console.groupEnd()
     clearMarkers()
     deleteClouds()
     createACloudGrid(mapToGrid(data.visited))
     addMarkers(data.locations)
-    console.log('DATA LOCATIONS IN AR: ', data.locations)
   })
 }
 

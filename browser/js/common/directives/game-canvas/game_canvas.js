@@ -798,21 +798,35 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
       ModalFactory.changeModal('upgrades', {forceOpen: true})
-      console.log('Computer One Activated.')
+      console.log('Upgrade Computer Activated.')
     }
   }
 
   function compTwo () {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
-      console.log('Computer Two Activited')
+      ModalFactory.changeModal('message', {
+        newContent: {
+          title: 'Deposit Resources',
+          description: 'Would you like to deposit your resources in your bunkers cache for use in upgrading your equipment?',
+          eventType: 'yes/no',
+          source: '/pimages/message.png',
+          type: 'general',
+          id: 998,
+          status: 'neutral',
+          exitType: 'load',
+          next: 'New Storage'
+        },
+        forceOpen: true
+      })
+      console.log('Deposit Computer Activated.')
     }
   }
 
   function compThree () {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
-      console.log('Computer Three Activated')
+      console.log('Market Computer Activated.')
     }
   }
 

@@ -112,9 +112,14 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
         console.log('User response to prompt was: ', aMessage.response)
       }
       $rootScope.$broadcast('messageRead', aMessage)
-      if (goToBunker) {
+      if (goToBunker && aMessage.response) {
         goToBunker = false
         $state.go('master.navbar.game')
+      } else {
+        if (goToBunker) {
+          goToBunker = false
+          this.closeModal()
+        }
       }
       this.wipeMarker()
     },

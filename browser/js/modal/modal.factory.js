@@ -1,7 +1,20 @@
 app.factory('ModalFactory', function ($state, $http, $rootScope) {
   // NEW DUMMY OBJECTS - BACKEND PPL CHECK IT OUT
   let testMessages = []
-  let testUpgrades = []
+  let testUpgrades = [
+    {
+      title: 'Upgrade 1',
+      description: 'This upgrade increases something, somewhere.',
+      source: '/pimages/electricity.png',
+      id: 999,
+      status: 'neutral',
+      exitType: 'load',
+      costs: [
+        {type: 'metal', quantity: 50},
+        {type: 'electricity', quantity: 20}
+      ]
+    }
+  ]
   /*
   {
     title: 'An Event',

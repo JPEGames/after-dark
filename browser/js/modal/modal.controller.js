@@ -1,5 +1,5 @@
 app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory, NavbarFactory) {
-  $scope.mode = 'notify'
+  $scope.mode = 'inventory'
   $scope.default = 'inventory'
   $scope.castData = {}
   $scope.messages = ModalFactory.getMessages()

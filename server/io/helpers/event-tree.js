@@ -1,5 +1,4 @@
-// var traveller = require('./event-tree')
-
+// <--- DATA STRUCTURE USED TO HANDLE EVENT GENERATION --->
 module.exports = class EventTree {
   constructor (title, description, eventType, source, id, status, exitType, next, options) {
     this.title = title

@@ -169,6 +169,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
+      console.log('EVENT OBJECT TO DISPLAY: ', eventObj)
       ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
@@ -182,6 +183,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
+      console.log('EVENT OBJECT TO DISPLAY: ', eventObj)
       ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)

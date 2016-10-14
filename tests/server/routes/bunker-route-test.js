@@ -38,7 +38,6 @@ describe('Bunker Route', function () {
   })
 
   describe('GET /api/bunkerstate/:id', function () {
-
     it('retrieve correct bunker for user', function (done) {
       agent.get('/api/bunkerstate/1').expect(200).end(function (err, res) {
         if (err) return done(err)
@@ -48,14 +47,13 @@ describe('Bunker Route', function () {
         done()
       })
     })
-
   })
 
   describe('POST /api/bunkerstate/:id', function () {
     var newUser
     beforeEach('make new user', function () {
-        var makeUser = User.create({email: 'test@fsa.com', password: '1234'})
-        return Promise.resolve(makeUser)
+      var makeUser = User.create({email: 'test@fsa.com', password: '1234'})
+      return Promise.resolve(makeUser)
           .then(user => {
             newUser = user
           })
@@ -67,10 +65,10 @@ describe('Bunker Route', function () {
       return agent.post(`/api/bunkerstate/${newUser.id}`)
         .send(fakeBunker)
         .expect(201)
-        .end(function(err, res) {
-            if (err) return done(err)
-            expect(res.body.userId).to.equal(3)
-            done()
+        .end(function (err, res) {
+          if (err) return done(err)
+          expect(res.body.userId).to.equal(3)
+          done()
         })
     })
   })

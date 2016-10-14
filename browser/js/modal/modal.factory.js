@@ -1,6 +1,34 @@
-app.factory('ModalFactory', function ($http, $rootScope) {
+app.factory('ModalFactory', function ($state, $http, $rootScope) {
   // NEW DUMMY OBJECTS - BACKEND PPL CHECK IT OUT
   let testMessages = []
+  let testUpgrades = [
+    {
+      // HEADER
+      title: 'Upgrade 1',
+      description: 'This upgrade increases something, somewhere.',
+      source: '/pimages/electricity.png',
+      // ARBITRARY
+      id: 999,
+      // COLOR
+      status: 'neutral',
+      // literally exit type
+      exitType: 'load',
+      costs: [
+        {type: 'metal', quantity: 50},
+        {type: 'electricity', quantity: 20},
+        {type: 'water', quantity: 15},
+        {type: 'oxygen', quantity: 5}
+      ],
+      benefits: [
+        {type: 'capacity', category: 'oxygen', benefit: 'plus', quantity: '10'},
+        {type: 'capacity', category: 'water', benefit: 'plus', quantity: '10'},
+        {type: 'capacity', category: 'metal', benefit: 'plus', quantity: '10'},
+        {type: 'capacity', category: 'electricity', benefit: 'plus', quantity: '10'}
+      ],
+      // custom load message
+      next: ''
+    }
+  ]
   /*
   {
     title: 'An Event',
@@ -49,8 +77,13 @@ app.factory('ModalFactory', function ($http, $rootScope) {
   ]
   */
 
+  // Right here begins my hacks - not ideal - but other solutions is eventing
+  // which is complex.
   let modalOpen = false
   let nextDeletion = {}
+  // Vars setting yes/no state of modal in terms of leave or exit.
+  let goToBunker = false
+  let leaveTheBunker = false
 
   return {
     // Marker functions for presentation, need deleted - ELIOT
@@ -67,8 +100,14 @@ app.factory('ModalFactory', function ($http, $rootScope) {
     changeModal: function (newMode, newData) {
       console.log('Called Factory Function!')
       console.log('Switching to new mode: ', newMode)
-      newData.newMode = newMode
-      $rootScope.$broadcast('modeChange', newData)
+      if (newData) {
+        newData.newMode = newMode
+        $rootScope.$broadcast('modeChange', newData)
+      } else {
+        let newData = {}
+        newData.newMode = newMode
+        $rootScope.$broadcast('modeChange', newData)
+      }
     },
     // Reset modal to its default state.
     resetModal: function () {
@@ -80,17 +119,35 @@ app.factory('ModalFactory', function ($http, $rootScope) {
         console.log('User response to prompt was: ', aMessage.response)
       }
       $rootScope.$broadcast('messageRead', aMessage)
+      if ((goToBunker || leaveTheBunker) && aMessage.response) {
+        if (goToBunker) {
+          goToBunker = false
+          $state.go('master.navbar.game')
+        }
+        if (leaveTheBunker) {
+          leaveTheBunker = false
+          $state.go('master.navbar.gamear')
+        }
+      } else {
+        if (goToBunker || leaveTheBunker) {
+          goToBunker = false
+          leaveTheBunker = false
+          this.closeModal()
+        }
+      }
       this.wipeMarker()
     },
     // Open modal from anywhere.
     openModal: function () {
       $('#myModal').modal('show')
       modalOpen = true
+      $rootScope.$broadcast('pause')
     },
     // Close modal from anywhere.
     closeModal: function () {
       $('#myModal').modal('hide')
       modalOpen = false
+      $rootScope.$broadcast('resume')
     },
     getModalOpen: function () {
       return modalOpen
@@ -99,6 +156,9 @@ app.factory('ModalFactory', function ($http, $rootScope) {
       // This is where we would be sending some information to a server.
       console.log('Submitted Response Below')
       console.log(aResponse)
+      // let response = `response_${aResponse}`
+      // console.log('EMITTING: ', response)
+      $rootScope.socket.emit('response', {choice: aResponse})
     },
     getMessages: function () {
       return testMessages
@@ -142,6 +202,15 @@ app.factory('ModalFactory', function ($http, $rootScope) {
     },
     updateInventory: function (newInventory) {
       $rootScope.$broadcast('updateInventory', newInventory)
+    },
+    enterBunker: function () {
+      goToBunker = true
+    },
+    leaveBunker: function () {
+      leaveTheBunker = true
+    },
+    getUpgrades: function () {
+      return testUpgrades
     }
   }
 })

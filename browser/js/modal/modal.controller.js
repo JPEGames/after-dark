@@ -1,9 +1,11 @@
 app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory, NavbarFactory) {
-  $scope.mode = 'notify'
+  $scope.mode = 'inventory'
   $scope.default = 'inventory'
   $scope.castData = {}
   $scope.messages = ModalFactory.getMessages()
+  $scope.upgrades = ModalFactory.getUpgrades()
 
+  console.group('Modal Controller')
   // LISTENING FOR FACTORY
   // Event driven modal. Only a few events right now.
   $scope.$on('updateInventory', function (event, data) {
@@ -16,7 +18,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     console.log('SCOPE RESOURCES: ', $scope.resources)
   })
 
-  // I want to change what 'mode' the modal is portraying at given moment. 
+  // I want to change what 'mode' the modal is portraying at given moment.
   // A queue manager will have to handle this event.
   $scope.$on('modeChange', function (event, data) {
     $scope.mode = data.newMode
@@ -24,6 +26,10 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     console.log('Mode is now: ', $scope.mode)
     if (data) {
       $scope.castData = data.newContent
+      if (data.forceOpen) {
+        console.log('Modal Open forced by Modal Change.')
+        $interval(ModalFactory.openModal, 10, 1)
+      }
     }
   })
 
@@ -66,4 +72,5 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // if ($scope.messages.length > 0) {
   //   ModalFactory.openModal()
   // }
+  console.groupEnd('Modal Controller')
 })

@@ -1,7 +1,6 @@
 const router = require('express').Router()
 const db = require('../../../db')
 const Point = db.model('point')
-const User = db.model('user')
 const co = require('co')
 const cf = require('co-functional')
 module.exports = router

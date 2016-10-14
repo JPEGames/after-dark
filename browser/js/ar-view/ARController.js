@@ -73,7 +73,6 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     tileLayer: 'https://api.mapbox.com/styles/v1/jyyeh/ciu1o4t2l00a92jo1o2qavws6/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoianl5ZWgiLCJhIjoiY2l1MW8zdWh2MGQ5MDMwandsMTh1cXlpbiJ9.MCJltxs97I_CAkTq2Z-n0g'
   }
 
-  $scope.$on('updateAR', (event, data) => console.log(data))
   // toggles AR menu
   $scope.menuVisible = () => {
     ArFactory.showMenu()
@@ -88,7 +87,22 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
       BunkerStateFactory.getBunkerUser(data.id)
         .then(bunkerUser => {
           if (bunkerUser === currentUser.username) {
-            $state.go('master.navbar.game')
+            ModalFactory.enterBunker()
+            ModalFactory.changeModal('message', {
+              newContent: {
+                title: `Enter ${currentUser.username}'s Bunker?`,
+                description: `You have arrived at your own bunker. Thankfully, still safe. Would you like to enter your bunker at the present moment?`,
+                eventType: 'yes/no',
+                source: '/pimages/vault.png',
+                type: 'general',
+                id: '10',
+                status: 'neutral',
+                exitType: 'load',
+                next: currentUser.username
+              }
+            })
+            ModalFactory.openModal()
+            // $state.go('master.navbar.game')
           }
         })
     } else {
@@ -137,6 +151,13 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     lng: 0,
     zoom: zoom
   }
+  $scope.$on('fight', function (event, data) {
+    console.log('Got fight event from Phaser!', 'data: ', data)
+    let payload = {userId: currentUser.id, type: data.type, dangerLvl: data.dangerLvl}
+    console.log('fight payload: ', payload)
+    $rootScope.socket.emit('fight', payload)
+  })
+
   // LISTENERS
   // Need to modify this to its own controller - so that something else handles
   // all event related communication.
@@ -148,6 +169,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
+      console.log('EVENT OBJECT TO DISPLAY: ', eventObj)
       ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
@@ -157,9 +179,11 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
 
   $rootScope.socket.on('send_electricity', function (event) {
     let eventObj = event.event
+    console.log('EVENT OBJECT: ', eventObj)
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
+      console.log('EVENT OBJECT TO DISPLAY: ', eventObj)
       ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
@@ -203,5 +227,26 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
         }
         ModalFactory.updateInventory(templateObjs)
       })
+  })
+  // <---- RAT ATTACK LISTENERS ----->
+  // TODO: put these in a factory!!! can we?
+  // $rootScope.socket.on('send_rat_attack', function (event) {
+  //   console.log('GOT RAT ATTACK', event)
+  //   ModalFactory.addMessage(event)
+  //   if (ModalFactory.getMessages().length) {
+  //     ModalFactory.changeModal('message', { newContent: event })
+  //     $timeout(ModalFactory.openModal(), 1000)
+  //   }
+  // })
+  //
+  // $rootScope.socket.on('outcome_1', function (event) {
+  //   console.log('GOT OUTCOME', event)
+  //   ModalFactory.changeModal('message', { newContent: event, forceOpen: true })
+  //   // $timeout(ModalFactory.openModal(), 1000)
+  // })
+
+  $rootScope.socket.on('serverRes', function (eventObj) {
+    console.log('Got server response!~~~~~~~~~~~~~~~~~~~~~~~', eventObj)
+    ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
   })
 })

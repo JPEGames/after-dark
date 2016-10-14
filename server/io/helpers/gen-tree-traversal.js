@@ -1,3 +1,4 @@
+// <------ USED FOR CREATING EVENT TREE ---->
 module.exports = function * travelTree (eventTree) {
   if (!eventTree) {
     return // maybe ending function here that resets eventTree to nothing

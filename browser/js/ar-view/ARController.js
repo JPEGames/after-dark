@@ -227,7 +227,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
       })
   })
   // <---- RAT ATTACK LISTENERS ----->
-  // TODO: put these in a factory!!!
+  // TODO: put these in a factory!!! can we?
   $rootScope.socket.on('send_rat_attack', function (event) {
     console.log('GOT RAT ATTACK', event)
     ModalFactory.addMessage(event)

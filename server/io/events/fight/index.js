@@ -15,7 +15,7 @@ module.exports = function (socket) {
           let {title, description, eventType,
             source, id, status, exitType, next, options} = runResult
           // insert generated outcome of run choice
-          if (!treeRoot.contains(runResult.title)) {
+          if (!treeRoot.contains(title)) {
             treeRoot.insert(ratEvent, title, description, eventType,
               source, id, status, exitType, next, options)
           }
@@ -26,7 +26,7 @@ module.exports = function (socket) {
           let {title, description, eventType,
             source, id, status, exitType, next, options} = fightResult
           // insert generated outcome of fight choice
-          if (!treeRoot.contains(fightResult.title)) {
+          if (!treeRoot.contains(title)) {
             treeRoot.insert(ratEvent, title, description, eventType,
               source, id, status, exitType, next, options)
           }

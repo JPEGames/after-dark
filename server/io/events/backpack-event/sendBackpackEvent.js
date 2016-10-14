@@ -1,5 +1,5 @@
-const backpackEvents = require('../helpers/backpack.js')
-const Backpack = require('../../db').model('backpack')
+const backpackEvents = require('../../helpers/backpack.js')
+const Backpack = require('../../../db/index').model('backpack')
 
 function processResource (type, socket, userId, markerId) {
   let resourceEvent = backpackEvents[type]

@@ -30,13 +30,16 @@ app.directive('eventEmitter', function ($state, ModalFactory) {
       }
       // Should also mark as read and remove from list.
       scope.exitMessage = function (aMessage) {
+        ModalFactory.submitResponse(0)
         ModalFactory.markRead(aMessage)
         nextModal(aMessage)
       }
 
       scope.confirmMessage = function (aMessage) {
         console.log('Confirmed!')
+        console.log('A MESSAGE: ', aMessage)
         aMessage.response = true
+        ModalFactory.submitResponse(1)
         ModalFactory.markRead(aMessage)
         nextModal(aMessage)
       }
@@ -44,6 +47,7 @@ app.directive('eventEmitter', function ($state, ModalFactory) {
       scope.denyMessage = function (aMessage) {
         console.log('Denied!')
         aMessage.response = false
+        ModalFactory.submitResponse(0)
         ModalFactory.markRead(aMessage)
         nextModal(aMessage)
       }

@@ -8,11 +8,11 @@ function statCheck (dangerLevel, userId) {
     })
 }
 
-let userId // need to actual get this...
-module.exports = {
-  ratAttack: {
+const ratMessage = 'A giant Earth Rat attacked! What do you do?'
+function makeRatattack (userId, message = ratMessage) {
+  return Promise.resolve({
     title: 'Rat Attack!',
-    description: 'A giant Earth Rat attacked! What do you do?',
+    description: message,
     eventType: 'variadic',
     source: '/pimages/rat.svg',
     id: 6,
@@ -20,11 +20,102 @@ module.exports = {
     exitType: 'load',
     next: '',
     options: [
-      {title: 'Run', req: false, action: 0},
-      {title: 'Fight', req: false, action: 1},
-      {title: 'Talk', req: false, action: 2}
-    ]
-  },
+      {title: 'Run', req: false, action: 0, create: () => run(userId)},
+      {title: 'Fight', req: false, action: 1, create: () => fight(userId)}
+    ],
+    type: 'general'
+  })
+}
+
+function run (userId, dangerLevel = 2) {
+  return Promise.resolve(statCheck(dangerLevel, userId))
+    .then((value) => {
+      console.log('promise resolved', value)
+      return value ? {
+        title: 'Run Success',
+        description: 'You run away successfully!',
+        eventType: 'confirm',
+        source: '',
+        id: '',
+        status: '',
+        exitType: '',
+        next: '',
+        options: '',
+        type: 'general'
+      } : {
+        title: 'Run Failure',
+        description: 'Your cowardice is of no avail! You fall down crying.',
+        eventType: 'confirm',
+        source: '',
+        id: '',
+        status: '',
+        exitType: 'load',
+        next: 'Are you fast enough?????',
+        options: [{title: 'Run', req: false, action: 0, create: (userId) => makeRatattack(userId, 'You are a failure. The rat leaps on you and spins you around!')}],
+        type: 'general'
+      }
+    })
+}
+
+function fight (userId, dangerLevel = 2) {
+  return statCheck(dangerLevel, userId)
+    .then((value) => {
+      console.log('fight win: ', value)
+      return value ? fightSuccess : fightFailure
+    })
+}
+
+// const runSuccess = {
+//   title: 'Run Success',
+//   description: 'You run away successfully!',
+//   eventType: 'confirm',
+//   source: '',
+//   id: '',
+//   status: '',
+//   exitType: '',
+//   next: '',
+//   options: '',
+//   type: 'general'
+// }
+// const runFailure = {
+//   title: 'Run Failure',
+//   description: 'Your cowardice is of no avail! You fall down crying.',
+//   eventType: 'confirm',
+//   source: '',
+//   id: '',
+//   status: '',
+//   exitType: '',
+//   next: '',
+//   options: [{title: 'Run', req: false, action: 0, create: () => ratAttack}],
+//   type: 'general'
+// }
+const fightSuccess = {
+  title: 'Fight Success',
+  description: 'You beat the feisty rodent up!',
+  eventType: 'confirm',
+  source: '',
+  id: '',
+  status: '',
+  exitType: '',
+  next: '',
+  options: [{title: 'Run', req: false, action: 0, create: undefined}],
+  type: 'general'
+}
+const fightFailure = {
+  title: 'Fight Failure',
+  description: 'The rat bites into you...HARD. You scream and drop your hard-earned resources.',
+  eventType: 'confirm',
+  source: '',
+  id: '',
+  status: '',
+  exitType: '',
+  next: '',
+  options: [{title: 'Run', req: false, action: 0, create: undefined}],
+  type: 'general'
+}
+
+module.exports = {
+  ratAttack: makeRatattack,
   mutantAttack: {
     title: '',
     description: '',
@@ -33,63 +124,5 @@ module.exports = {
     status: '',
     exitType: '',
     next: ''
-  },
-  run: function (dangerLevel, userId) {
-    let win = Promise.resolve(statCheck(dangerLevel, userId))
-    return win.then((value) => {
-      console.log('promise resolved', value)
-      return value ? this.runSuccess : this.runFailure
-    })
-  },
-  fight: function (dangerLevel, userId) {
-    let win = Promise.resolve(statCheck(dangerLevel, userId))
-    return win.then((value) => {
-      console.log('fight win: ', value)
-      return value ? this.fightSuccess : this.fightFailure
-    })
-  },
-  runSuccess: {
-    title: 'Run Success',
-    description: 'You run away successfully!',
-    eventType: 'confirm',
-    source: '',
-    id: '',
-    status: '',
-    exitType: '',
-    next: '',
-    options: ''
-  },
-  runFailure: {
-    title: 'Run Failure',
-    description: 'Your cowardice is of no avail! You fall down crying.',
-    eventType: 'confirm',
-    source: '',
-    id: '',
-    status: '',
-    exitType: '',
-    next: '',
-    options: ''
-  },
-  fightSuccess: {
-    title: 'Fight Success',
-    description: 'You beat the feisty rodent up!',
-    eventType: 'confirm',
-    source: '',
-    id: '',
-    status: '',
-    exitType: '',
-    next: '',
-    options: ''
-  },
-  fightFailure: {
-    title: 'Fight Failure',
-    description: 'The rat bites into you...HARD. You scream and drop your hard-earned resources.',
-    eventType: 'confirm',
-    source: '',
-    id: '',
-    status: '',
-    exitType: '',
-    next: '',
-    options: ''
   }
 }

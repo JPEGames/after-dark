@@ -1,15 +1,14 @@
-module.exports = function * travelTree (eventTree) {
-  if (!eventTree) {
-    return // maybe ending function here that resets eventTree to nothing
-  }
-  var currentTree = eventTree
-  let {title, description, eventType,
-    source, id, status, exitType, next, options} = currentTree
-  let eventInfo = {title, description, eventType, source, id, status, exitType, next, options}
-  // yield pertinent event info for socket emission
-  let choice = yield eventInfo
+// <------ USED FOR CREATING EVENT TREE ---->
+function endEvent () {
+  return Promise.resolve('done')
+}
 
-  if (currentTree.outcomes.length > 0) {
-    yield * travelTree(currentTree.outcomes[choice])
+module.exports = function * travelTree (eventConstructor, userId) {
+  if (!eventConstructor) {
+    return endEvent() // maybe ending function here that resets eventTree to nothing
   }
+  let nextFunc = yield eventConstructor(userId)
+  // yield pertinent event info for socket emission
+  // this is sent to Angular after user makes a decision
+  yield * travelTree(nextFunc, userId)
 }

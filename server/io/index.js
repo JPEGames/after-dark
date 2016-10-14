@@ -42,6 +42,7 @@ module.exports = function (server) {
     // upon login through nav-bar client-side
     socket.on('loading', function (data) {
       let duplicate = false
+      socket.userId = data.id
       var userInformation = { username: data.username, userId: data.id, connection: socket.id, eventHistory: [] }
       for (let i = 0; i < currentUsers.length; i++) {
         if (currentUsers[i].userId === data.id) {
@@ -60,6 +61,8 @@ module.exports = function (server) {
         console.log('Stored user data.')
         currentUsers.push(userInformation)
         duplicate = false
+        // attach event listeners here!
+        listeners(socket)
       }
       console.log('Current Users: ', currentUsers)
     })
@@ -79,9 +82,6 @@ module.exports = function (server) {
         console.log('Unable to remove user.')
       }
     })
-
-    /* <------CLIENT EVENT HANDLING--------> */
-    listeners(socket)
   })
   return io
 }

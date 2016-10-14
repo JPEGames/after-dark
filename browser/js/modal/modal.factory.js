@@ -147,6 +147,9 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       // This is where we would be sending some information to a server.
       console.log('Submitted Response Below')
       console.log(aResponse)
+      let response = `response_${aResponse}`
+      console.log('EMITTING: ', response)
+      $rootScope.socket.emit(response)
     },
     getMessages: function () {
       return testMessages

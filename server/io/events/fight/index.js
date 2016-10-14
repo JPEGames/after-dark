@@ -30,12 +30,18 @@ module.exports = function (socket) {
             treeRoot.insert(ratEvent, title, description, eventType,
               source, id, status, exitType, next, options)
           }
-          console.log('FINAL TREE: ', treeRoot)
           // initialize generator function
           var iterator = treeTraveller(treeRoot)
           var result = iterator.next()
-          console.log('ITERATOR RESULT: ', result)
+          // send rat attack info to front
           socket.emit('send_rat_attack', result.value)
+          // TODO: this part needs to be in a function!
+          // user chose to fight...
+          socket.on('response_1', function () {
+            console.log('GOT RESPONSE')
+            result = iterator.next(1)
+            socket.emit('outcome_1', result.value)
+          })
         })
     }
   }

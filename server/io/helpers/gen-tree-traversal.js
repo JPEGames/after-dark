@@ -4,9 +4,9 @@ module.exports = function * travelTree (eventTree) {
   }
   var currentTree = eventTree
   let {title, description, eventType,
-    source, id, status, exitType, next} = currentTree
-  let eventInfo = {title, description, eventType, source, id, status, exitType, next}
-  console.log('Event info: ', eventInfo)
+    source, id, status, exitType, next, options} = currentTree
+  let eventInfo = {title, description, eventType, source, id, status, exitType, next, options}
+  // yield pertinent event info for socket emission
   let choice = yield eventInfo
 
   if (currentTree.outcomes.length > 0) {

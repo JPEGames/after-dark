@@ -15,9 +15,9 @@ module.exports = {
     description: 'A giant Earth Rat attacked! What do you do?',
     eventType: 'variadic',
     source: '/pimages/rat.svg',
-    id: '',
-    status: '',
-    exitType: '',
+    id: 6,
+    status: 'danger',
+    exitType: 'load',
     next: '',
     options: [
       {title: 'Run', req: false, action: 0},
@@ -56,7 +56,8 @@ module.exports = {
     id: '',
     status: '',
     exitType: '',
-    next: ''
+    next: '',
+    options: ''
   },
   runFailure: {
     title: 'Run Failure',
@@ -66,7 +67,8 @@ module.exports = {
     id: '',
     status: '',
     exitType: '',
-    next: ''
+    next: '',
+    options: ''
   },
   fightSuccess: {
     title: 'Fight Success',
@@ -76,7 +78,8 @@ module.exports = {
     id: '',
     status: '',
     exitType: '',
-    next: ''
+    next: '',
+    options: ''
   },
   fightFailure: {
     title: 'Fight Failure',
@@ -86,6 +89,7 @@ module.exports = {
     id: '',
     status: '',
     exitType: '',
-    next: ''
+    next: '',
+    options: ''
   }
 }

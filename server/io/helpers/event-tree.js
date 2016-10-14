@@ -1,7 +1,7 @@
 // var traveller = require('./event-tree')
 
 module.exports = class EventTree {
-  constructor (title, description, eventType, source, id, status, exitType, next) {
+  constructor (title, description, eventType, source, id, status, exitType, next, options) {
     this.title = title
     this.description = description
     this.eventType = eventType
@@ -10,17 +10,18 @@ module.exports = class EventTree {
     this.status = status
     this.exitType = exitType
     this.next = next
+    this.options = options
     this.outcomes = []
   }
-  insert (parentEvent, childEvent, childDesc, childType, childSource, childId, childStatus, childExitType, childNext) {
+  insert (parentEvent, childEvent, childDesc, childType, childSource, childId, childStatus, childExitType, childNext, childOptions) {
     if (!this.contains(parentEvent)) throw new Error('No such event in tree!')
     if (this.title === parentEvent) {
       console.log('Adding', childEvent)
-      this.outcomes.push(new EventTree(childEvent, childDesc, childType, childSource, childId, childStatus, childExitType, childNext))
+      this.outcomes.push(new EventTree(childEvent, childDesc, childType, childSource, childId, childStatus, childExitType, childNext, childOptions))
       return true
     } else {
       return this.outcomes.some(outcome => {
-        return outcome.insert(parentEvent, childDesc, childType, childSource, childId, childStatus, childExitType, childNext)
+        return outcome.insert(parentEvent, childDesc, childType, childSource, childId, childStatus, childExitType, childNext, childOptions)
       })
     }
   }

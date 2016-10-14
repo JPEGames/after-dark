@@ -1,9 +1,10 @@
 // var traveller = require('./event-tree')
 
 module.exports = class EventTree {
-  constructor (title, description, source, id, status, exitType, next) {
+  constructor (title, description, eventType, source, id, status, exitType, next) {
     this.title = title
     this.description = description
+    this.eventType = eventType
     this.source = source
     this.id = id
     this.status = status
@@ -11,15 +12,15 @@ module.exports = class EventTree {
     this.next = next
     this.outcomes = []
   }
-  insert (parentEvent, childEvent, childDesc, childSource, childId, childStatus, childExitType, childNext) {
+  insert (parentEvent, childEvent, childDesc, childType, childSource, childId, childStatus, childExitType, childNext) {
     if (!this.contains(parentEvent)) throw new Error('No such event in tree!')
     if (this.title === parentEvent) {
       console.log('Adding', childEvent)
-      this.outcomes.push(new EventTree(childEvent, childDesc, childSource, childId, childStatus, childExitType, childNext))
+      this.outcomes.push(new EventTree(childEvent, childDesc, childType, childSource, childId, childStatus, childExitType, childNext))
       return true
     } else {
       return this.outcomes.some(outcome => {
-        return outcome.insert(parentEvent, childDesc, childSource, childId, childStatus, childExitType, childNext)
+        return outcome.insert(parentEvent, childDesc, childType, childSource, childId, childStatus, childExitType, childNext)
       })
     }
   }
@@ -50,28 +51,3 @@ module.exports = class EventTree {
 // console.log(...newNode)
 // firstUpgrades.insert(...newNode)
 // console.log(firstUpgrades)
-
-// insert event as a possible outcome of an existing event
-// EventTree.prototype.insert = function (parentEvent, childEvent, childEventType) {
-//   if (!this.contains(parentEvent)) throw new Error('No such event in tree!')
-//   if (this.event === parentEvent) {
-//     console.log('Adding', childEvent)
-//     this.outcomes.push(new EventTree(childEvent, childEventType))
-//     return true
-//   } else {
-//     return this.outcomes.some(outcome => {
-//       return outcome.insert(parentEvent, childEvent, childEventType)
-//     })
-//   }
-// }
-//
-// EventTree.prototype.contains = function (event) {
-//   if (!this.event) return false
-//   if (this.event === event) {
-//     return true
-//   } else {
-//     return this.outcomes.some(outcome => {
-//       return outcome.contains(event)
-//     })
-//   }
-// }

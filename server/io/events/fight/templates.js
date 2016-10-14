@@ -1,4 +1,5 @@
 const Character = require('../../../db').model('character')
+const Promise = require('bluebird')
 
 function statCheck (dangerLevel, userId) {
   return Character.findOne({where: {userId}})
@@ -12,16 +13,22 @@ module.exports = {
   ratAttack: {
     title: 'Rat Attack!',
     description: 'A giant Earth Rat attacked! What do you do?',
-    src: '/pimages/rat.svg',
+    eventType: 'variadic',
+    source: '/pimages/rat.svg',
     id: '',
     status: '',
     exitType: '',
-    next: ''
+    next: '',
+    options: [
+      {title: 'Run', req: false, action: 0},
+      {title: 'Fight', req: false, action: 1},
+      {title: 'Talk', req: false, action: 2}
+    ]
   },
   mutantAttack: {
     title: '',
     description: '',
-    src: '',
+    source: '',
     id: '',
     status: '',
     exitType: '',
@@ -34,13 +41,18 @@ module.exports = {
       return value ? this.runSuccess : this.runFailure
     })
   },
-  fight: function (dangerLevel) {
-    let win = statCheck(dangerLevel, userId)
+  fight: function (dangerLevel, userId) {
+    let win = Promise.resolve(statCheck(dangerLevel, userId))
+    return win.then((value) => {
+      console.log('fight win: ', value)
+      return value ? this.fightSuccess : this.fightFailure
+    })
   },
   runSuccess: {
     title: 'Run Success',
     description: 'You run away successfully!',
-    src: '',
+    eventType: 'confirm',
+    source: '',
     id: '',
     status: '',
     exitType: '',
@@ -49,7 +61,28 @@ module.exports = {
   runFailure: {
     title: 'Run Failure',
     description: 'Your cowardice is of no avail! You fall down crying.',
-    src: '',
+    eventType: 'confirm',
+    source: '',
+    id: '',
+    status: '',
+    exitType: '',
+    next: ''
+  },
+  fightSuccess: {
+    title: 'Fight Success',
+    description: 'You beat the feisty rodent up!',
+    eventType: 'confirm',
+    source: '',
+    id: '',
+    status: '',
+    exitType: '',
+    next: ''
+  },
+  fightFailure: {
+    title: 'Fight Failure',
+    description: 'The rat bites into you...HARD. You scream and drop your hard-earned resources.',
+    eventType: 'confirm',
+    source: '',
     id: '',
     status: '',
     exitType: '',

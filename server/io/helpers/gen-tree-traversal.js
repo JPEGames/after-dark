@@ -3,7 +3,11 @@ module.exports = function * travelTree (eventTree) {
     return // maybe ending function here that resets eventTree to nothing
   }
   var currentTree = eventTree
-  let choice = yield currentTree.event
+  let {title, description, eventType,
+    source, id, status, exitType, next} = currentTree
+  let eventInfo = {title, description, eventType, source, id, status, exitType, next}
+  console.log('Event info: ', eventInfo)
+  let choice = yield eventInfo
 
   if (currentTree.outcomes.length > 0) {
     yield * travelTree(currentTree.outcomes[choice])

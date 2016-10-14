@@ -71,14 +71,24 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   var log
   var touchJoy = true
 
+  // Controls timing of building an upgrade.
   var buildTime = false
   var buildHere = false
-  var upgradeHeight = 2
-  var upgradeWidth = 2
-  var upgradePieces = [[98, 99], [91, 92]]
+  // Vars controlling specifics of deploying an upgrade.
+  var upgradeHeight = 0
+  var upgradeWidth = 0
+  var upgradePieces = []
   var upgradeData = {}
-  var upgradeAction = 'test'
+  var upgradeAction = ''
   var upgradeActions = []
+  // A sample object for an upgrade.
+  var upgradeObj = {
+    height: 2,
+    width: 2,
+    pieces: [[98, 99], [91, 92]],
+    data: {},
+    action: 'test'
+  }
 
   var curMouseTileX, curMouseTileY, lastMouseTileX, lastMouseTileY
 
@@ -758,12 +768,13 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   }
 
   // Set global upgrade variables to proper vars.
-  function setCurrentUpgrade (myWidth, myHeight, myPieces, myAction, myData) {
-    upgradeHeight = myHeight
-    upgradeWidth = myWidth
-    upgradePieces = myPieces
-    upgradeAction = myAction
-    upgradeData = myData
+  function setCurrentUpgrade (anUpgrade) {
+    upgradeHeight = anUpgrade.height
+    upgradeWidth = anUpgrade.width
+    upgradePieces = anUpgrade.pieces
+    upgradeAction = anUpgrade.action
+    upgradeData = anUpgrade.data
+    buildTime = true
   }
 
   // Build an upgrade

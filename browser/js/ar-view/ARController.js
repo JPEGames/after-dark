@@ -151,6 +151,13 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     lng: 0,
     zoom: zoom
   }
+  $scope.$on('fight', function (event, data) {
+    console.log('Got fight event from Phaser!', 'data: ', data)
+    let payload = {userId: currentUser.id, type: data.type, dangerLvl: data.dangerLvl}
+    console.log('fight payload: ', payload)
+    $rootScope.socket.emit('fight', payload)
+  })
+
   // LISTENERS
   // Need to modify this to its own controller - so that something else handles
   // all event related communication.
@@ -171,6 +178,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
 
   $rootScope.socket.on('send_electricity', function (event) {
     let eventObj = event.event
+    console.log('EVENT OBJECT: ', eventObj)
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
@@ -217,5 +225,21 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
         }
         ModalFactory.updateInventory(templateObjs)
       })
+  })
+  // <---- RAT ATTACK LISTENERS ----->
+  // TODO: put these in a factory!!!
+  $rootScope.socket.on('send_rat_attack', function (event) {
+    console.log('GOT RAT ATTACK', event)
+    ModalFactory.addMessage(event)
+    if (ModalFactory.getMessages().length) {
+      ModalFactory.changeModal('message', { newContent: event })
+      $timeout(ModalFactory.openModal(), 1000)
+    }
+  })
+
+  $rootScope.socket.on('outcome_1', function (event) {
+    console.log('GOT OUTCOME', event)
+    ModalFactory.changeModal('message', { newContent: event })
+    $timeout(ModalFactory.openModal(), 1000)
   })
 })

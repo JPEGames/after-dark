@@ -3,11 +3,15 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
   let testMessages = []
   let testUpgrades = [
     {
+      // HEADER
       title: 'Upgrade 1',
       description: 'This upgrade increases something, somewhere.',
       source: '/pimages/electricity.png',
+      // ARBITRARY
       id: 999,
+      // COLOR
       status: 'neutral',
+      // literally exit type
       exitType: 'load',
       costs: [
         {type: 'metal', quantity: 50},
@@ -20,8 +24,9 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
         {type: 'capacity', category: 'water', benefit: 'plus', quantity: '10'},
         {type: 'capacity', category: 'metal', benefit: 'plus', quantity: '10'},
         {type: 'capacity', category: 'electricity', benefit: 'plus', quantity: '10'}
-
-      ]
+      ],
+      // custom load message
+      next: ''
     }
   ]
   /*
@@ -142,6 +147,9 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       // This is where we would be sending some information to a server.
       console.log('Submitted Response Below')
       console.log(aResponse)
+      let response = `response_${aResponse}`
+      console.log('EMITTING: ', response)
+      $rootScope.socket.emit(response)
     },
     getMessages: function () {
       return testMessages

@@ -68,30 +68,6 @@ function fight (userId, dangerLevel = 2) {
     })
 }
 
-// const runSuccess = {
-//   title: 'Run Success',
-//   description: 'You run away successfully!',
-//   eventType: 'confirm',
-//   source: '',
-//   id: '',
-//   status: '',
-//   exitType: '',
-//   next: '',
-//   options: '',
-//   type: 'general'
-// }
-// const runFailure = {
-//   title: 'Run Failure',
-//   description: 'Your cowardice is of no avail! You fall down crying.',
-//   eventType: 'confirm',
-//   source: '',
-//   id: '',
-//   status: '',
-//   exitType: '',
-//   next: '',
-//   options: [{title: 'Run', req: false, action: 0, create: () => ratAttack}],
-//   type: 'general'
-// }
 const fightSuccess = {
   title: 'Fight Success',
   description: 'You beat the feisty rodent up!',

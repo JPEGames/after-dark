@@ -10,6 +10,7 @@ module.exports = function (socket) {
     console.log('received fight payload: ', data)
     if (data.type === 'rat attack') {
       console.log('we got a rat attack event from server')
+      // Helper function used to emit correct event objects to client socket
       const sendEvent = function (eventPromise) {
         console.log('Calling sendEvent!')
         return eventPromise.then(eventObj => {
@@ -18,10 +19,12 @@ module.exports = function (socket) {
           return eventObj
         })
       }
-      // Initialize event tree
+      // Initialize event chain - generator function closes around user ID
       let iterator = treeTraveller(fightTemplates.ratAttack, socket.userId)
       let result = iterator.next()
       console.log('INITIAL RESULT:', result)
+      // resolve next event in chain (result of a returned create() in
+      // options property on event object
       sendEvent(result.value)
         .then(val => {
           lastEvent = val

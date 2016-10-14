@@ -156,8 +156,8 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       // This is where we would be sending some information to a server.
       console.log('Submitted Response Below')
       console.log(aResponse)
-      // let response = `response_${aResponse}`
-      // console.log('EMITTING: ', response)
+      // Only emit 'response' when event objects in an event chain
+      // are sent up from the server!
       if (socketBool) {
         console.log('Firing socket response~~~~~~~')
         $rootScope.socket.emit('response', {choice: aResponse})

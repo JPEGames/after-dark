@@ -1,8 +1,5 @@
 const Sequelize = require('sequelize')
 const db = require('../../_db')
-const GeoFire = require('geofire')
-const firebaseRef = require('../../firebase')
-let geofireRef = new GeoFire(firebaseRef.child('locations'))
 
 module.exports = db.define('bunker', {
   savedBunkerState: {

@@ -45,11 +45,19 @@
         >
     </body>
     <script>
+    window.mouseXY = {
+        x: 0,
+        y: 0
+    }
     $(function() {
     $('#WelText').css('top','0');
     });
     $('#modal').on('show', function () {
     $('.modal-body',this).css({width:'auto',height:'auto', 'max-height':'100%', 'transition':'height 1s, transform 1s'});
     });
+    $('body').mousemove(function(event) {
+        window.mouseXY.x = event.clientX
+        window.mouseXY.y = event.clientY
+    })
     </script>
 </html>

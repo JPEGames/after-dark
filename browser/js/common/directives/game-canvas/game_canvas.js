@@ -1,6 +1,6 @@
 // testing for phaser
 
-window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
+window.createGame = function (ele, scope, $interval, bunker, injector, MenuFactory, ModalFactory) {
   let height = scope.height
   // let width = parseInt(ele.css('width'), 10)
   var game = new Phaser.Game(960, height, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
@@ -75,7 +75,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   var buildHere = false
   var upgradeHeight = 2
   var upgradeWidth = 2
-  var upgradePieces = [[99, 99], [99, 99]]
+  var upgradePieces = [[98, 99], [91, 92]]
   var upgradeData = {}
   var upgradeAction = 'test'
   var upgradeActions = []
@@ -221,6 +221,9 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       clearBunker()
       loadBunker(bunker.savedBunkerState)
     }
+
+    // ELIOT - will close modal no matter what - likely want a better iteration of this.
+    ModalFactory.closeModal()
   // Alias keys - didnt work otherwise, dont ask.
   }
 
@@ -292,12 +295,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     }
   }
 
-  function render () {
-    game.debug.cameraInfo(game.camera, 32, 32)
-    // Show camera info
-    game.debug.text('Tile Info: ' + log, 32, 570)
-  // Show selected tile
-  }
+  function render () {}
 
   // Move player down.
   function moveDown () {
@@ -339,6 +337,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
       console.log('Attempting to exit vault.')
+      scope.leaveBunker()
     }
   }
 
@@ -795,21 +794,36 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   function compOne () {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
-      console.log('Computer One Activated.')
+      ModalFactory.changeModal('upgrades', {forceOpen: true})
+      console.log('Upgrade Computer Activated.')
     }
   }
 
   function compTwo () {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
-      console.log('Computer Two Activited')
+      ModalFactory.changeModal('message', {
+        newContent: {
+          title: 'Deposit Resources',
+          description: 'Would you like to deposit your resources in your bunkers cache for use in upgrading your equipment?',
+          eventType: 'yes/no',
+          source: '/pimages/message.png',
+          type: 'general',
+          id: 998,
+          status: 'neutral',
+          exitType: 'load',
+          next: 'New Storage'
+        },
+        forceOpen: true
+      })
+      console.log('Deposit Computer Activated.')
     }
   }
 
   function compThree () {
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
-      console.log('Computer Three Activated')
+      console.log('Market Computer Activated.')
     }
   }
 
@@ -835,7 +849,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 }
 
 // custom directive to link phaser object to angular
-app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, AuthService) {
+app.directive('gameCanvas', function ($window, $injector, $interval, $http, MenuFactory, AuthService, ModalFactory) {
   return {
     scope: {
       data: '=',
@@ -846,8 +860,28 @@ app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, Au
       // condition for state transition into game view
       scope.height = $window.innerHeight
 
+      scope.leaveBunker = function () {
+        console.log('Isolate scope leave bunker running!')
+        MenuFactory.toggleBunkerSave()
+        ModalFactory.leaveBunker()
+        ModalFactory.changeModal('message', {
+          newContent: {
+            title: `Leave Bunker?`,
+            description: `Would you like to exit the safety of you vault and venture out into the great wastes of earth?`,
+            eventType: 'yes/no',
+            source: '/pimages/vault.png',
+            type: 'general',
+            id: '11',
+            status: 'neutral',
+            exitType: 'load',
+            next: 'the Wasteland'
+          }
+        })
+        $interval(ModalFactory.openModal, 10, 1)
+      }
+
       if (scope.data) {
-        window.createGame(ele, scope, scope.bunker, $injector, MenuFactory)
+        window.createGame(ele, scope, $interval, scope.bunker, $injector, MenuFactory, ModalFactory)
       }
     }
   }

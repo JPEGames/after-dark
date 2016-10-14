@@ -8,13 +8,18 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
       scope.hasBunker = NavbarFactory.getter().hasBunker
       console.log('hasCharacter: ', scope.hasCharacter, 'hasBunker: ', scope.hasBunker)
 
+      scope.$on('resetNavAuth', function () {
+        console.log('Resetting Nav Auth')
+        scope.hasCharacter = NavbarFactory.getter().hasCharacter
+        scope.hasBunker = NavbarFactory.getter().hasBunker
+      })
       // scope.items = [
-        // { label: 'Bunker', state: 'master.navbar.game', auth: true },
-        // { label: 'Wasteland', state: 'master.navbar.gamear', auth: true },
-        // { label: 'Account', state: 'master.navbar.signup-settings', auth: true },
-        // { label: 'Character Creation', state: 'master.navbar.characterCreate', auth: true },
-        // { label: 'Home', state: 'master.navbar.characterOverview', auth: true }
-        // {label: 'Home', state: 'master.navbar.home', auth: true}
+      // { label: 'Bunker', state: 'master.navbar.game', auth: true },
+      // { label: 'Wasteland', state: 'master.navbar.gamear', auth: true },
+      // { label: 'Account', state: 'master.navbar.signup-settings', auth: true },
+      // { label: 'Character Creation', state: 'master.navbar.characterCreate', auth: true },
+      // { label: 'Home', state: 'master.navbar.characterOverview', auth: true }
+      // {label: 'Home', state: 'master.navbar.home', auth: true}
       // ]
 
       // displaying in-game menu option in nav-bar
@@ -29,6 +34,7 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
       }
 
       scope.openInventory = function () {
+        ModalFactory.changeModal('inventory')
         ModalFactory.openModal()
       }
 
@@ -82,14 +88,14 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
       $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser)
       $rootScope.$on(AUTH_EVENTS.sessionTimeout, removeUser)
 
-      // SOCKET LISTENERS
-      // $rootScope.socket.on('test', function () {
-      //   console.log('Got emit from backend communicate!')
-      //   ModalFactory.openModal()
-      // })
-      // $rootScope.socket.on('testing', function () {
-      //   console.log('Got socket emit from character route!')
-      // })
+    // SOCKET LISTENERS
+    // $rootScope.socket.on('test', function () {
+    //   console.log('Got emit from backend communicate!')
+    //   ModalFactory.openModal()
+    // })
+    // $rootScope.socket.on('testing', function () {
+    //   console.log('Got socket emit from character route!')
+    // })
     }
 
   }

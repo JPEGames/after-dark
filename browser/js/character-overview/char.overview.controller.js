@@ -1,4 +1,4 @@
-app.controller('CharOverviewController', function ($scope, $state, CharacterFactory, myCharacter) {
+app.controller('CharOverviewController', function ($scope, $state, NavbarFactory, CharacterFactory, myCharacter, $rootScope) {
   $scope.myChar = myCharacter
   console.log($scope.myChar)
   // myChar.perk lol
@@ -9,4 +9,8 @@ app.controller('CharOverviewController', function ($scope, $state, CharacterFact
   nameSplit = nameSplit.join('')
   $scope.myTitle = nameSplit
   $scope.myLocation = 'New York'
+
+  NavbarFactory.setter(true, true)
+  console.log('Forced hamburger menu to comply.')
+  $rootScope.$broadcast('resetNavAuth')
 })

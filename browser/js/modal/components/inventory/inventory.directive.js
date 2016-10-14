@@ -1,4 +1,4 @@
-app.directive('inventory', function ($state, ModalFactory) {
+app.directive('inventory', function ($state, ModalFactory, NavbarFactory) {
   return {
     restrict: 'E',
     templateUrl: 'js/modal/components/inventory/inventory.html',

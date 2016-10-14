@@ -334,12 +334,15 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     game.paused = false
   }
 
-  function exitBunker () {
-    if (useKey.isDown && useTimer > 30) {
+  function exitBunker (aPress) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
       console.log('Attempting to exit vault.')
       scope.leaveBunker()
     }
+  }
+  function pressExit () {
+    exitBunker(true)
   }
 
   // Saves entire maps state.
@@ -629,8 +632,18 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
 
     if (tile === null) {
       // map.putTile(95, x, y, layer5)
-      console.log('Placed tile.')
-      return false
+      console.log('Could not get tile on layer5, checking layer3')
+      x = layer3.getTileX(game.input.activePointer.worldX)
+      y = layer5.getTileY(game.input.activePointer.worldY)
+      tile = map.getTile(x, y, layer3)
+      if (tile === null) {
+        console.log('Could not find tile on layer3 either.')
+        return false
+      } else {
+        log = tile.index
+        console.log({x: x, y: y, index: tile.index})
+        return {x: x, y: y, index: tile.index}
+      }
     } else {
       log = tile.index
       console.log({x: x, y: y, index: tile.index})
@@ -794,7 +807,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
 
   // Starter computers, not sure how pertinent these will be.
   function compOne (aPress) {
-    if ((useKey.isDown || aPress) && useTimer > 30) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
       ModalFactory.changeModal('upgrades', {forceOpen: true})
       console.log('Upgrade Computer Activated.')
@@ -805,7 +818,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   }
 
   function compTwo (aPress) {
-    if ((useKey.isDown || aPress) && useTimer > 30) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
       ModalFactory.changeModal('message', {
         newContent: {
@@ -829,7 +842,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   }
 
   function compThree (aPress) {
-    if ((useKey.isDown || aPress) && useTimer > 30) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
       console.log('Market Computer Activated.')
     }
@@ -852,6 +865,10 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     if (curTile.index === 95) {
       foundTile = true
       pressThree()
+    }
+    if (curTile.index === 82) {
+      foundTile = true
+      pressExit()
     }
     if (!foundTile) {
       console.log('Was not a pressable tile.')

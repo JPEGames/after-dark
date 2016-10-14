@@ -149,7 +149,7 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       console.log(aResponse)
       let response = `response_${aResponse}`
       console.log('EMITTING: ', response)
-      $rootScope.socket.emit(response)
+      $rootScope.socket.emit('response', {choice: aResponse})
     },
     getMessages: function () {
       return testMessages

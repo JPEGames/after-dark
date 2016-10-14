@@ -5,14 +5,12 @@ module.exports = function (socket) {
     console.log('received fight payload: ', data)
     if (data.type === 'rat attack') {
       let treeRoot = treeCreator(fightTemplates.ratAttack)
-      let resolvedRun = Promise.resolve(fightTemplates.run(data.dangerLvl, data.userId))
-      resolvedRun
+      fightTemplates.run(data.dangerLvl, data.userId)
         .then(runResult => {
           console.log('run RESULT: ', runResult)
-          treeRoot.insert(fightTemplates.ratAttack.title,
-            fightTemplates.run(data.dangerLvl, data.userId)
-          )
+          treeRoot.insert(fightTemplates.ratAttack.title, runResult)
         })
+
     }
   }
 }

@@ -29,7 +29,7 @@ module.exports = {
   },
   run: function (dangerLevel, userId) {
     let win = Promise.resolve(statCheck(dangerLevel, userId))
-    win.then((value) => {
+    return win.then((value) => {
       console.log('promise resolved', value)
       return value ? this.runSuccess : this.runFailure
     })

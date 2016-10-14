@@ -81,7 +81,9 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
   // which is complex.
   let modalOpen = false
   let nextDeletion = {}
+  // Vars setting yes/no state of modal in terms of leave or exit.
   let goToBunker = false
+  let leaveTheBunker = false
 
   return {
     // Marker functions for presentation, need deleted - ELIOT
@@ -117,12 +119,19 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
         console.log('User response to prompt was: ', aMessage.response)
       }
       $rootScope.$broadcast('messageRead', aMessage)
-      if (goToBunker && aMessage.response) {
-        goToBunker = false
-        $state.go('master.navbar.game')
-      } else {
+      if ((goToBunker || leaveTheBunker) && aMessage.response) {
         if (goToBunker) {
           goToBunker = false
+          $state.go('master.navbar.game')
+        }
+        if (leaveTheBunker) {
+          leaveTheBunker = false
+          $state.go('master.navbar.gamear')
+        }
+      } else {
+        if (goToBunker || leaveTheBunker) {
+          goToBunker = false
+          leaveTheBunker = false
           this.closeModal()
         }
       }
@@ -196,6 +205,9 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     },
     enterBunker: function () {
       goToBunker = true
+    },
+    leaveBunker: function () {
+      leaveTheBunker = true
     },
     getUpgrades: function () {
       return testUpgrades

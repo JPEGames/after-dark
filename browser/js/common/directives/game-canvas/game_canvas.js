@@ -222,6 +222,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
       loadBunker(bunker.savedBunkerState)
     }
 
+    // ELIOT - will close modal no matter what - likely want a better iteration of this.
     ModalFactory.closeModal()
   // Alias keys - didnt work otherwise, dont ask.
   }
@@ -336,6 +337,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     if (useKey.isDown && useTimer > 30) {
       useTimer = 0
       console.log('Attempting to exit vault.')
+      scope.leaveBunker()
     }
   }
 
@@ -857,6 +859,26 @@ app.directive('gameCanvas', function ($window, $injector, $interval, $http, Menu
     link: function (scope, ele, attrs) {
       // condition for state transition into game view
       scope.height = $window.innerHeight
+
+      scope.leaveBunker = function () {
+        console.log('Isolate scope leave bunker running!')
+        MenuFactory.toggleBunkerSave()
+        ModalFactory.leaveBunker()
+        ModalFactory.changeModal('message', {
+          newContent: {
+            title: `Leave Bunker?`,
+            description: `Would you like to exit the safety of you vault and venture out into the great wastes of earth?`,
+            eventType: 'yes/no',
+            source: '/pimages/vault.png',
+            type: 'general',
+            id: '11',
+            status: 'neutral',
+            exitType: 'load',
+            next: 'the Wasteland'
+          }
+        })
+        $interval(ModalFactory.openModal, 10, 1)
+      }
 
       if (scope.data) {
         window.createGame(ele, scope, $interval, scope.bunker, $injector, MenuFactory, ModalFactory)

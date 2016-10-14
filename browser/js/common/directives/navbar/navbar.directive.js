@@ -8,6 +8,11 @@ app.directive('navbar', function ($rootScope, Socket, ModalFactory, AuthService,
       scope.hasBunker = NavbarFactory.getter().hasBunker
       console.log('hasCharacter: ', scope.hasCharacter, 'hasBunker: ', scope.hasBunker)
 
+      scope.$on('resetNavAuth', function () {
+        console.log('Resetting Nav Auth')
+        scope.hasCharacter = NavbarFactory.getter().hasCharacter
+        scope.hasBunker = NavbarFactory.getter().hasBunker
+      })
       // scope.items = [
       // { label: 'Bunker', state: 'master.navbar.game', auth: true },
       // { label: 'Wasteland', state: 'master.navbar.gamear', auth: true },

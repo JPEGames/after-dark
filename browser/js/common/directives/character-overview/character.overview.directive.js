@@ -1,4 +1,4 @@
-app.directive('characterOverview', function (AuthService, $state, $rootScope, CharOverFactory) {
+app.directive('characterOverview', function (AuthService, NavbarFactory, $state, $rootScope, CharOverFactory) {
   return {
     restrict: 'E',
     templateUrl: 'js/common/directives/character-overview/char-dir-overview.html',
@@ -13,6 +13,9 @@ app.directive('characterOverview', function (AuthService, $state, $rootScope, Ch
 
       scope.myStats = CharOverFactory.getStats()
       console.log('myStats', scope.myStats)
+
+      NavbarFactory.setter(true, true)
+      console.log('Forced hamburger menu to comply.')
     }
   }
 })

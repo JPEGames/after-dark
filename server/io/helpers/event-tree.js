@@ -1,6 +1,6 @@
-var traveller = require('./event-tree')
+// var traveller = require('./event-tree')
 
-class EventTree {
+module.exports = class EventTree {
   constructor (title, description, source, id, status, exitType, next) {
     this.title = title
     this.description = description
@@ -35,21 +35,21 @@ class EventTree {
   }
 }
 
-class UpgradeTree extends EventTree {
-  constructor (title, description, source, id, status, exitType, next, cost, benefit) {
-    super(title, description, source, id, status, exitType, next)
-    this.cost = cost
-    this.benefit = benefit
-  }
-}
+// class UpgradeTree extends EventTree {
+//   constructor (title, description, source, id, status, exitType, next, cost, benefit) {
+//     super(title, description, source, id, status, exitType, next)
+//     this.cost = cost
+//     this.benefit = benefit
+//   }
+// }
 
-let firstUpgrades = new UpgradeTree('airProduction', 'produces more air', 'air.png', 1, 'success', 'load', '', [], [])
-let newNode = ['airProduction', 'confirm', 'confirm upgrade', '', 2, 'success', 'load', '', [], []]
-console.log(firstUpgrades)
-console.log(firstUpgrades.contains())
-console.log(...newNode)
-firstUpgrades.insert(...newNode)
-console.log(firstUpgrades)
+// let firstUpgrades = new UpgradeTree('airProduction', 'produces more air', 'air.png', 1, 'success', 'load', '', [], [])
+// let newNode = ['airProduction', 'confirm', 'confirm upgrade', '', 2, 'success', 'load', '', [], []]
+// console.log(firstUpgrades)
+// console.log(firstUpgrades.contains())
+// console.log(...newNode)
+// firstUpgrades.insert(...newNode)
+// console.log(firstUpgrades)
 
 // insert event as a possible outcome of an existing event
 // EventTree.prototype.insert = function (parentEvent, childEvent, childEventType) {

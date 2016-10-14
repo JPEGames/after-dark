@@ -151,6 +151,13 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     lng: 0,
     zoom: zoom
   }
+  $scope.$on('fight', function (event, data) {
+    console.log('Got fight event from Phaser!', 'data: ', data)
+    let payload = {userId: currentUser.id, type: data.type, dangerLvl: data.dangerLvl}
+    console.log('fight payload: ', payload)
+    $rootScope.socket.emit('fight', payload)
+  })
+
   // LISTENERS
   // Need to modify this to its own controller - so that something else handles
   // all event related communication.

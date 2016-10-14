@@ -67,6 +67,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
     gameAR.load.image('water', '/pimages/water.png')
     gameAR.load.image('air', '/pimages/oxygen.png')
     gameAR.load.image('electricity', '/pimages/electricity.png')
+    gameAR.load.image('rat attack', '/pimages/rat-attack.png')
   }
 
   // Create systems and assets.
@@ -152,7 +153,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
   // HELPER FUNCTION FOR addAMarker()
   function markerSetter (markerType, id, xCoord, yCoord) {
     // let imageType
-    // console.log('MARKER TYPE: ', markerType)
+    console.log('MARKER TYPE: ', markerType)
     // TODO: THIS IS TEMPORARY! should be just imageType = markerType
     // markerType !== 'bunker' ? imageType = 'ore' : imageType = markerType
     let sprite = new Phaser.Sprite(gameAR, xCoord - centerShift, yCoord - centerShift, markerType)
@@ -200,9 +201,13 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
 
   // Listener on pressing a marker.
   function markerPress (sprite, pointer) {
-    console.log('ON PRESS: ', sprite)
+    console.log('ON PRESS TYPE: ', sprite['markerType'])
     // send event type and id upon click
-    scope.$emit('gameEvent', {type: sprite['markerType'], id: sprite['id']})
+    if (sprite['markerType'] === 'rat attack') {
+      scope.$emit('fight', {type: sprite['markerType'], id: sprite['id'], dangerLvl: 1})
+    } else {
+      scope.$emit('gameEvent', {type: sprite['markerType'], id: sprite['id']})
+    }
   }
 
   // takes a height and width in number of clouds and an array of objects of xy percentages representing where to hide clouds,

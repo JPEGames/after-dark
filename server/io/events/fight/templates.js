@@ -3,7 +3,7 @@ const Character = require('../../../db').model('character')
 function statCheck (dangerLevel, userId) {
   return Character.findOne({where: {userId}})
     .then(character => {
-      return Math.floor(Math.random() * dangerLevel) < Math.floor(Math.random() * character.attackPower)
+      return Math.random() * dangerLevel < Math.random() * character.attackPower
     })
 }
 
@@ -27,16 +27,32 @@ module.exports = {
     exitType: '',
     next: ''
   },
-  run: function (dangerLevel) {
+  run: function (dangerLevel, userId) {
+    let win = Promise.resolve(statCheck(dangerLevel, userId))
+    win.then((value) => {
+      console.log('promise resolved', value)
+      return value ? this.runSuccess : this.runFailure
+    })
+  },
+  fight: function (dangerLevel) {
     let win = statCheck(dangerLevel, userId)
-    return {
-      title: '',
-      description: '',
-      src: '',
-      id: '',
-      status: '',
-      exitType: '',
-      next: ''
-    }
+  },
+  runSuccess: {
+    title: 'Run Success',
+    description: 'You run away successfully!',
+    src: '',
+    id: '',
+    status: '',
+    exitType: '',
+    next: ''
+  },
+  runFailure: {
+    title: 'Run Failure',
+    description: 'Your cowardice is of no avail! You fall down crying.',
+    src: '',
+    id: '',
+    status: '',
+    exitType: '',
+    next: ''
   }
 }

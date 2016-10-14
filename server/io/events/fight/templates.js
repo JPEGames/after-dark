@@ -23,7 +23,8 @@ function makeRatattack (userId, message = ratMessage) {
       {title: 'Run', req: false, action: 0, create: () => run(userId)},
       {title: 'Fight', req: false, action: 1, create: () => fight(userId)}
     ],
-    type: 'general'
+    type: 'general',
+    socketMsg: true
   })
 }
 
@@ -40,8 +41,9 @@ function run (userId, dangerLevel = 2) {
         status: '',
         exitType: '',
         next: '',
-        options: '',
-        type: 'general'
+        options: [{title: 'Run', req: false, action: 0, create: undefined}],
+        type: 'general',
+        socketMsg: true
       } : {
         title: 'Run Failure',
         description: 'Your cowardice is of no avail! You fall down crying.',
@@ -52,7 +54,8 @@ function run (userId, dangerLevel = 2) {
         exitType: 'load',
         next: 'Are you fast enough?????',
         options: [{title: 'Run', req: false, action: 0, create: (userId) => makeRatattack(userId, 'You are a failure. The rat leaps on you and spins you around!')}],
-        type: 'general'
+        type: 'general',
+        socketMsg: true
       }
     })
 }
@@ -99,7 +102,8 @@ const fightSuccess = {
   exitType: '',
   next: '',
   options: [{title: 'Run', req: false, action: 0, create: undefined}],
-  type: 'general'
+  type: 'general',
+  socketMsg: true
 }
 const fightFailure = {
   title: 'Fight Failure',
@@ -111,7 +115,8 @@ const fightFailure = {
   exitType: '',
   next: '',
   options: [{title: 'Run', req: false, action: 0, create: undefined}],
-  type: 'general'
+  type: 'general',
+  socketMsg: true
 }
 
 module.exports = {

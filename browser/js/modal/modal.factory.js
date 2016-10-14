@@ -152,13 +152,16 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     getModalOpen: function () {
       return modalOpen
     },
-    submitResponse: function (aResponse) {
+    submitResponse: function (aResponse, socketBool) {
       // This is where we would be sending some information to a server.
       console.log('Submitted Response Below')
       console.log(aResponse)
       // let response = `response_${aResponse}`
       // console.log('EMITTING: ', response)
-      $rootScope.socket.emit('response', {choice: aResponse})
+      if (socketBool) {
+        console.log('Firing socket response~~~~~~~')
+        $rootScope.socket.emit('response', {choice: aResponse})
+      }
     },
     getMessages: function () {
       return testMessages

@@ -60,6 +60,10 @@ function run (userId, dangerLevel = 2) {
     })
 }
 
+function repeatRatAttack(userId) {
+  return makeRatattack(userId, 'You are a failure. The rat leaps on you and spins you around!')
+}
+
 function fight (userId, dangerLevel = 2) {
   return statCheck(dangerLevel, userId)
     .then((value) => {

@@ -230,18 +230,23 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   })
   // <---- RAT ATTACK LISTENERS ----->
   // TODO: put these in a factory!!! can we?
-  $rootScope.socket.on('send_rat_attack', function (event) {
-    console.log('GOT RAT ATTACK', event)
-    ModalFactory.addMessage(event)
-    if (ModalFactory.getMessages().length) {
-      ModalFactory.changeModal('message', { newContent: event })
-      $timeout(ModalFactory.openModal(), 1000)
-    }
-  })
+  // $rootScope.socket.on('send_rat_attack', function (event) {
+  //   console.log('GOT RAT ATTACK', event)
+  //   ModalFactory.addMessage(event)
+  //   if (ModalFactory.getMessages().length) {
+  //     ModalFactory.changeModal('message', { newContent: event })
+  //     $timeout(ModalFactory.openModal(), 1000)
+  //   }
+  // })
+  //
+  // $rootScope.socket.on('outcome_1', function (event) {
+  //   console.log('GOT OUTCOME', event)
+  //   ModalFactory.changeModal('message', { newContent: event, forceOpen: true })
+  //   // $timeout(ModalFactory.openModal(), 1000)
+  // })
 
-  $rootScope.socket.on('outcome_1', function (event) {
-    console.log('GOT OUTCOME', event)
-    ModalFactory.changeModal('message', { newContent: event })
-    $timeout(ModalFactory.openModal(), 1000)
+  $rootScope.socket.on('serverRes', function (eventObj) {
+    console.log('Got server response!~~~~~~~~~~~~~~~~~~~~~~~', eventObj)
+    ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
   })
 })

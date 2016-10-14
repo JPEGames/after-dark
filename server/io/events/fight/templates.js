@@ -10,7 +10,7 @@ function statCheck (dangerLevel, userId) {
 
 const ratMessage = 'A giant Earth Rat attacked! What do you do?'
 function makeRatattack (userId, message = ratMessage) {
-  return {
+  return Promise.resolve({
     title: 'Rat Attack!',
     description: message,
     eventType: 'variadic',
@@ -22,15 +22,38 @@ function makeRatattack (userId, message = ratMessage) {
     options: [
       {title: 'Run', req: false, action: 0, create: () => run(userId)},
       {title: 'Fight', req: false, action: 1, create: () => fight(userId)}
-    ]
-  }
+    ],
+    type: 'general'
+  })
 }
 
 function run (userId, dangerLevel = 2) {
   return Promise.resolve(statCheck(dangerLevel, userId))
     .then((value) => {
       console.log('promise resolved', value)
-      return value ? runSuccess : runFailure
+      return value ? {
+        title: 'Run Success',
+        description: 'You run away successfully!',
+        eventType: 'confirm',
+        source: '',
+        id: '',
+        status: '',
+        exitType: '',
+        next: '',
+        options: '',
+        type: 'general'
+      } : {
+        title: 'Run Failure',
+        description: 'Your cowardice is of no avail! You fall down crying.',
+        eventType: 'confirm',
+        source: '',
+        id: '',
+        status: '',
+        exitType: 'load',
+        next: 'Are you fast enough?????',
+        options: [{title: 'Run', req: false, action: 0, create: (userId) => makeRatattack(userId, 'You are a failure. The rat leaps on you and spins you around!')}],
+        type: 'general'
+      }
     })
 }
 
@@ -42,30 +65,30 @@ function fight (userId, dangerLevel = 2) {
     })
 }
 
-const runSuccess = {
-  title: 'Run Success',
-  description: 'You run away successfully!',
-  eventType: 'confirm',
-  source: '',
-  id: '',
-  status: '',
-  exitType: '',
-  next: '',
-  options: '',
-  type: ''
-}
-const runFailure = {
-  title: 'Run Failure',
-  description: 'Your cowardice is of no avail! You fall down crying.',
-  eventType: 'confirm',
-  source: '',
-  id: '',
-  status: '',
-  exitType: '',
-  next: '',
-  options: [{title: 'Run', req: false, action: 0, create: run}],
-  type: ''
-}
+// const runSuccess = {
+//   title: 'Run Success',
+//   description: 'You run away successfully!',
+//   eventType: 'confirm',
+//   source: '',
+//   id: '',
+//   status: '',
+//   exitType: '',
+//   next: '',
+//   options: '',
+//   type: 'general'
+// }
+// const runFailure = {
+//   title: 'Run Failure',
+//   description: 'Your cowardice is of no avail! You fall down crying.',
+//   eventType: 'confirm',
+//   source: '',
+//   id: '',
+//   status: '',
+//   exitType: '',
+//   next: '',
+//   options: [{title: 'Run', req: false, action: 0, create: () => ratAttack}],
+//   type: 'general'
+// }
 const fightSuccess = {
   title: 'Fight Success',
   description: 'You beat the feisty rodent up!',
@@ -75,8 +98,8 @@ const fightSuccess = {
   status: '',
   exitType: '',
   next: '',
-  options: '',
-  type: ''
+  options: [{title: 'Run', req: false, action: 0, create: undefined}],
+  type: 'general'
 }
 const fightFailure = {
   title: 'Fight Failure',
@@ -87,12 +110,12 @@ const fightFailure = {
   status: '',
   exitType: '',
   next: '',
-  options: '',
-  type: ''
+  options: [{title: 'Run', req: false, action: 0, create: undefined}],
+  type: 'general'
 }
 
 module.exports = {
-  ratAttack: Promise.promisify(makeRatattack),
+  ratAttack: makeRatattack,
   mutantAttack: {
     title: '',
     description: '',

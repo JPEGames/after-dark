@@ -71,7 +71,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   var log
   var touchJoy = true
 
-  var buildTime = true
+  var buildTime = false
   var buildHere = false
   var upgradeHeight = 2
   var upgradeWidth = 2
@@ -93,6 +93,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   // var totalLayers = 4
   var doorSwitch = true
   var testSave
+  var currentAction = 'default'
   // declare semi globals - figure it out
 
   function create () {
@@ -168,7 +169,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     game.inputEnabled = true
 
     // TODO: PUT ANY FUNCTION HERE - will activate on any click of wall
-    game.input.onDown.add(buildUpgrade, this)
+    game.input.onDown.add(curPressFunction, this)
     // OKAY - input enabled is 1/2 things for touch enabled. May not work yet.
     // game.input = mouse
     // onDown = event
@@ -222,6 +223,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
       loadBunker(bunker.savedBunkerState)
     }
 
+    // ELIOT - will close modal no matter what - likely want a better iteration of this.
     ModalFactory.closeModal()
   // Alias keys - didnt work otherwise, dont ask.
   }
@@ -332,11 +334,15 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     game.paused = false
   }
 
-  function exitBunker () {
-    if (useKey.isDown && useTimer > 30) {
+  function exitBunker (aPress) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
       console.log('Attempting to exit vault.')
+      scope.leaveBunker()
     }
+  }
+  function pressExit () {
+    exitBunker(true)
   }
 
   // Saves entire maps state.
@@ -626,7 +632,18 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
 
     if (tile === null) {
       // map.putTile(95, x, y, layer5)
-      console.log('Placed tile.')
+      console.log('Could not get tile on layer5, checking layer3')
+      x = layer3.getTileX(game.input.activePointer.worldX)
+      y = layer5.getTileY(game.input.activePointer.worldY)
+      tile = map.getTile(x, y, layer3)
+      if (tile === null) {
+        console.log('Could not find tile on layer3 either.')
+        return false
+      } else {
+        log = tile.index
+        console.log({x: x, y: y, index: tile.index})
+        return {x: x, y: y, index: tile.index}
+      }
     } else {
       log = tile.index
       console.log({x: x, y: y, index: tile.index})
@@ -789,16 +806,19 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   }
 
   // Starter computers, not sure how pertinent these will be.
-  function compOne () {
-    if (useKey.isDown && useTimer > 30) {
+  function compOne (aPress) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
       ModalFactory.changeModal('upgrades', {forceOpen: true})
       console.log('Upgrade Computer Activated.')
     }
   }
+  function pressOne () {
+    compOne(true)
+  }
 
-  function compTwo () {
-    if (useKey.isDown && useTimer > 30) {
+  function compTwo (aPress) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
       ModalFactory.changeModal('message', {
         newContent: {
@@ -817,14 +837,54 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
       console.log('Deposit Computer Activated.')
     }
   }
+  function pressTwo () {
+    compTwo(true)
+  }
 
-  function compThree () {
-    if (useKey.isDown && useTimer > 30) {
+  function compThree (aPress) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
       console.log('Market Computer Activated.')
     }
   }
+  function pressThree () {
+    compThree(true)
+  }
 
+  function tileMousePress () {
+    let curTile = getTileProperties()
+    let foundTile = false
+    if (curTile.index === 93) {
+      foundTile = true
+      pressOne()
+    }
+    if (curTile.index === 94) {
+      foundTile = true
+      pressTwo()
+    }
+    if (curTile.index === 95) {
+      foundTile = true
+      pressThree()
+    }
+    if (curTile.index === 82) {
+      foundTile = true
+      pressExit()
+    }
+    if (!foundTile) {
+      console.log('Was not a pressable tile.')
+    }
+  }
+
+  function curPressFunction () {
+    if (currentAction === 'default') {
+      console.log('curPress ran default')
+      tileMousePress()
+    }
+    if (currentAction === 'upgrade') {
+      console.log('curPress ran upgrade')
+      buildUpgrade()
+    }
+  }
   // Turns a function into a function that is listened to.
   function returnKeyListener (emitWord, emitData) {
     console.log('keylistener returned')
@@ -857,6 +917,26 @@ app.directive('gameCanvas', function ($window, $injector, $interval, $http, Menu
     link: function (scope, ele, attrs) {
       // condition for state transition into game view
       scope.height = $window.innerHeight
+
+      scope.leaveBunker = function () {
+        console.log('Isolate scope leave bunker running!')
+        MenuFactory.toggleBunkerSave()
+        ModalFactory.leaveBunker()
+        ModalFactory.changeModal('message', {
+          newContent: {
+            title: `Leave Bunker?`,
+            description: `Would you like to exit the safety of you vault and venture out into the great wastes of earth?`,
+            eventType: 'yes/no',
+            source: '/pimages/vault.png',
+            type: 'general',
+            id: '11',
+            status: 'neutral',
+            exitType: 'load',
+            next: 'the Wasteland'
+          }
+        })
+        $interval(ModalFactory.openModal, 10, 1)
+      }
 
       if (scope.data) {
         window.createGame(ele, scope, $interval, scope.bunker, $injector, MenuFactory, ModalFactory)

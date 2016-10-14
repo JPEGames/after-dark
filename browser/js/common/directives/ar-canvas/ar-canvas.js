@@ -1,4 +1,4 @@
-window.createGameAR = function (ele, scope, players, mapId, injector, $interval) {
+window.createGameAR = function (ele, scope, players, mapId, injector, $interval, ModalFactory) {
   let height = scope.height
   let width = scope.width
   const centerShift = 20
@@ -45,6 +45,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
   let ranTest = false
 
   let firstUpdate = true // only emits on first event cycle
+  let firstBroadcast = true
 
   // All this stuff has to do with creating a ring of clouds - again - a system that will change once we implement markers accurately.
   let randCount = 180
@@ -95,7 +96,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
   // What happens every 1/60th a second?
   function update () {
     // Increase counter for recreating clouds for shitty animation effect that needs work.
-    randCount++
+    // randCount++
     // If the counter is above the set timer...
     /*
     if (randCount >= randFrequency && randOn) {
@@ -111,6 +112,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
       firstUpdate = false
       scope.$emit('PhaserReady')
     }
+  // ELIOT - Forcing loading to work temporarily
   // If I havent run a test on markers...
   // if (!ranTest) {
   // Add test markers.
@@ -266,6 +268,10 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
         }
       })
     })
+    if (firstBroadcast) {
+      firstBroadcast = false
+      ModalFactory.closeModal()
+    }
   }
 
   // Delete all clouds.
@@ -295,10 +301,6 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
   }
 
   scope.$on('updateAR', (event, data) => {
-    console.group('UPDATE AR')
-    console.table(data.visited)
-    console.table(data.locations)
-    console.groupEnd()
     clearMarkers()
     deleteClouds()
     createACloudGrid(mapToGrid(data.visited))
@@ -308,7 +310,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval)
 
 // Part of a state that has an ARController as a parent - so broadcasts are available.
 // custom directive to link phaser object to angular
-app.directive('arCanvas', function ($injector, $window, $interval) {
+app.directive('arCanvas', function ($injector, $window, $interval, ModalFactory) {
   return {
     scope: {
       data: '=',
@@ -326,7 +328,7 @@ app.directive('arCanvas', function ($injector, $window, $interval) {
       scope.width = $window.innerWidth
       scope.height = $window.innerHeight
       if (scope.data) {
-        window.createGameAR(ele, scope, scope.players, scope.mapId, $injector, $interval)
+        window.createGameAR(ele, scope, scope.players, scope.mapId, $injector, $interval, ModalFactory)
       }
     }
   }

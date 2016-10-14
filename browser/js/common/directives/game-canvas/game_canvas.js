@@ -71,7 +71,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   var log
   var touchJoy = true
 
-  var buildTime = true
+  var buildTime = false
   var buildHere = false
   var upgradeHeight = 2
   var upgradeWidth = 2
@@ -93,6 +93,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   // var totalLayers = 4
   var doorSwitch = true
   var testSave
+  var currentAction = 'default'
   // declare semi globals - figure it out
 
   function create () {
@@ -168,7 +169,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     game.inputEnabled = true
 
     // TODO: PUT ANY FUNCTION HERE - will activate on any click of wall
-    game.input.onDown.add(buildUpgrade, this)
+    game.input.onDown.add(curPressFunction, this)
     // OKAY - input enabled is 1/2 things for touch enabled. May not work yet.
     // game.input = mouse
     // onDown = event
@@ -629,6 +630,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     if (tile === null) {
       // map.putTile(95, x, y, layer5)
       console.log('Placed tile.')
+      return false
     } else {
       log = tile.index
       console.log({x: x, y: y, index: tile.index})
@@ -791,16 +793,19 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   }
 
   // Starter computers, not sure how pertinent these will be.
-  function compOne () {
-    if (useKey.isDown && useTimer > 30) {
+  function compOne (aPress) {
+    if ((useKey.isDown || aPress) && useTimer > 30) {
       useTimer = 0
       ModalFactory.changeModal('upgrades', {forceOpen: true})
       console.log('Upgrade Computer Activated.')
     }
   }
+  function pressOne () {
+    compOne(true)
+  }
 
-  function compTwo () {
-    if (useKey.isDown && useTimer > 30) {
+  function compTwo (aPress) {
+    if ((useKey.isDown || aPress) && useTimer > 30) {
       useTimer = 0
       ModalFactory.changeModal('message', {
         newContent: {
@@ -819,14 +824,50 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
       console.log('Deposit Computer Activated.')
     }
   }
+  function pressTwo () {
+    compTwo(true)
+  }
 
-  function compThree () {
-    if (useKey.isDown && useTimer > 30) {
+  function compThree (aPress) {
+    if ((useKey.isDown || aPress) && useTimer > 30) {
       useTimer = 0
       console.log('Market Computer Activated.')
     }
   }
+  function pressThree () {
+    compThree(true)
+  }
 
+  function tileMousePress () {
+    let curTile = getTileProperties()
+    let foundTile = false
+    if (curTile.index === 93) {
+      foundTile = true
+      pressOne()
+    }
+    if (curTile.index === 94) {
+      foundTile = true
+      pressTwo()
+    }
+    if (curTile.index === 95) {
+      foundTile = true
+      pressThree()
+    }
+    if (!foundTile) {
+      console.log('Was not a pressable tile.')
+    }
+  }
+
+  function curPressFunction () {
+    if (currentAction === 'default') {
+      console.log('curPress ran default')
+      tileMousePress()
+    }
+    if (currentAction === 'upgrade') {
+      console.log('curPress ran upgrade')
+      buildUpgrade()
+    }
+  }
   // Turns a function into a function that is listened to.
   function returnKeyListener (emitWord, emitData) {
     console.log('keylistener returned')

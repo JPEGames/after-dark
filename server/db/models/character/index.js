@@ -53,18 +53,31 @@ module.exports = db.define('character', {
         // <--- MEDIUM ATTRIBUTES --->
         character.intelligence = _.sample(_.range(5, 9))
         character.endurance = _.sample(_.range(5, 9))
+        // <--- WEAK ATTRIBUTES --->
+        character.tinkering = _.sample(_.range(3, 7))
+        character.luck = _.sample(_.range(3, 7))
       }
       if (character.perk === 'scientist') {
+        // <--- STRONG ATTRIBUTES --->
         character.intelligence = _.sample(_.range(7, 11))
         character.tinkering = _.sample(_.range(7, 11))
-        character.strength = _.sample(_.range(3, 6))
-        character.endurance = _.sample(_.range(3, 6))
+        // <--- MEDIUM ATTRIBUTES --->
+        character.luck = _.sample(_.range(5, 9))
+        character.perception = _.sample(_.range(5, 9))
+        // <--- WEAK ATTRIBUTES --->
+        character.strength = _.sample(_.range(3, 7))
+        character.endurance = _.sample(_.range(3, 7))
       }
       if (character.perk === 'miner') {
+        // <--- STRONG ATTRIBUTES --->
         character.endurance = _.sample(_.range(7, 11))
         character.luck = _.sample(_.range(7, 11))
-        character.intelligence = _.sample(_.range(3, 6))
-        character.endurance = _.sample(_.range(3, 6))
+        // <--- MEDIUM ATTRIBUTES --->
+        character.strength = _.sample(_.range(5, 9))
+        character.tinkering = _.sample(_.range(5, 9))
+        // <--- WEAK ATTRIBUTES --->
+        character.intelligence = _.sample(_.range(3, 7))
+        character.perception = _.sample(_.range(3, 7))
       }
     }
   }

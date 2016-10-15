@@ -6,6 +6,9 @@
 		<img ng-src="/pimages/scientist.png" height="100%" width="100%" ng-show="myChar.perk === 'scientist'">
 		<img ng-src="/pimages/soldier.png" height="100%" width="100%" ng-show="myChar.perk === 'soldier'">
 	</div>
+	<div style="margin: 0 auto; text-align: center; margin-top: 1em">
+		<h4>You have <span style="color: #4CAF50">{{myMoney | currency}}</span></h4>
+	</div>
 	<div style="margin: 0 auto; text-align: center">
 		<h4> Experience - <span style="color: #F44336">{{myExp}}/{{myMaxExp}}</span></h4>
 	</div>
@@ -14,9 +17,6 @@
 			aria-valuenow="{{myExpPer}}" value="{{myExpPer}}" aria-valuemin="0" aria-valuemax="{{myMaxExp}}" ng-style="myProgress" style="color: black; font-weight: bold">
 			<span>{{myExpPer}}</span>
 		</div>
-	</div>
-	<div style="margin: 0 auto; text-align: center; margin-top: 1em">
-		<h4>You have <span style="color: #4CAF50">{{myMoney | currency}}</span></h4>
 	</div>
 	<div id="leaveForWastesBut" style="margin: 0 auto; text-align: center; margin-top: 1em;">
 		<button class='btn btn-danger' ng-click="goToWasteland()">

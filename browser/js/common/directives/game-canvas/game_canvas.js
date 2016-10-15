@@ -831,20 +831,21 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   function compTwo (aPress) {
     if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
-      ModalFactory.changeModal('message', {
-        newContent: {
-          title: 'Deposit Resources',
-          description: 'Would you like to deposit your resources in your bunkers cache for use in upgrading your equipment?',
-          eventType: 'yes/no',
-          source: '/pimages/message.png',
-          type: 'general',
-          id: 998,
-          status: 'neutral',
-          exitType: 'load',
-          next: 'New Storage'
-        },
-        forceOpen: true
-      })
+      scope.$emit('saveResource_Phaser')
+      // ModalFactory.changeModal('message', {
+      //   newContent: {
+      //     title: 'Deposit Resources',
+      //     description: 'Would you like to deposit your resources in your bunkers cache for use in upgrading your equipment?',
+      //     eventType: 'yes/no',
+      //     source: '/pimages/message.png',
+      //     type: 'general',
+      //     id: 998,
+      //     status: 'neutral',
+      //     exitType: 'load',
+      //     next: 'New Storage'
+      //   },
+      //   forceOpen: true
+      // })
       console.log('Deposit Computer Activated.')
     }
   }

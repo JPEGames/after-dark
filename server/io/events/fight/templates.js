@@ -1,6 +1,9 @@
 const Character = require('../../../db').model('character')
 const Promise = require('bluebird')
 
+// <---- DEFAULT MESSAGES FOR EVENT CONSTRUCTORS --->
+const ratMessage = 'A giant Earth Rat attacked! What do you do?'
+
 // <---- HELPER FUNCTIONS THAT INTERACT WITH BACKEND ---->
 function statCheck (dangerLevel, userId) {
   return Character.findOne({where: {userId}})
@@ -10,7 +13,6 @@ function statCheck (dangerLevel, userId) {
 }
 
 // <---- CUSTOM CONSTRUCTOR FUNCTIONS INVOKED IN GENERATOR FUNCTION ---->
-const ratMessage = 'A giant Earth Rat attacked! What do you do?'
 function makeRatattack (userId, message = ratMessage) {
   return Promise.resolve({
     title: 'Rat Attack!',

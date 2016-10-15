@@ -1,4 +1,4 @@
-app.controller('GameController', function ($scope, ModalFactory, $localStorage, showGame, GameViewFactory, MenuFactory, bunkerState, FbFactory) {
+app.controller('GameController', function ($scope, $rootScope, ModalFactory, $localStorage, showGame, GameViewFactory, MenuFactory, bunkerState, FbFactory, Socket, EventFactory) {
   // display game upon transition to game view
   $scope.showGame = showGame
 
@@ -39,9 +39,35 @@ app.controller('GameController', function ($scope, ModalFactory, $localStorage, 
     $scope.$broadcast('clearing')
   }
 
-  $scope.$on('test', function () {
-    console.log('RECIEVED TEST!')
+  // <---- LISTENERS FOR BUNKER VIEW EVENTS ---->
+  $scope.$on('saveResource_Phaser', function (event, data) {
+    console.log('GOT PHASER SAVE RESOURCE MSG!')
+    // ModalFactory.changeModal('message', {
+    //   newContent: {
+    //     title: 'Deposit Resources',
+    //     description: 'Would you like to deposit your resources in your bunkers cache for use in upgrading your equipment?',
+    //     eventType: 'yes/no',
+    //     source: '/pimages/message.png',
+    //     type: 'general',
+    //     id: 998,
+    //     status: 'neutral',
+    //     exitType: 'load',
+    //     next: 'New Storage'
+    //   },
+    //   forceOpen: true
+    // })
+    // EventFactory.getBackpack()
+    //   .then(backpack => {
+    //     console.log('USER BACKPACK: ', backpack)
+    //     return EventFactory.depositResources(backpack)
+    //   })
+    // TODO: in case we need event generator!
+    $rootScope.socket.emit('saveResources_Client')
   })
+
+  // $scope.$on('test', function () {
+  //   console.log('RECIEVED TEST!')
+  // })
 
   // removes erroneous 'second' game view on page refresh
   $scope.$on('$destroy', () => {

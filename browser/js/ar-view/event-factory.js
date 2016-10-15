@@ -29,5 +29,11 @@ app.factory('EventFactory', function ($http, AuthService, FbFactory, GeoFireFact
     return $http.post('api/events/', event)
       .then(res => res.data)
   }
+  EventFactory.depositResources = (backpackObj) => {
+    return AuthService.getLoggedInUser()
+      .then(user => {
+        return $http.put(`api/bunkerstate/depositResources/${user.id}`, backpackObj)
+      })
+  }
   return EventFactory
 })

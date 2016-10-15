@@ -26,6 +26,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     console.log('Mode is now: ', $scope.mode)
     if (data) {
       $scope.castData = data.newContent
+      console.log('DATA: ', data)
       if (data.forceOpen) {
         console.log('Modal Open forced by Modal Change.')
         $interval(ModalFactory.openModal, 10, 1)

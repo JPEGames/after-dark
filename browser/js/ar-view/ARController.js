@@ -170,10 +170,8 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   $rootScope.socket.on('send_metal', function (event) {
     let eventObj = event.event
     let thisMarker = { id: event.markerId, type: event.markerType }
-    console.log('THIS MARKER: ', thisMarker)
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      console.log('EVENT OBJECT TO DISPLAY: ', eventObj)
       ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
@@ -183,12 +181,9 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
 
   $rootScope.socket.on('send_electricity', function (event) {
     let eventObj = event.event
-    console.log('EVENT OBJECT: ', eventObj)
     let thisMarker = { id: event.markerId, type: event.markerType }
-    console.log('THIS MARKER: ', thisMarker)
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      console.log('EVENT OBJECT TO DISPLAY: ', eventObj)
       ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
@@ -221,23 +216,19 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   })
 
   $rootScope.socket.on('updateBackpack', function (event) {
-    console.log('GOT UPDATE BACKPACK EVENT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     EventFactory.getBackpack()
       .then(userBackpack => {
-        console.log('USER BACKPACK AFTER SOCKET EMIT: ', userBackpack)
         for (let resource in templateObjs) {
           templateObjs[ resource ][ 'pquantity' ] = userBackpack[ resource ]
           templateObjs[ resource ][ 'myProgress' ] = {'width': templateObjs[ resource ][ 'pquantity' ] / templateObjs[ resource ][ 'pmax' ] * 100 + '%'}
-          console.log('RESOURCE: ', resource, 'QUANTITY: ', templateObjs[ resource ][ 'pquantity' ])
         }
         ModalFactory.updateInventory(templateObjs)
       })
   })
 
-  // <-------- LISTENER FOR EVENT CHAIN RESPONSES -------->
+  // <-------- LISTENER FOR ANY EVENT CHAIN RESPONSES -------->
   $rootScope.socket.on('serverRes', function (eventObj) {
     console.log('Got server response!~~~~~~~~~~~~~~~~~~~~~~~', eventObj)
     ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
-    // ModalFactory.setMarker()
   })
 })

@@ -1,6 +1,7 @@
 const Bunker = require('../../../db').model('bunker')
 const Backpack = require('../../../db').model('backpack')
 const Promise = require('bluebird')
+const _ = require('lodash')
 
 function putResourcesInBunker (userId) {
   return Backpack.findOne({ where: { userId } })
@@ -11,10 +12,13 @@ function putResourcesInBunker (userId) {
         water: backpack.water,
         metal: backpack.metal
       }
-      console.log('RESOURCES IN BACKPACK: ', resources)
       return Bunker.findOne({ where: { userId } })
         .then(bunker => {
           return bunker.update(resources)
+        })
+        .then(() => {
+          let defaultResources = {air: 0, electricity: 0, water: 0, metal: 0}
+          return backpack.update(defaultResources)
         })
     })
 }
@@ -38,7 +42,6 @@ function saveResources (userId) {
   console.log('You chose to save your resources!!!')
   return Promise.resolve(putResourcesInBunker(userId))
     .then((bunker) => {
-      console.log('updated bunker resources: ', bunker)
       console.log('saved resources!!!')
       return {
         title: 'Resources Successfully Stored',

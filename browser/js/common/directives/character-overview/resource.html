@@ -1,0 +1,26 @@
+<div>
+<hr style="width: 66%; color: gray; background-color: gray">
+<div style="margin: 0 auto; text-align: center">
+	<p><span style="font-size: 1.6em">{{resource.title}}</span><p>
+</div>
+<div style="float: left; width: 20%; margin-top: 1em">
+	<h4>Bunker: {{resource.bquantity}}/{{resource.bmax}}</h4>
+</div>
+<div class="progress" style="float: right; width: 75%; margin-top: 1.6em">
+	<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{resource.bquantity}}" aria-valuemin="{{resource.bquantity}}" aria-valuemax="100" ng-style="resource.myBProgress">
+		<span style="color: black; font-weight: bold">{{resource.bquantity}}</span>
+	</div>
+</div>
+<div style="clear: both">
+</div>
+<div style="float: left; width: 20%; margin-top: 1em">
+	<h4>Backpack: {{resource.pquantity}}/{{resource.pmax}}</h4>
+</div>
+<div class="progress" style="float: right; width: 75%; margin-top: 1.6em">
+	<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{resource.pquantity}}" aria-valuemin="{{resource.pquantity}}" aria-valuemax="100" ng-style="resource.myPProgress">
+		<span style="color: black; font-weight: bold">{{resource.pquantity}}</span>
+	</div>
+</div>
+<div style="clear: both">
+</div>
+</div>

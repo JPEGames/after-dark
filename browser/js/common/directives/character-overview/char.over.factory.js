@@ -1,4 +1,8 @@
 app.factory('CharOverFactory', function ($http, $rootScope, AuthService) {
+  // <---- GLOBALS FOR CHARACTER INFORMATION --->
+  let charStats
+  let charResources
+
   let testResources = [
     {
       title: 'Metal',
@@ -72,13 +76,18 @@ app.factory('CharOverFactory', function ($http, $rootScope, AuthService) {
   ]
 
   return {
-    getStats: function () {
-      console.log('Invoking getStats from CharOverFactory!')
+    getCharacter: function () {
       return AuthService.getLoggedInUser()
         .then(user => {
           return $http.get(`/api/characters/${user.id}`)
         })
-        .then(res => res.data)
+        .then(res => {
+          charStats = res.data
+          return res.data
+        })
+    },
+    getStats: function () {
+      return charStats
     },
     setStats: function (newStats) {
       testStats = newStats
@@ -94,6 +103,17 @@ app.factory('CharOverFactory', function ($http, $rootScope, AuthService) {
     },
     setMoney: function (newMoney) {
       testMoney = newMoney
+    },
+    statConverter: function (statObj) {
+      let statArr = []
+      Object.keys(statObj).forEach(stat => {
+        statArr.push({
+          title: `${stat.substring(0, 1).toUpperCase()}${stat.substring(1)}`,
+          level: statObj[ stat ],
+          myProgress: { 'width': `${statObj[ stat ]}%` }
+        })
+      })
+      return statArr
     }
   }
 })

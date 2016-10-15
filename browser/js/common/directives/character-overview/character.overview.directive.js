@@ -12,24 +12,13 @@ app.directive('characterOverview', function (AuthService, $state, $rootScope, Ch
         })
 
       // <---- SET STATS IN CHARACTER OVERVIEW ---->
-      CharOverFactory.getStats()
+      CharOverFactory.getCharacter()
         .then(character => {
           let { endurance, intelligence, luck, perception, strength, tinkering } = character
           let myStats = { strength, endurance, intelligence, luck, tinkering, perception }
-          scope.myStats = statConverter(myStats)
+          scope.myStats = CharOverFactory.statConverter(myStats)
         })
-      // Helper to convert retrieved character stats to proper format for display
-      function statConverter (statObj) {
-        let statArr = []
-        Object.keys(statObj).forEach(stat => {
-          statArr.push({
-            title: `${stat.substring(0, 1).toUpperCase()}${stat.substring(1)}`,
-            level: statObj[ stat ],
-            myProgress: { 'width': `${statObj[ stat ]}%` }
-          })
-        })
-        return statArr
-      }
+
       scope.myResources = CharOverFactory.getResources()
 
       scope.myMoney = CharOverFactory.getMoney()

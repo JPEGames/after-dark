@@ -29,7 +29,7 @@ module.exports = function (socket) {
           lastEvent = val
           console.log('LAST EVENT: ', lastEvent)
         })
-      socket.on('response', function (resData) {
+      socket.on('fight_response', function (resData) {
         if (!iterator.done) {
           console.log('RES DATA: ', resData)
           let nextConstructor = lastEvent.options[ resData.choice ].create

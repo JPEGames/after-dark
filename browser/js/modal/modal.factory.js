@@ -152,15 +152,21 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     getModalOpen: function () {
       return modalOpen
     },
-    submitResponse: function (aResponse, socketBool) {
+    submitResponse: function (aResponse, socketBool, category) {
       // This is where we would be sending some information to a server.
       console.log('Submitted Response Below')
       console.log(aResponse)
       // Only emit 'response' when event objects in an event chain
       // are sent up from the server!
       if (socketBool) {
-        console.log('Firing socket response~~~~~~~')
-        $rootScope.socket.emit('response', {choice: aResponse})
+        if (category === 'fight') {
+          console.log('Firing socket response~~~~~~~')
+          $rootScope.socket.emit('fight_response', {choice: aResponse})
+        }
+        if (category === 'saveBackpack') {
+          console.warn('Firing socket response for saving backpack~~~')
+          $rootScope.socket.emit('backpack_response', {choice: aResponse})
+        }
       }
     },
     getMessages: function () {

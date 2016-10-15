@@ -28,7 +28,8 @@ function makeRatattack (userId, message = ratMessage) {
       {title: 'Fight', req: false, action: 1, create: () => fight(userId)}
     ],
     type: 'general',
-    socketMsg: true
+    socketMsg: true,
+    category: 'fight'
   })
 }
 
@@ -47,7 +48,8 @@ function run (userId, dangerLevel = 2) {
         next: '',
         options: [{title: 'Run', req: false, action: 0, create: undefined}],
         type: 'general',
-        socketMsg: true
+        socketMsg: true,
+        category: 'fight'
       } : {
         title: 'Run Failure',
         description: 'Your cowardice is of no avail! You fall down crying.',
@@ -59,7 +61,8 @@ function run (userId, dangerLevel = 2) {
         next: 'Are you fast enough?????',
         options: [{title: 'Run', req: false, action: 0, create: (userId) => makeRatattack(userId, 'You are a failure. The rat leaps on you and spins you around!')}],
         type: 'general',
-        socketMsg: true
+        socketMsg: true,
+        category: 'fight'
       }
     })
 }
@@ -87,7 +90,8 @@ const fightSuccess = {
   next: '',
   options: [{title: 'Run', req: false, action: 0, create: undefined}],
   type: 'general',
-  socketMsg: true
+  socketMsg: true,
+  category: 'fight'
 }
 const fightFailure = {
   title: 'Fight Failure',
@@ -100,7 +104,8 @@ const fightFailure = {
   next: '',
   options: [{title: 'Run', req: false, action: 0, create: undefined}],
   type: 'general',
-  socketMsg: true
+  socketMsg: true,
+  category: 'fight'
 }
 
 // <------- POSSIBLE STARTING EVENTS FOR INITIATING GENERATOR FUNCTION ------>

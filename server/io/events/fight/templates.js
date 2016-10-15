@@ -1,6 +1,7 @@
 const Character = require('../../../db').model('character')
 const Promise = require('bluebird')
 
+// <---- HELPER FUNCTIONS THAT INTERACT WITH BACKEND ---->
 function statCheck (dangerLevel, userId) {
   return Character.findOne({where: {userId}})
     .then(character => {
@@ -8,6 +9,7 @@ function statCheck (dangerLevel, userId) {
     })
 }
 
+// <---- CUSTOM CONSTRUCTOR FUNCTIONS INVOKED IN GENERATOR FUNCTION ---->
 const ratMessage = 'A giant Earth Rat attacked! What do you do?'
 function makeRatattack (userId, message = ratMessage) {
   return Promise.resolve({
@@ -60,7 +62,7 @@ function run (userId, dangerLevel = 2) {
     })
 }
 
-function repeatRatAttack(userId) {
+function repeatRatAttack (userId) {
   return makeRatattack(userId, 'You are a failure. The rat leaps on you and spins you around!')
 }
 
@@ -99,6 +101,7 @@ const fightFailure = {
   socketMsg: true
 }
 
+// <------- POSSIBLE STARTING EVENTS FOR INITIATING GENERATOR FUNCTION ------>
 module.exports = {
   ratAttack: makeRatattack,
   mutantAttack: {

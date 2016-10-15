@@ -11,7 +11,7 @@ app.directive('characterOverview', function (AuthService, $state, $rootScope, Ch
           $rootScope.socket.emit('loading', user)
         })
 
-      scope.myStats = CharOverFactory.getStats()
+      CharOverFactory.getStats()
       console.log('myStats', scope.myStats)
 
       scope.goToWasteland = function () {

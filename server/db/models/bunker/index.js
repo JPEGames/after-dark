@@ -19,6 +19,10 @@ module.exports = db.define('bunker', {
     type: Sequelize.INTEGER,
     defaultValue: 0
   },
+  metal: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
+  },
   air: {
     type: Sequelize.INTEGER,
     defaultValue: 0

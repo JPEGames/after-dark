@@ -5,6 +5,7 @@ function endEvent () {
 
 module.exports = function * travelTree (eventConstructor, userId) {
   if (!eventConstructor) {
+    console.log('ENDING GENERATOR!')
     return endEvent() // maybe ending function here that resets eventTree to nothing
   }
   let nextFunc = yield eventConstructor(userId)

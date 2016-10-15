@@ -207,6 +207,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
     // send event type and id upon click
     if (sprite['markerType'] === 'rat attack') {
       scope.$emit('fight', {type: sprite['markerType'], id: sprite['id'], dangerLvl: 1})
+      console.log('SPRITE ID FOR RATTATA: ', sprite['id'])
     } else {
       scope.$emit('gameEvent', {type: sprite['markerType'], id: sprite['id']})
     }

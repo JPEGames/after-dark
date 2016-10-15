@@ -15,6 +15,7 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
 
   $rootScope.$on('DeleteMarker', function (event, data) {
     const key = `${data.type}_${data.id}`
+    console.log('DATA: ', data)
     _.remove(pointsOfInterest, point => point.id === key)
     mapMover(center)
   // updatePhaser()

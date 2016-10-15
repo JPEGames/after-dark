@@ -154,8 +154,11 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   $scope.$on('fight', function (event, data) {
     console.log('Got fight event from Phaser!', 'data: ', data)
     let payload = {userId: currentUser.id, type: data.type, dangerLvl: data.dangerLvl}
+    let thisMarker = { id: data.id, type: data.type }
     console.log('fight payload: ', payload)
     $rootScope.socket.emit('fight', payload)
+    // this is useful for deleting the rat marker!
+    ModalFactory.setMarker(thisMarker)
   })
 
   // LISTENERS
@@ -169,7 +172,6 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      console.log('EVENT OBJECT TO DISPLAY: ', eventObj)
       ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
@@ -179,11 +181,9 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
 
   $rootScope.socket.on('send_electricity', function (event) {
     let eventObj = event.event
-    console.log('EVENT OBJECT: ', eventObj)
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      console.log('EVENT OBJECT TO DISPLAY: ', eventObj)
       ModalFactory.changeModal('message', { newContent: eventObj })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
@@ -216,35 +216,17 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   })
 
   $rootScope.socket.on('updateBackpack', function (event) {
-    console.log('GOT UPDATE BACKPACK EVENT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     EventFactory.getBackpack()
       .then(userBackpack => {
-        console.log('USER BACKPACK AFTER SOCKET EMIT: ', userBackpack)
         for (let resource in templateObjs) {
           templateObjs[ resource ][ 'pquantity' ] = userBackpack[ resource ]
           templateObjs[ resource ][ 'myProgress' ] = {'width': templateObjs[ resource ][ 'pquantity' ] / templateObjs[ resource ][ 'pmax' ] * 100 + '%'}
-          console.log('RESOURCE: ', resource, 'QUANTITY: ', templateObjs[ resource ][ 'pquantity' ])
         }
         ModalFactory.updateInventory(templateObjs)
       })
   })
-  // <---- RAT ATTACK LISTENERS ----->
-  // TODO: put these in a factory!!! can we?
-  // $rootScope.socket.on('send_rat_attack', function (event) {
-  //   console.log('GOT RAT ATTACK', event)
-  //   ModalFactory.addMessage(event)
-  //   if (ModalFactory.getMessages().length) {
-  //     ModalFactory.changeModal('message', { newContent: event })
-  //     $timeout(ModalFactory.openModal(), 1000)
-  //   }
-  // })
-  //
-  // $rootScope.socket.on('outcome_1', function (event) {
-  //   console.log('GOT OUTCOME', event)
-  //   ModalFactory.changeModal('message', { newContent: event, forceOpen: true })
-  //   // $timeout(ModalFactory.openModal(), 1000)
-  // })
 
+  // <-------- LISTENER FOR ANY EVENT CHAIN RESPONSES -------->
   $rootScope.socket.on('serverRes', function (eventObj) {
     console.log('Got server response!~~~~~~~~~~~~~~~~~~~~~~~', eventObj)
     ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })

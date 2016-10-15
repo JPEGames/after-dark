@@ -1,41 +1,41 @@
 const fightTemplates = require('./templates')
 // const EventTree = require('../../helpers/event-tree')
 const treeTraveller = require('../../helpers/gen-tree-traversal')
+let sendEvent = require('../../helpers/send-event')
 
 module.exports = function (socket) {
   return function (data) {
     let lastEvent
-    console.log('Socket')
-    console.log(socket.userId)
     console.log('received fight payload: ', data)
     if (data.type === 'rat attack') {
-      // let ratEvent = fightTemplates.ratAttack.title
       console.log('we got a rat attack event from server')
-      // Initialize event tree
-      const sendEvent = function (eventPromise) {
-        console.log('Calling sendEvent!')
-        return eventPromise.then(eventObj => {
-          console.log('PROMISE RESOLVING: about to emit serverRes')
-          socket.emit('serverRes', eventObj)
-          return eventObj
-        })
-      }
-
+      // Helper function used to emit correct event objects to client socket
+      // const sendEvent = function (eventPromise, socket) {
+      //   console.log('Calling sendEvent!')
+      //   return eventPromise.then(eventObj => {
+      //     console.log('PROMISE RESOLVING: about to emit serverRes')
+      //     socket.emit('serverRes', eventObj)
+      //     return eventObj
+      //   })
+      // }
+      // Initialize event chain - generator function closes around user ID
       let iterator = treeTraveller(fightTemplates.ratAttack, socket.userId)
       let result = iterator.next()
       console.log('INITIAL RESULT:', result)
-      sendEvent(result.value)
+      // resolve next event in chain (result of a returned create() in
+      // options property on event object)
+      sendEvent(result.value, socket)
         .then(val => {
           lastEvent = val
           console.log('LAST EVENT: ', lastEvent)
         })
-      socket.on('response', function (resData) {
+      socket.on('fight_response', function (resData) {
         if (!iterator.done) {
           console.log('RES DATA: ', resData)
           let nextConstructor = lastEvent.options[ resData.choice ].create
           result = iterator.next(nextConstructor)
           result.done ? console.log('Sequence is done!')
-            : sendEvent(result.value).then((val) => {
+            : sendEvent(result.value, socket).then((val) => {
               lastEvent = val
             })
         }

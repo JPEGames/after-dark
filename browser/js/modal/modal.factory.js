@@ -152,7 +152,7 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     getModalOpen: function () {
       return modalOpen
     },
-    submitResponse: function (aResponse, socketBool, category) {
+    submitResponse: function (aResponse, socketBool, category, afterEffect) {
       // This is where we would be sending some information to a server.
       console.log('Submitted Response Below')
       console.log(aResponse)
@@ -166,6 +166,9 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
         if (category === 'saveBackpack') {
           console.warn('Firing socket response for saving backpack~~~')
           $rootScope.socket.emit('backpack_response', {choice: aResponse})
+          if (afterEffect) {
+            $rootScope.$broadcast(afterEffect)
+          }
         }
       }
     },

@@ -60,6 +60,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     console.log('Clearing inventory!')
     $scope.resources.forEach(resource => {
       resource.pquantity = 0
+      resource.myProgress = { 'width': 0 + '%' }
     })
   })
 

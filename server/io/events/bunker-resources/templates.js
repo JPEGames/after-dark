@@ -55,7 +55,8 @@ function saveResources (userId) {
         options: [ { create: undefined }, { create: undefined } ],
         type: 'general',
         socketMsg: true,
-        category: 'saveBackpack'
+        category: 'saveBackpack',
+        afterEffect: 'clearInventory'
       }
     })
 }

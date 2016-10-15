@@ -14,6 +14,10 @@ app.directive('characterOverview', function (AuthService, $state, $rootScope, Ch
       scope.myStats = CharOverFactory.getStats()
       console.log('myStats', scope.myStats)
 
+      scope.myResources = CharOverFactory.getResources()
+
+      scope.myMoney = CharOverFactory.getMoney()
+
       scope.goToWasteland = function () {
         ModalFactory.leaveBunker()
         ModalFactory.changeModal('message', {

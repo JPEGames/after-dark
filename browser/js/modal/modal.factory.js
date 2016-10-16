@@ -174,6 +174,9 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
         if (category === 'upgrade') {
           console.warn('Firing socket response for purchasing upgrades!')
           $rootScope.socket.emit('upgrade_response', { choice: aResponse })
+          if (afterEffect) {
+            $rootScope.$broadcast(afterEffect)
+          }
         }
       }
     },

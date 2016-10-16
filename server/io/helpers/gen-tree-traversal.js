@@ -8,6 +8,7 @@ module.exports = function * travelTree (eventConstructor, userId) {
     console.log('ENDING GENERATOR!')
     return endEvent() // maybe ending function here that resets eventTree to nothing
   }
+  console.log('CALLING GENERATOR')
   let nextFunc = yield Promise.resolve(eventConstructor(userId))
   // yield pertinent event info for socket emission
   // this is sent to Angular after user makes a decision

@@ -156,6 +156,7 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       // This is where we would be sending some information to a server.
       console.log('Submitted Response Below')
       console.log(aResponse)
+      console.log('Response category: ', category)
       // Only emit 'response' when event objects in an event chain
       // are sent up from the server!
       if (socketBool) {
@@ -169,6 +170,10 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
           if (afterEffect) {
             $rootScope.$broadcast(afterEffect)
           }
+        }
+        if (category === 'upgrade') {
+          console.warn('Firing socket response for purchasing upgrades!')
+          $rootScope.socket.emit('upgrade_response', {choice: aResponse})
         }
       }
     },

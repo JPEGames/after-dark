@@ -20,7 +20,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     },
     'air': {
       title: 'O2',
-      source: '/pimages/oxygen.png',
+      source: '/pimages/air.png',
       pquantity: 0,
       pmax: 100,
       bquantity: 0,
@@ -215,6 +215,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     }
   })
 
+  // <------ LISTENER FOR STORING RESOURCES IN BACKPACK ----->
   $rootScope.socket.on('updateBackpack', function (event) {
     EventFactory.getBackpack()
       .then(userBackpack => {

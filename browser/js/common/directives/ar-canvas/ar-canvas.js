@@ -66,7 +66,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
     gameAR.load.image('bunker', '/pimages/vault.png')
     gameAR.load.image('metal', '/pimages/ore.png')
     gameAR.load.image('water', '/pimages/water.png')
-    gameAR.load.image('air', '/pimages/oxygen.png')
+    gameAR.load.image('air', '/pimages/air.png')
     gameAR.load.image('electricity', '/pimages/electricity.png')
     gameAR.load.image('rat attack', '/pimages/rat-attack.png')
   }

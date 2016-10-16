@@ -820,7 +820,8 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
   function compOne (aPress) {
     if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
-      ModalFactory.changeModal('upgrades', {forceOpen: true})
+      scope.$emit('startUpgrade_Phaser')
+      // ModalFactory.changeModal('upgrades', {forceOpen: true})
       console.log('Upgrade Computer Activated.')
     }
   }

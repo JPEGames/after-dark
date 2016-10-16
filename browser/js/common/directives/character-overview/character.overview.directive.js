@@ -19,7 +19,14 @@ app.directive('characterOverview', function (AuthService, $state, $rootScope, Ch
           scope.myStats = CharOverFactory.statConverter(myStats)
         })
 
-      scope.myResources = CharOverFactory.getResources()
+      // <---- SET RESOURCES IN CHARACTER OVERVIEW ---->
+      CharOverFactory.resourceGenerator()
+        .then(resourceArray => {
+          console.log('RESOURCES IN CHARACTER OVERVIEW: ', resourceArray)
+          scope.myResources = resourceArray
+        })
+
+      // scope.myResources = CharOverFactory.getResources()
 
       scope.myMoney = CharOverFactory.getMoney()
 

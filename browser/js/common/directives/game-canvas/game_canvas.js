@@ -51,7 +51,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     game.load.image('touch', 'pimages/touch.png')
     game.load.image('touch_segment', 'pimages/touch_segment.png')
     game.load.image('compass', 'pimages/compass.png')
-    game.load.spritesheet('player', 'pimages/dude.png', 32, 48)
+    game.load.spritesheet('player', 'pimages/astronaut-sheet.png', 35, 51)
   }
   // Set bg color behind all elements in this frame
   // Load my tilemap - a json that can be found in assets - that is essentially a matrix of png elements
@@ -205,8 +205,8 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     player.body.checkCollision.left = true
     // I follow the rules of walls to the left
 
-    player.animations.add('left', [0, 1, 2, 3], 10, true)
-    player.animations.add('right', [5, 6, 7, 8], 10, true)
+    player.animations.add('left', [1, 2, 3], 10, true)
+    player.animations.add('right', [4, 5, 6], 10, true)
     // Name animation, what frames is this animation, at what FPS, do I idle otherwise?
 
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
@@ -269,7 +269,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
           player.animations.stop()
           // otherwise, standstill
 
-          player.frame = 4
+          player.frame = 0
         // at this frame
         }
       }

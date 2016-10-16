@@ -64,7 +64,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
   function preload () {
     gameAR.load.image('cloud', '/pimages/cloud2.png')
     gameAR.load.image('bunker', '/pimages/vault.png')
-    gameAR.load.image('metal', '/pimages/ore.png')
+    gameAR.load.image('metal', '/pimages/metal.png')
     gameAR.load.image('water', '/pimages/water.png')
     gameAR.load.image('air', '/pimages/air.png')
     gameAR.load.image('electricity', '/pimages/electricity.png')

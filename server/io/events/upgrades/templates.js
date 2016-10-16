@@ -16,13 +16,20 @@ function makeMenu (userId) {
         id: 998,
         status: 'neutral',
         exitType: 'load',
-        options: [ { title: 'water', action: 0, create: () => new Upgrade('water', bunker.waterCapacity, userId) },
-          { title: 'air', action: 1, create: () => new Upgrade('air', bunker.airCapacity, userId) },
-          { title: 'electricity', action: 2, create: () => new Upgrade('electricity', bunker.electricityCapacity, userId) },
-          { title: 'metal', action: 3, create: () => new Upgrade('metal', bunker.metalCapacity, userId) } ],
+        options: [
+          new Upgrade('water', bunker.waterCapacity, userId),
+          new Upgrade('air', bunker.airCapacity, userId),
+          new Upgrade('electricity', bunker.electricityCapacity, userId),
+          new Upgrade('metal', bunker.metalCapacity, userId)
+        ],
+        // options: [ { title: 'water', action: 0, create: () => new Upgrade('water', bunker.waterCapacity, userId) },
+        //   { title: 'air', action: 1, create: () => new Upgrade('air', bunker.airCapacity, userId) },
+        //   { title: 'electricity', action: 2, create: () => new Upgrade('electricity', bunker.electricityCapacity, userId) },
+        //   { title: 'metal', action: 3, create: () => new Upgrade('metal', bunker.metalCapacity, userId) } ],
         next: 'Calculating optimal upgrades',
         socketMsg: true,
-        category: 'upgrade'
+        category: 'upgrade',
+        forceEventType: 'upgrades'
       }
     })
 }
@@ -39,12 +46,16 @@ class Upgrade {
     this.benefits = [ { type, category, benefit: 'times', quantity: level } ]
     this.next = ''
     this.eventType = 'variadic'
-    this.options = [
-      { title: 'purchase', action: 0, create: () => checkPurchase(userId, category, type) },
-      { title: 'back', action: 1, create: () => makeMenu(userId) }
-    ]
+    // this.options = [
+    //   { title: 'purchase', action: 0, create: () => checkPurchase(userId, category, type) },
+    //   { title: 'back', action: 1, create: () => makeMenu(userId) }
+    // ]
     this.category = 'upgrade'
     this.socketMsg = true
+    this.forceEventType = 'upgrades'
+    // THIS IS FOR THE BUY MESSAGE!!!!
+    this.action = 0
+    this.create = () => checkPurchase(userId, category, type)
   }
 }
 

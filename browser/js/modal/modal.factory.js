@@ -14,68 +14,68 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       // literally exit type
       exitType: 'load',
       costs: [
-        {type: 'metal', quantity: 50},
-        {type: 'electricity', quantity: 20},
-        {type: 'water', quantity: 15},
-        {type: 'oxygen', quantity: 5}
+        { type: 'metal', quantity: 50 },
+        { type: 'electricity', quantity: 20 },
+        { type: 'water', quantity: 15 },
+        { type: 'oxygen', quantity: 5 }
       ],
       benefits: [
-        {type: 'capacity', category: 'oxygen', benefit: 'plus', quantity: '10'},
-        {type: 'capacity', category: 'water', benefit: 'plus', quantity: '10'},
-        {type: 'capacity', category: 'metal', benefit: 'plus', quantity: '10'},
-        {type: 'capacity', category: 'electricity', benefit: 'plus', quantity: '10'}
+        { type: 'capacity', category: 'oxygen', benefit: 'plus', quantity: '10' },
+        { type: 'capacity', category: 'water', benefit: 'plus', quantity: '10' },
+        { type: 'capacity', category: 'metal', benefit: 'plus', quantity: '10' },
+        { type: 'capacity', category: 'electricity', benefit: 'plus', quantity: '10' }
       ],
       // custom load message
       next: ''
     }
   ]
   /*
-  {
-    title: 'An Event',
-    description: 'Something somewhere happened to someone.',
-    eventType: 'confirm',
-    source: '/pimages/message.png',
-    type: 'general',
-    id: 1,
-    status: 'neutral',
-    // exitType: 'load', if activated - will cause a load state
-    next: 'Any Event'
-  },
-  {
-    title: 'Another Event',
-    description: 'Something somewhere happened to someone else!',
-    eventType: 'yes/no',
-    source: '/pimages/message.png',
-    type: 'general',
-    id: 2,
-    status: 'danger'
-  },
-  {
-    title: 'Metal Found',
-    description: 'You gathered some metal.',
-    quantity: 17,
-    eventType: 'confirm',
-    id: 3,
-    type: 'resource',
-    source: '/pimages/ore.png',
-    status: 'success'
-  },
-  {
-    title: 'Earthling Assault!',
-    description: 'A group of earthlings has appeared out of the dust with intentions of attacking you! What will you do?',
-    eventType: 'variadic',
-    options: [
-      {title: 'Run', req: false, action: 1},
-      {title: 'Fight', req: false, action: 2},
-      {title: 'Talk', req: false, action: 3}
-    ],
-    id: 4,
-    type: 'general',
-    source: '/pimages/message.png',
-    status: 'neutral'
-  }
-  ]
-  */
+   {
+   title: 'An Event',
+   description: 'Something somewhere happened to someone.',
+   eventType: 'confirm',
+   source: '/pimages/message.png',
+   type: 'general',
+   id: 1,
+   status: 'neutral',
+   // exitType: 'load', if activated - will cause a load state
+   next: 'Any Event'
+   },
+   {
+   title: 'Another Event',
+   description: 'Something somewhere happened to someone else!',
+   eventType: 'yes/no',
+   source: '/pimages/message.png',
+   type: 'general',
+   id: 2,
+   status: 'danger'
+   },
+   {
+   title: 'Metal Found',
+   description: 'You gathered some metal.',
+   quantity: 17,
+   eventType: 'confirm',
+   id: 3,
+   type: 'resource',
+   source: '/pimages/metal.png',
+   status: 'success'
+   },
+   {
+   title: 'Earthling Assault!',
+   description: 'A group of earthlings has appeared out of the dust with intentions of attacking you! What will you do?',
+   eventType: 'variadic',
+   options: [
+   {title: 'Run', req: false, action: 1},
+   {title: 'Fight', req: false, action: 2},
+   {title: 'Talk', req: false, action: 3}
+   ],
+   id: 4,
+   type: 'general',
+   source: '/pimages/message.png',
+   status: 'neutral'
+   }
+   ]
+   */
 
   // Right here begins my hacks - not ideal - but other solutions is eventing
   // which is complex.
@@ -162,18 +162,18 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       if (socketBool) {
         if (category === 'fight') {
           console.log('Firing socket response~~~~~~~')
-          $rootScope.socket.emit('fight_response', {choice: aResponse})
+          $rootScope.socket.emit('fight_response', { choice: aResponse })
         }
         if (category === 'saveBackpack') {
           console.warn('Firing socket response for saving backpack~~~')
-          $rootScope.socket.emit('backpack_response', {choice: aResponse})
+          $rootScope.socket.emit('backpack_response', { choice: aResponse })
           if (afterEffect) {
             $rootScope.$broadcast(afterEffect)
           }
         }
         if (category === 'upgrade') {
           console.warn('Firing socket response for purchasing upgrades!')
-          $rootScope.socket.emit('upgrade_response', {choice: aResponse})
+          $rootScope.socket.emit('upgrade_response', { choice: aResponse })
         }
       }
     },
@@ -228,6 +228,27 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     },
     getUpgrades: function () {
       return testUpgrades
+    },
+    nextModal: function (aMessage) {
+      if (aMessage.exitType === 'load') {
+        this.startLoading({ title: aMessage.next })
+      } else {
+        if (this.lastMessage()) {
+          this.resetModal()
+          this.closeModal()
+        } else {
+          if (aMessage.exitType) {
+            if (aMessage.exitType === 'immediate') {
+              this.resetModal()
+              this.closeModal()
+            } else {
+              this.changeModal('notify', {})
+            }
+          } else {
+            this.changeModal('notify', {})
+          }
+        }
+      }
     }
   }
 })

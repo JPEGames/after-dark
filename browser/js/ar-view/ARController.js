@@ -2,7 +2,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   let templateObjs = {
     'metal': {
       title: 'Metal',
-      source: '/pimages/ore.png',
+      source: '/pimages/metal.png',
       pquantity: 0,
       pmax: 100,
       bquantity: 0,
@@ -230,6 +230,10 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   // <-------- LISTENER FOR ANY EVENT CHAIN RESPONSES -------->
   $rootScope.socket.on('serverRes', function (eventObj) {
     console.log('Got server response!~~~~~~~~~~~~~~~~~~~~~~~', eventObj)
+    if (eventObj.forceEventType) {
+      console.log('Changing Modal based on force event type!')
+      ModalFactory.changeModal(eventObj.forceEventType, { newContent: eventObj, forceOpen: true })
+    }
     ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
   })
 })

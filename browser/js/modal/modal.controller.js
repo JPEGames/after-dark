@@ -28,6 +28,11 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       $scope.castData = data.newContent
       console.log('DATA: ', data)
       if (data.forceOpen) {
+        if (data.newContent.forceEventType) {
+          console.log('Forcing Event Type')
+          $scope.mode = data.newContent.forceEventType
+          console.log('Mode forced to: ', $scope.mode)
+        }
         console.log('Modal Open forced by Modal Change.')
         $interval(ModalFactory.openModal, 10, 1)
       }
@@ -74,7 +79,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   $scope.resources = [
     {
       title: 'Metal',
-      source: '/pimages/ore.png',
+      source: '/pimages/metal.png',
       pquantity: 0,
       pmax: 100,
       bquantity: 0,

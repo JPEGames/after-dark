@@ -1,36 +1,8 @@
-app.factory('CharOverFactory', function () {
-  let testStats = [
-    {
-      title: 'Strength',
-      level: 15,
-      myProgress: { 'width': 15 + '%' }
-    },
-    {
-      title: 'Endurance',
-      level: 17,
-      myProgress: { 'width': 17 + '%' }
-    },
-    {
-      title: 'Perception',
-      level: 7,
-      myProgress: { 'width': 7 + '%' }
-    },
-    {
-      title: 'Luck',
-      level: 1,
-      myProgress: { 'width': 1 + '%' }
-    },
-    {
-      title: 'Intelligence',
-      level: 21,
-      myProgress: { 'width': 21 + '%' }
-    },
-    {
-      title: 'Tinkering',
-      level: 10,
-      myProgress: { 'width': 10 + '%' }
-    }
-  ]
+app.factory('CharOverFactory', function ($http, $rootScope, AuthService) {
+  // <---- GLOBALS FOR CHARACTER INFORMATION --->
+  let charStats
+  let charResources
+
   let testResources = [
     {
       title: 'Metal',
@@ -70,10 +42,52 @@ app.factory('CharOverFactory', function () {
     }
   ]
   let testMoney = 1765.3465
+  let testStats = [
+    {
+      title: 'Strength',
+      level: 15,
+      myProgress: { 'width': 15 + '%' }
+    },
+    {
+      title: 'Endurance',
+      level: 17,
+      myProgress: { 'width': 17 + '%' }
+    },
+    {
+      title: 'Perception',
+      level: 7,
+      myProgress: { 'width': 7 + '%' }
+    },
+    {
+      title: 'Luck',
+      level: 1,
+      myProgress: { 'width': 1 + '%' }
+    },
+    {
+      title: 'Intelligence',
+      level: 21,
+      myProgress: { 'width': 21 + '%' }
+    },
+    {
+      title: 'Tinkering',
+      level: 10,
+      myProgress: { 'width': 10 + '%' }
+    }
+  ]
 
   return {
+    getCharacter: function () {
+      return AuthService.getLoggedInUser()
+        .then(user => {
+          return $http.get(`/api/characters/${user.id}`)
+        })
+        .then(res => {
+          charStats = res.data
+          return res.data
+        })
+    },
     getStats: function () {
-      return testStats
+      return charStats
     },
     setStats: function (newStats) {
       testStats = newStats
@@ -89,6 +103,17 @@ app.factory('CharOverFactory', function () {
     },
     setMoney: function (newMoney) {
       testMoney = newMoney
+    },
+    statConverter: function (statObj) {
+      let statArr = []
+      Object.keys(statObj).forEach(stat => {
+        statArr.push({
+          title: `${stat.substring(0, 1).toUpperCase()}${stat.substring(1)}`,
+          level: statObj[ stat ],
+          myProgress: { 'width': `${statObj[ stat ]}%` }
+        })
+      })
+      return statArr
     }
   }
 })

@@ -47,16 +47,37 @@ module.exports = db.define('character', {
     beforeCreate: function (character) {
       console.log('character!', character.perk)
       if (character.perk === 'soldier') {
+        // <--- STRONG ATTRIBUTES --->
         character.strength = _.sample(_.range(7, 11))
         character.perception = _.sample(_.range(7, 11))
+        // <--- MEDIUM ATTRIBUTES --->
+        character.intelligence = _.sample(_.range(5, 9))
+        character.endurance = _.sample(_.range(5, 9))
+        // <--- WEAK ATTRIBUTES --->
+        character.tinkering = _.sample(_.range(3, 7))
+        character.luck = _.sample(_.range(3, 7))
       }
       if (character.perk === 'scientist') {
+        // <--- STRONG ATTRIBUTES --->
         character.intelligence = _.sample(_.range(7, 11))
         character.tinkering = _.sample(_.range(7, 11))
+        // <--- MEDIUM ATTRIBUTES --->
+        character.luck = _.sample(_.range(5, 9))
+        character.perception = _.sample(_.range(5, 9))
+        // <--- WEAK ATTRIBUTES --->
+        character.strength = _.sample(_.range(3, 7))
+        character.endurance = _.sample(_.range(3, 7))
       }
       if (character.perk === 'miner') {
+        // <--- STRONG ATTRIBUTES --->
         character.endurance = _.sample(_.range(7, 11))
         character.luck = _.sample(_.range(7, 11))
+        // <--- MEDIUM ATTRIBUTES --->
+        character.strength = _.sample(_.range(5, 9))
+        character.tinkering = _.sample(_.range(5, 9))
+        // <--- WEAK ATTRIBUTES --->
+        character.intelligence = _.sample(_.range(3, 7))
+        character.perception = _.sample(_.range(3, 7))
       }
     }
   }

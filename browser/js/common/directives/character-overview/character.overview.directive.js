@@ -11,8 +11,13 @@ app.directive('characterOverview', function (AuthService, $state, $rootScope, Ch
           $rootScope.socket.emit('loading', user)
         })
 
-      scope.myStats = CharOverFactory.getStats()
-      console.log('myStats', scope.myStats)
+      // <---- SET STATS IN CHARACTER OVERVIEW ---->
+      CharOverFactory.getCharacter()
+        .then(character => {
+          let { endurance, intelligence, luck, perception, strength, tinkering } = character
+          let myStats = { strength, endurance, intelligence, luck, tinkering, perception }
+          scope.myStats = CharOverFactory.statConverter(myStats)
+        })
 
       scope.myResources = CharOverFactory.getResources()
 

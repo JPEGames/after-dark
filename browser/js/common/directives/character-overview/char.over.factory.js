@@ -1,4 +1,4 @@
-app.factory('CharOverFactory', function ($http, $rootScope, AuthService) {
+app.factory('CharOverFactory', function ($http, $rootScope, AuthService, BunkerStateFactory, EventFactory) {
   // <---- GLOBALS FOR CHARACTER INFORMATION --->
   let charStats
   let charResources
@@ -14,7 +14,7 @@ app.factory('CharOverFactory', function ($http, $rootScope, AuthService) {
       myPProgress: { 'width': 12 + '%' }
     },
     {
-      title: 'Oxygen',
+      title: 'Air',
       bquantity: 55,
       bmax: 100,
       myBProgress: { 'width': 55 + '%' },
@@ -114,6 +114,39 @@ app.factory('CharOverFactory', function ($http, $rootScope, AuthService) {
         })
       })
       return statArr
+    },
+    resourceGenerator: function (bunkerObj) {
+      let resourceArr = []
+      let bunkerResources
+      let backpackResources
+      let totalMoney
+      return AuthService.getLoggedInUser()
+        .then(user => {
+          return BunkerStateFactory.getBunkerState(user.id)
+        })
+        .then(bunker => {
+          let { air, electricity, metal, water, money } = bunker
+          bunkerResources = { air, electricity, metal, water }
+          // TODO: implement this in $$ spot in overview
+          totalMoney = money
+          console.log('BUNKER RESOURCES: ', bunkerResources)
+          return EventFactory.getBackpack()
+        })
+        .then(backpack => {
+          let { air, electricity, metal, water } = backpack
+          backpackResources = { air, electricity, metal, water }
+          return Object.keys(bunkerResources).map(resource => {
+            return {
+              title: `${resource.substring(0, 1).toUpperCase()}${resource.substring(1)}`,
+              bquantity: bunkerResources[ resource ],
+              bmax: 100,
+              myBProgress: { 'width': `${bunkerResources[ resource ]}%` },
+              pquantity: backpackResources[ resource ],
+              pmax: 100,
+              myPProgress: { 'width': `${backpackResources[ resource ]}%` }
+            }
+          })
+        })
     }
   }
 })

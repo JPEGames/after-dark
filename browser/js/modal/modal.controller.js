@@ -92,7 +92,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     },
     {
       title: 'O2',
-      source: '/pimages/oxygen.png',
+      source: '/pimages/air.png',
       pquantity: 0,
       pmax: 100,
       bquantity: 0,

@@ -59,6 +59,10 @@ module.exports = db.define('bunker', {
     type: Sequelize.INTEGER,
     defaultValue: 1
   },
+  metalCapacity: {
+    type: Sequelize.INTEGER,
+    defaultValue: 1
+  },
   maxCpu: {
     type: Sequelize.INTEGER,
     defaultValue: 1
@@ -70,5 +74,12 @@ module.exports = db.define('bunker', {
   cpuAllocation: {
     type: Sequelize.ARRAY(Sequelize.DECIMAL),
     defaultValue: [ 0.25, 0.25, 0.25, 0.25 ]
+  }
+}, {
+  instanceMethods: {
+    subtract: function (type, amount) {
+      this[type] -= amount
+      return this
+    }
   }
 })

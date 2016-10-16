@@ -22,10 +22,6 @@ function makeMenu (userId) {
           new Upgrade('electricity', bunker.electricityCapacity / 500, userId, 500),
           new Upgrade('metal', bunker.metalCapacity / 500, userId, 500)
         ],
-        // options: [ { title: 'water', action: 0, create: () => new Upgrade('water', bunker.waterCapacity, userId) },
-        //   { title: 'air', action: 1, create: () => new Upgrade('air', bunker.airCapacity, userId) },
-        //   { title: 'electricity', action: 2, create: () => new Upgrade('electricity', bunker.electricityCapacity, userId) },
-        //   { title: 'metal', action: 3, create: () => new Upgrade('metal', bunker.metalCapacity, userId) } ],
         next: 'Calculating optimal upgrades',
         socketMsg: true,
         category: 'upgrade',

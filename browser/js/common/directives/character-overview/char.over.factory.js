@@ -1,6 +1,7 @@
 app.factory('CharOverFactory', function ($http, $rootScope, AuthService, BunkerStateFactory, EventFactory) {
   // <---- GLOBALS FOR CHARACTER INFORMATION --->
   let charStats
+  let totalMoney
   let testResources = [
     {
       title: 'Metal',
@@ -97,7 +98,7 @@ app.factory('CharOverFactory', function ($http, $rootScope, AuthService, BunkerS
       testResources = newResources
     },
     getMoney: function () {
-      return testMoney
+      return totalMoney
     },
     setMoney: function (newMoney) {
       testMoney = newMoney
@@ -117,14 +118,19 @@ app.factory('CharOverFactory', function ($http, $rootScope, AuthService, BunkerS
       let resourceArr = []
       let bunkerResources
       let backpackResources
-      let totalMoney
+      let bunkerCapacities
+
       return AuthService.getLoggedInUser()
         .then(user => {
           return BunkerStateFactory.getBunkerState(user.id)
         })
         .then(bunker => {
-          let { air, electricity, metal, water, money } = bunker
+          let {
+            air, electricity, metal, water, money,
+            airCapacity, waterCapacity, electricityCapacity, metalCapacity
+          } = bunker
           bunkerResources = { air, electricity, metal, water }
+          bunkerCapacities = { airCapacity, electricityCapacity, metalCapacity, waterCapacity }
           // TODO: implement this in $$ spot in overview
           totalMoney = money
           console.log('BUNKER RESOURCES: ', bunkerResources)
@@ -137,8 +143,8 @@ app.factory('CharOverFactory', function ($http, $rootScope, AuthService, BunkerS
             return {
               title: `${resource.substring(0, 1).toUpperCase()}${resource.substring(1)}`,
               bquantity: bunkerResources[ resource ],
-              bmax: 100,
-              myBProgress: { 'width': `${bunkerResources[ resource ]}%` },
+              bmax: bunkerCapacities[ `${resource}Capacity` ],
+              myBProgress: { 'width': `${bunkerResources[ resource ] / bunkerCapacities[ `${resource}Capacity` ] * 100}%` },
               pquantity: backpackResources[ resource ],
               pmax: 100,
               myPProgress: { 'width': `${backpackResources[ resource ]}%` }

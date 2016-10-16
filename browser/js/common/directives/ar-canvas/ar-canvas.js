@@ -1,4 +1,4 @@
-window.createGameAR = function (ele, scope, players, mapId, injector) {
+window.createGameAR = function (ele, scope, players, mapId, injector, $interval, ModalFactory) {
   let height = scope.height
   let width = scope.width
   const centerShift = 20
@@ -10,7 +10,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   })
 
   // Attempt for responsiveness - does not work.
-  /*  
+  /*
   $(window).resize(function () {
     gameAR.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
     gameAR.scale.refresh()
@@ -45,6 +45,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   let ranTest = false
 
   let firstUpdate = true // only emits on first event cycle
+  let firstBroadcast = true
 
   // All this stuff has to do with creating a ring of clouds - again - a system that will change once we implement markers accurately.
   let randCount = 180
@@ -67,6 +68,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     gameAR.load.image('water', '/pimages/water.png')
     gameAR.load.image('air', '/pimages/oxygen.png')
     gameAR.load.image('electricity', '/pimages/electricity.png')
+    gameAR.load.image('rat attack', '/pimages/rat-attack.png')
   }
 
   // Create systems and assets.
@@ -94,9 +96,9 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // What happens every 1/60th a second?
   function update () {
     // Increase counter for recreating clouds for shitty animation effect that needs work.
-    randCount++
+    // randCount++
     // If the counter is above the set timer...
-    /*    
+    /*
     if (randCount >= randFrequency && randOn) {
           // Delete the clouds,
           deleteClouds()
@@ -110,6 +112,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
       firstUpdate = false
       scope.$emit('PhaserReady')
     }
+  // ELIOT - Forcing loading to work temporarily
   // If I havent run a test on markers...
   // if (!ranTest) {
   // Add test markers.
@@ -134,6 +137,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
   // Add an array of markers to the map.
   function addMarkers (anArray) {
+    console.warn('ADDING MARKERS')
     anArray.forEach(function (newMark) {
       let perToX = newMark.pos.x * gameAR.world.width
       let perToY = newMark.pos.y * gameAR.world.height
@@ -163,14 +167,12 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
   // Add an individual marker to the map.
   function addAMarker (xCoord, yCoord, width, height, type, id, found) {
     let tempSprite
-    // TODO:
     let [x, y] = [xCoord, yCoord]
-    // let [x, y] = spaceMarker(xCoord, yCoord)
     tempSprite = markerSetter(type, id, x, y)
-    console.log('Attempting to add marker!')
-    console.log(type)
+    // console.log('Attempting to add marker!')
+    // console.log(type)
     tempSprite['markerType'] = type
-    console.log('SPRITE AFTER TYPE: ', tempSprite['markerType'])
+    // console.log('SPRITE AFTER TYPE: ', tempSprite['markerType'])
     markerLayer.add(tempSprite)
     if (type === 'bunker') {
       tempSprite.scale.setTo(width, height)
@@ -201,9 +203,14 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
   // Listener on pressing a marker.
   function markerPress (sprite, pointer) {
-    console.log('ON PRESS: ', sprite)
+    console.log('ON PRESS TYPE: ', sprite['markerType'])
     // send event type and id upon click
-    scope.$emit('gameEvent', {type: sprite['markerType'], id: sprite['id']})
+    if (sprite['markerType'] === 'rat attack') {
+      scope.$emit('fight', {type: sprite['markerType'], id: sprite['id'], dangerLvl: 1})
+      console.log('SPRITE ID FOR RATTATA: ', sprite['id'])
+    } else {
+      scope.$emit('gameEvent', {type: sprite['markerType'], id: sprite['id']})
+    }
   }
 
   // takes a height and width in number of clouds and an array of objects of xy percentages representing where to hide clouds,
@@ -254,6 +261,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
 
   // Create a cloud grid.
   function createACloudGrid (aMatrix) {
+    console.log('CREATING CLOUDS')
     aMatrix.forEach(function (aRow) {
       aRow.forEach(function (aCloud) {
         if (aCloud.cloud) {
@@ -261,6 +269,10 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
         }
       })
     })
+    if (firstBroadcast) {
+      firstBroadcast = false
+      ModalFactory.closeModal()
+    }
   }
 
   // Delete all clouds.
@@ -294,13 +306,12 @@ window.createGameAR = function (ele, scope, players, mapId, injector) {
     deleteClouds()
     createACloudGrid(mapToGrid(data.visited))
     addMarkers(data.locations)
-    console.log('DATA LOCATIONS IN AR: ', data.locations)
   })
 }
 
 // Part of a state that has an ARController as a parent - so broadcasts are available.
 // custom directive to link phaser object to angular
-app.directive('arCanvas', function ($injector, $window) {
+app.directive('arCanvas', function ($injector, $window, $interval, ModalFactory) {
   return {
     scope: {
       data: '=',
@@ -318,7 +329,7 @@ app.directive('arCanvas', function ($injector, $window) {
       scope.width = $window.innerWidth
       scope.height = $window.innerHeight
       if (scope.data) {
-        window.createGameAR(ele, scope, scope.players, scope.mapId, $injector)
+        window.createGameAR(ele, scope, scope.players, scope.mapId, $injector, $interval, ModalFactory)
       }
     }
   }

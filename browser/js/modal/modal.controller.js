@@ -1,22 +1,24 @@
 app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory, NavbarFactory) {
-  $scope.mode = 'notify'
+  $scope.mode = 'inventory'
   $scope.default = 'inventory'
   $scope.castData = {}
   $scope.messages = ModalFactory.getMessages()
+  $scope.upgrades = ModalFactory.getUpgrades()
 
+  console.group('Modal Controller')
   // LISTENING FOR FACTORY
   // Event driven modal. Only a few events right now.
   $scope.$on('updateInventory', function (event, data) {
     console.log('updating inventory!!!')
     let newInventory = []
     for (let resource in data) {
-      newInventory.push(data[resource])
+      newInventory.push(data[ resource ])
     }
     $scope.resources = newInventory
     console.log('SCOPE RESOURCES: ', $scope.resources)
   })
 
-  // I want to change what 'mode' the modal is portraying at given moment. 
+  // I want to change what 'mode' the modal is portraying at given moment.
   // A queue manager will have to handle this event.
   $scope.$on('modeChange', function (event, data) {
     $scope.mode = data.newMode
@@ -24,6 +26,11 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     console.log('Mode is now: ', $scope.mode)
     if (data) {
       $scope.castData = data.newContent
+      console.log('DATA: ', data)
+      if (data.forceOpen) {
+        console.log('Modal Open forced by Modal Change.')
+        $interval(ModalFactory.openModal, 10, 1)
+      }
     }
   })
 
@@ -48,6 +55,15 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     $scope.castData = loadData
   })
 
+  // for clearing inventory upon depositing resources!
+  $scope.$on('clearInventory', function (event, data) {
+    console.log('Clearing inventory!')
+    $scope.resources.forEach(resource => {
+      resource.pquantity = 0
+      resource.myProgress = { 'width': 0 + '%' }
+    })
+  })
+
   function resetVars () {
     $scope.mode = $scope.default
     $scope.castData = {}
@@ -56,14 +72,46 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
 
   // Dummy inv objects - notice ng-style obj at end
   $scope.resources = [
-    {title: 'Metal', source: '/pimages/ore.png', pquantity: 0, pmax: 100, bquantity: 0, bmax: 100, myProgress: {'width': 0 + '%'}},
-    {title: 'H2O', source: '/pimages/water.png', pquantity: 0, pmax: 100, bquantity: 0, bmax: 100, myProgress: {'width': 0 + '%'}},
-    {title: 'O2', source: '/pimages/oxygen.png', pquantity: 0, pmax: 100, bquantity: 0, bmax: 100, myProgress: {'width': 0 + '%'}},
-    {title: 'Electricity', source: '/pimages/electricity.png', pquantity: 0, pmax: 100, bquantity: 0, bmax: 100, myProgress: {'width': 0 + '%'}}
+    {
+      title: 'Metal',
+      source: '/pimages/ore.png',
+      pquantity: 0,
+      pmax: 100,
+      bquantity: 0,
+      bmax: 100,
+      myProgress: { 'width': 0 + '%' }
+    },
+    {
+      title: 'H2O',
+      source: '/pimages/water.png',
+      pquantity: 0,
+      pmax: 100,
+      bquantity: 0,
+      bmax: 100,
+      myProgress: { 'width': 0 + '%' }
+    },
+    {
+      title: 'O2',
+      source: '/pimages/oxygen.png',
+      pquantity: 0,
+      pmax: 100,
+      bquantity: 0,
+      bmax: 100,
+      myProgress: { 'width': 0 + '%' }
+    },
+    {
+      title: 'Electricity',
+      source: '/pimages/electricity.png',
+      pquantity: 0,
+      pmax: 100,
+      bquantity: 0,
+      bmax: 100,
+      myProgress: { 'width': 0 + '%' }
+    }
   ]
-
   // Force modal open if there are things to say.
   // if ($scope.messages.length > 0) {
   //   ModalFactory.openModal()
   // }
+  console.groupEnd('Modal Controller')
 })

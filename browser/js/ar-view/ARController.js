@@ -73,7 +73,6 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     tileLayer: 'https://api.mapbox.com/styles/v1/jyyeh/ciu1o4t2l00a92jo1o2qavws6/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoianl5ZWgiLCJhIjoiY2l1MW8zdWh2MGQ5MDMwandsMTh1cXlpbiJ9.MCJltxs97I_CAkTq2Z-n0g'
   }
 
-  $scope.$on('updateAR', (event, data) => console.log(data))
   // toggles AR menu
   $scope.menuVisible = () => {
     ArFactory.showMenu()
@@ -88,7 +87,22 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
       BunkerStateFactory.getBunkerUser(data.id)
         .then(bunkerUser => {
           if (bunkerUser === currentUser.username) {
-            $state.go('master.navbar.game')
+            ModalFactory.enterBunker()
+            ModalFactory.changeModal('message', {
+              newContent: {
+                title: `Enter ${currentUser.username}'s Bunker?`,
+                description: `You have arrived at your own bunker. Thankfully, still safe. Would you like to enter your bunker at the present moment?`,
+                eventType: 'yes/no',
+                source: '/pimages/vault.png',
+                type: 'general',
+                id: '10',
+                status: 'neutral',
+                exitType: 'load',
+                next: currentUser.username
+              }
+            })
+            ModalFactory.openModal()
+            // $state.go('master.navbar.game')
           }
         })
     } else {
@@ -137,6 +151,16 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     lng: 0,
     zoom: zoom
   }
+  $scope.$on('fight', function (event, data) {
+    console.log('Got fight event from Phaser!', 'data: ', data)
+    let payload = {userId: currentUser.id, type: data.type, dangerLvl: data.dangerLvl}
+    let thisMarker = { id: data.id, type: data.type }
+    console.log('fight payload: ', payload)
+    $rootScope.socket.emit('fight', payload)
+    // this is useful for deleting the rat marker!
+    ModalFactory.setMarker(thisMarker)
+  })
+
   // LISTENERS
   // Need to modify this to its own controller - so that something else handles
   // all event related communication.
@@ -192,16 +216,19 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   })
 
   $rootScope.socket.on('updateBackpack', function (event) {
-    console.log('GOT UPDATE BACKPACK EVENT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     EventFactory.getBackpack()
       .then(userBackpack => {
-        console.log('USER BACKPACK AFTER SOCKET EMIT: ', userBackpack)
         for (let resource in templateObjs) {
           templateObjs[ resource ][ 'pquantity' ] = userBackpack[ resource ]
           templateObjs[ resource ][ 'myProgress' ] = {'width': templateObjs[ resource ][ 'pquantity' ] / templateObjs[ resource ][ 'pmax' ] * 100 + '%'}
-          console.log('RESOURCE: ', resource, 'QUANTITY: ', templateObjs[ resource ][ 'pquantity' ])
         }
         ModalFactory.updateInventory(templateObjs)
       })
+  })
+
+  // <-------- LISTENER FOR ANY EVENT CHAIN RESPONSES -------->
+  $rootScope.socket.on('serverRes', function (eventObj) {
+    console.log('Got server response!~~~~~~~~~~~~~~~~~~~~~~~', eventObj)
+    ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
   })
 })

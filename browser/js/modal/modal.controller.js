@@ -30,18 +30,13 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // I want to change what 'mode' the modal is portraying at given moment.
   // A queue manager will have to handle this event.
   $scope.$on('modeChange', function (event, data) {
+    $scope.mode = data.newMode
     console.log('Detected Change!')
     console.log('Mode is now: ', $scope.mode)
     if (data) {
       // TODO: THIS WAS ADDED TO MODIFY CAST DATA STUFF
       // originally should just be $scope.mode = data.newMode, $scope.castData = data.newContent
-      if (Object.keys($scope.castData).length) {
-        console.log('CAST DATA LENGTH GREATER THAN ZERO ~~~~~~~~~')
-        ModalFactory.addMessage(data.newContent)
-      } else {
-        $scope.mode = data.newMode
-        $scope.castData = data.newContent
-      }
+      $scope.castData = data.newContent
       console.log('DATA: ', data)
       if (data.forceOpen) {
         if (data.newContent.forceEventType) {
@@ -68,7 +63,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // from front end. Will obvisouly require promises
   $scope.$on('messageRead', function (event, aMessage) {
     // TODO: THIS WAS ADDED TO MODIFY CAST DATA STUFF
-    $scope.castData = null
+    // $scope.castData = null
     ModalFactory.deleteMessage(aMessage)
     $scope.messages = ModalFactory.getMessages()
   })

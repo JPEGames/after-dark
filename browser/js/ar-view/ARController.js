@@ -172,7 +172,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('notify', { newContent: eventObj, forceOpen: true })
+      ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
@@ -184,7 +184,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('notify', { newContent: eventObj, forceOpen: true })
+      ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
@@ -196,7 +196,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('notify', { newContent: eventObj, forceOpen: true })
+      ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
@@ -208,7 +208,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
     if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('notify', { newContent: eventObj, forceOpen: true })
+      ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
       // TODO: this is hacky - implement loading!
       $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)

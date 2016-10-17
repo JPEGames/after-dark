@@ -179,6 +179,7 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       let indexToRemove = null
       testMessages.forEach(function (mes, index) {
         if (mes.id === aMessage.id) {
+          console.log('Matched up message to delete', mes)
           indexToRemove = index
         }
       })
@@ -207,10 +208,21 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     },
     addMessage: function (message) {
       console.log('Adding message: ', message)
-      testMessages.push(message)
+      let tempMessages = testMessages.slice()
+      tempMessages.push(message)
+      console.log('Dupe Temp Array: ', tempMessages)
+      tempMessages = _.uniq(tempMessages)
       // TODO: this temporarily takes care of double addMessage call
-      testMessages = _.uniq(testMessages)
-      console.log('Test messages: ', testMessages)
+      testMessages = tempMessages
+      console.log('Final Msg Array: ', testMessages)
+    },
+    setMessages: function (messageArr) {
+      console.log('Setting messages!')
+      if (this.lastMessage()) {
+        testMessages = messageArr
+      } else {
+        testMessages.concat(messageArr)
+      }
     },
     updateInventory: function (newInventory) {
       $rootScope.$broadcast('updateInventory', newInventory)
@@ -223,6 +235,28 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     },
     getUpgrades: function () {
       return testUpgrades
+    },
+    nextModal: function (aMessage) {
+      // So, I now have a queue getting built in messages
+      if (aMessage.exitType === 'load') {
+        this.startLoading({title: aMessage.next})
+      } else {
+        if (this.lastMessage()) {
+          this.resetModal()
+          this.closeModal()
+        } else {
+          if (aMessage.exitType && this.lastMessage()) {
+            if (aMessage.exitType === 'immediate') {
+              this.resetModal()
+              this.closeModal()
+            } else {
+              this.changeModal('notify', {})
+            }
+          } else {
+            this.changeModal('notify', {})
+          }
+        }
+      }
     }
   }
 })

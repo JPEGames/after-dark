@@ -21,15 +21,29 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // I want to change what 'mode' the modal is portraying at given moment.
   // A queue manager will have to handle this event.
   $scope.$on('modeChange', function (event, data) {
-    $scope.mode = data.newMode
-    console.log('Detected Change!')
-    console.log('Mode is now: ', $scope.mode)
-    if (data) {
-      $scope.castData = data.newContent
-      console.log('DATA: ', data)
-      if (data.forceOpen) {
-        console.log('Modal Open forced by Modal Change.')
-        $interval(ModalFactory.openModal, 10, 1)
+    // If I am already in a mode, and get information about the next mode, what occurs here?
+    if (Object.keys($scope.castData).length && $scope.mode !== 'loading') {
+      // This would mean that castData has not been dealt with:
+      // 1. Add this data as a new message in the factory.
+      // 2. Make sure getMessages is operating properly.
+      // 3. Ensure that the loading mode does not get in the way of accepting a new message.
+      console.log('Detected unresolved castData, adding message onto event queue.')
+      console.log('Next Message: ', data.newContent)
+      console.log('Unresolved message: ', $scope.castData)
+      // Store the mode that this event requested.
+      data.newContent.nextMode = data.newMode
+      ModalFactory.addMessage(data.newContent)
+    } else {
+      $scope.mode = data.newMode
+      console.log('Detected Change!')
+      console.log('Mode is now: ', $scope.mode)
+      if (data) {
+        $scope.castData = data.newContent
+        console.log('DATA: ', data)
+        if (data.forceOpen) {
+          console.log('Modal Open forced by Modal Change.')
+          $interval(ModalFactory.openModal, 10, 1)
+        }
       }
     }
   })
@@ -46,12 +60,14 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // Kind of ridiculous - but just for visual cue - mark message read and remove
   // from front end. Will obvisouly require promises
   $scope.$on('messageRead', function (event, aMessage) {
+    $scope.castData = {}
     ModalFactory.deleteMessage(aMessage)
     $scope.messages = ModalFactory.getMessages()
   })
 
   $scope.$on('startLoad', function (event, loadData) {
     $scope.mode = 'loading'
+    // Loading counts as cast data...
     $scope.castData = loadData
   })
 

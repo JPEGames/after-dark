@@ -190,23 +190,21 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
         if (mes.id === aMessage.id) {
           console.log(mes.id + ' vs. ' + aMessage.id)
           console.log('Matched up message to delete', mes)
-          indexesToRemove.push(aMessage.id)
+          indexesToRemove.push(mes.id)
         }
       })
       console.log('Pre filter messages: ')
       console.log(testMessages)
       testMessages = testMessages.filter(function (elem) {
         let tempBool = true
-        indexesToRemove.forEach(function (indexes) {
-          console.log('Indexes: ')
-          console.log(indexes)
-          console.log('Elem ID: ')
-          console.log(elem.id)
-          if (indexes === elem.id) {
+        for (let i = 0; i < indexesToRemove.length; i++) {
+          if (indexesToRemove[i] === elem.id) {
+            console.log('Match @ index ' + i + ' between ' + indexesToRemove[i] + ' and ' + elem.id)
             removedMessages++
             tempBool = false
+            break
           }
-        })
+        }
         return tempBool
       })
       console.log('Post filter messages:')

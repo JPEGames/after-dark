@@ -198,8 +198,8 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       testMessages = testMessages.filter(function (elem) {
         let tempBool = true
         for (let i = 0; i < indexesToRemove.length; i++) {
-          if (indexesToRemove[i] === elem.id) {
-            console.log('Match @ index ' + i + ' between ' + indexesToRemove[i] + ' and ' + elem.id)
+          if (indexesToRemove[ i ] === elem.id) {
+            console.log('Match @ index ' + i + ' between ' + indexesToRemove[ i ] + ' and ' + elem.id)
             removedMessages++
             tempBool = false
             break
@@ -210,6 +210,17 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       console.log('Post filter messages:')
       console.log(testMessages)
       console.log('Removed ' + removedMessages + ' messages.')
+      if (testMessages.length === 0) {
+        console.error('CLOSING MODAL! NO MORE TEST MESSAGES!')
+        // this.changeModal('message', {
+        //   newContent: {
+        //     title: 'Socket Error',
+        //     exitType: 'immediate',
+        //     eventType: 'confirm'
+        //   },
+        //   forceOpen: true
+        // })
+      }
     },
     lastMessage: function () {
       if (testMessages.length < 1) {
@@ -259,9 +270,10 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     },
     nextModal: function (aMessage) {
       if (aMessage.exitType === 'load') {
-        this.startLoading({title: aMessage.next})
+        this.startLoading({ title: aMessage.next })
       } else {
         if (this.lastMessage()) {
+          console.warn('CALLING LAST MESSAGE IN NEXT MODAL')
           this.resetModal()
           this.closeModal()
         } else {

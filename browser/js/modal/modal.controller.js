@@ -1,4 +1,4 @@
-app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory, NavbarFactory) {
+app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory, NavbarFactory, CharOverFactory) {
   $scope.mode = 'inventory'
   $scope.default = 'inventory'
   $scope.castData = {}
@@ -6,6 +6,12 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   $scope.upgrades = ModalFactory.getUpgrades()
 
   console.group('Modal Controller')
+  CharOverFactory.resourceGenerator()
+    .then(resources => {
+      console.log('RESOURCES: ', resources)
+      $scope.resources = resources
+    })
+
   // LISTENING FOR FACTORY
   // Event driven modal. Only a few events right now.
   $scope.$on('updateInventory', function (event, data) {
@@ -14,6 +20,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     for (let resource in data) {
       newInventory.push(data[ resource ])
     }
+    // this gets passed into modal.html (inventory directive)
     $scope.resources = newInventory
     console.log('SCOPE RESOURCES: ', $scope.resources)
   })

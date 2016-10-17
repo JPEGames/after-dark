@@ -132,8 +132,11 @@ app.factory('CharOverFactory', function ($http, $rootScope, AuthService, BunkerS
           bunkerResources = { air, electricity, metal, water }
           bunkerCapacities = { airCapacity, electricityCapacity, metalCapacity, waterCapacity }
           // TODO: implement this in $$ spot in overview
+          console.log('MONEY~~~', {money})
+          console.log(money)
           totalMoney = money
           console.log('BUNKER RESOURCES: ', bunkerResources)
+          console.log('BUNKER MONEY!', totalMoney)
           return EventFactory.getBackpack()
         })
         .then(backpack => {

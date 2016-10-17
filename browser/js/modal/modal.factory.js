@@ -211,6 +211,7 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       if (!loadData) {
         loadData = {}
       }
+      console.log('Broadcasting startLoad!!')
       $rootScope.$broadcast('startLoad', loadData)
     },
     addMessage: function (message) {

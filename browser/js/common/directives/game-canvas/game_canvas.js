@@ -36,6 +36,13 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     MenuFactory.saveBunker(saveBunker())
   })
 
+  // happens at the end of upgrade purchase chain to allow user to
+  // physically click + put down an upgrade
+  scope.$on('allowBunkerUpgrade', function (event, data) {
+    console.log('FINALLY ALLOWING BUNKER UPGRADE')
+    setCurrentUpgrade(upgradeObj)
+  })
+
   // destroys game instance on refresh...is this what we want??!?
   scope.$on('$destroy', () => {
     game.destroy()
@@ -778,6 +785,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     upgradePieces = anUpgrade.pieces
     upgradeAction = anUpgrade.action
     upgradeData = anUpgrade.data
+    currentAction = 'upgrade'
     buildTime = true
   }
 
@@ -804,6 +812,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
       console.log('Build Completed!')
       buildTime = false
       buildHere = false
+      currentAction = 'default'
       MenuFactory.saveBunker(saveBunker())
       marker.destroy()
     } else {

@@ -2,6 +2,7 @@ const backpackEvents = require('../../helpers/backpack.js')
 const Backpack = require('../../../db/index').model('backpack')
 
 function processResource (type, socket, userId, markerId) {
+  console.log('Processing Resource!')
   let resourceEvent = backpackEvents[type]
   resourceEvent.quantity = Math.floor(Math.random() * 20)
   let emittedEvent = `send_${type}`

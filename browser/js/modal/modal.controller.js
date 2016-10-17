@@ -1,4 +1,4 @@
-app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory, NavbarFactory) {
+app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory, NavbarFactory, CharOverFactory) {
   $scope.mode = 'inventory'
   $scope.default = 'inventory'
   $scope.castData = {}
@@ -6,14 +6,23 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   $scope.upgrades = ModalFactory.getUpgrades()
 
   console.group('Modal Controller')
+  CharOverFactory.resourceGenerator()
+    .then(resources => {
+      console.warn('RESOURCES: ', resources)
+    // $scope.resources = resources
+    })
+
   // LISTENING FOR FACTORY
-  // Event driven modal. Only a few events right now.
+    // Event driven modal. Only a few events right now.
+
+  // <----- WILL UPDATE INVENTORY AFTER CLICKING ON RESOURCES ---->
   $scope.$on('updateInventory', function (event, data) {
     console.log('updating inventory!!!')
     let newInventory = []
     for (let resource in data) {
       newInventory.push(data[ resource ])
     }
+    // this gets passed into modal.html (inventory directive)
     $scope.resources = newInventory
     console.log('SCOPE RESOURCES: ', $scope.resources)
   })
@@ -71,6 +80,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // from front end. Will obvisouly require promises
   $scope.$on('messageRead', function (event, aMessage) {
     $scope.castData = {}
+    $scope.messages = ModalFactory.getMessages()
     if ($scope.messages.length > 0) {
       ModalFactory.deleteMessage(aMessage)
       $scope.messages = ModalFactory.getMessages()
@@ -104,7 +114,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   $scope.resources = [
     {
       title: 'Metal',
-      source: '/pimages/ore.png',
+      source: '/pimages/metal.png',
       pquantity: 0,
       pmax: 100,
       bquantity: 0,

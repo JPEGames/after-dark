@@ -139,12 +139,12 @@ app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafl
   //   query.cancel()
   // })
   }
-
+  const centerPoints = [{x: 0.5, y: 0.5}, {x: 0.55, y: 0.55}, {x: 0.55, y: 0.45}, {x: 0.45, y: 0.45}, {x: 0.45, y: 0.55}]
   // Converting cummulated geofire objects to our data
   function updatePhaser (sw, ne, nw, mapSize) {
     let data = {
       locations: pointsOfInterest.filter(x => inMapBounds(x.coords, sw, ne)).map(x => formatMarker(x, nw, mapSize)),
-      visited: foundPoints.filter(x => inMapBounds(x, sw, ne)).map(x => toXY(x, nw, mapSize))
+      visited: foundPoints.filter(x => inMapBounds(x, sw, ne)).map(x => toXY(x, nw, mapSize)).concat(centerPoints)
     }
     $rootScope.$broadcast('updateAR', data)
   }

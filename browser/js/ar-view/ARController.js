@@ -1,4 +1,4 @@
-app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory, BunkerStateFactory) {
+app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory, BunkerStateFactory, NavbarFactory) {
   let templateObjs = {
     'metal': {
       title: 'Metal',
@@ -174,8 +174,9 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
       // TODO: this is hacky - implement loading!
-      $timeout(ModalFactory.openModal(), 1000)
+      // $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
+      $timeout(NavbarFactory.createExp(50), 1000)
     }
   })
 
@@ -186,8 +187,9 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
       // TODO: this is hacky - implement loading!
-      $timeout(ModalFactory.openModal(), 1000)
+      // $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
+      $timeout(NavbarFactory.createExp(50), 1000)
     }
   })
 
@@ -198,8 +200,9 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
       // TODO: this is hacky - implement loading!
-      $timeout(ModalFactory.openModal(), 1000)
+      // $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
+      $timeout(NavbarFactory.createExp(50), 1000)
     }
   })
 
@@ -210,8 +213,9 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
       // TODO: this is hacky - implement loading!
-      $timeout(ModalFactory.openModal(), 1000)
+      // $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
+      $timeout(NavbarFactory.createExp(50), 1000)
     }
   })
 

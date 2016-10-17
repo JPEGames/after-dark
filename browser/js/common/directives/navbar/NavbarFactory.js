@@ -13,10 +13,6 @@ app.factory('NavbarFactory', function ($http, $interval) {
   NavbarFactory.createExp = function (expAmount) {
     var posx = window.mouseXY.x
     var posy = window.mouseXY.y
-    if (!e) var e = window.event
-
-    posx = e.clientX
-    posy = e.clientY
 
     console.log('X: ' + posx)
     console.log('Y: ' + posy)
@@ -30,7 +26,7 @@ app.factory('NavbarFactory', function ($http, $interval) {
     document.body.appendChild(newDiv)
 
     newDiv.innerHTML = '+' + expAmount + ' Exp'
-    newDiv.style = `z-index: 100011; top: ` + posy + `px; left: ` + (posx - 35) + `px; display: block; position: absolute; transition: top 3s, opacity 3s; color: red; font-size: 2em;`
+    newDiv.style = `z-index: 100011; top: ` + posy + `px; left: ` + (posx - 35) + `px; display: block; position: absolute; transition: top 3s, opacity 3s; color: #66bb6a; font-size: 2em;`
 
     console.log(newDiv)
 

@@ -21,18 +21,28 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // I want to change what 'mode' the modal is portraying at given moment.
   // A queue manager will have to handle this event.
   $scope.$on('modeChange', function (event, data) {
+    let tempLength = 0
+    for (let keys in $scope.castData) {
+      if ($scope.castData.hasOwnProperty(keys)) {
+        tempLength++
+      }
+    }
+
+    console.log('castData keys - ' + tempLength)
     // If I am already in a mode, and get information about the next mode, what occurs here?
-    if (Object.keys($scope.castData).length && $scope.mode !== 'loading') {
+    if (tempLength > 0 && $scope.mode !== 'loading') {
       // This would mean that castData has not been dealt with:
       // 1. Add this data as a new message in the factory.
       // 2. Make sure getMessages is operating properly.
       // 3. Ensure that the loading mode does not get in the way of accepting a new message.
       console.log('Detected unresolved castData, adding message onto event queue.')
-      console.log('Next Message: ', data.newContent)
-      console.log('Unresolved message: ', $scope.castData)
       // Store the mode that this event requested.
-      data.newContent.nextMode = data.newMode
-      ModalFactory.addMessage(data.newContent)
+      if (data) {
+        console.log('Next Message: ', data.newContent)
+        console.log('Unresolved message: ', $scope.castData)
+        data.newContent.nextMode = data.newMode
+        ModalFactory.addMessage(data.newContent)
+      }
     } else {
       $scope.mode = data.newMode
       console.log('Detected Change!')
@@ -61,8 +71,12 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // from front end. Will obvisouly require promises
   $scope.$on('messageRead', function (event, aMessage) {
     $scope.castData = {}
-    ModalFactory.deleteMessage(aMessage)
-    $scope.messages = ModalFactory.getMessages()
+    if ($scope.messages.length > 0) {
+      ModalFactory.deleteMessage(aMessage)
+      $scope.messages = ModalFactory.getMessages()
+    } else {
+      $scope.messages = ModalFactory.getMessages()
+    }
   })
 
   $scope.$on('startLoad', function (event, loadData) {

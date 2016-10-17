@@ -181,20 +181,29 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       return testMessages
     },
     deleteMessage: function (aMessage) {
-      let indexToRemove = null
+      let removedMessages = 0
+      let indexesToRemove = []
       testMessages.forEach(function (mes, index) {
         if (mes.id === aMessage.id) {
+          console.log(mes.id + ' vs. ' + aMessage.id)
           console.log('Matched up message to delete', mes)
-          indexToRemove = index
+          indexesToRemove.push(index)
         }
       })
-      if (indexToRemove !== null) {
-        testMessages.splice(indexToRemove, 1)
-        console.log('Removed Message!')
-      } else {
-        console.log('Could not find message to remove.')
-        console.log(aMessage)
-      }
+      console.log('Pre filter messages: ')
+      console.log(testMessages)
+      testMessages = testMessages.filter(function (elem) {
+        indexesToRemove.forEach(function (indexes) {
+          if (indexes === elem.id) {
+            removedMessages++
+            return false
+          }
+        })
+        return true
+      })
+      console.log('Post filter messages:')
+      console.log(testMessages)
+      console.log('Removed ' + removedMessages + ' messages.')
     },
     lastMessage: function () {
       if (testMessages.length < 1) {

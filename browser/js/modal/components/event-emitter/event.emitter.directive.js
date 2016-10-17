@@ -11,7 +11,7 @@ app.directive('eventEmitter', function ($state, ModalFactory, $interval) {
       scope.exitMessage = function (aMessage) {
         ModalFactory.submitResponse(0, aMessage.socketMsg, aMessage.category, aMessage.afterEffect)
         ModalFactory.markRead(aMessage)
-        $interval(ModalFactory.nextModal(aMessage), 10, 1)
+        ModalFactory.nextModal(aMessage)
       }
 
       scope.confirmMessage = function (aMessage) {
@@ -20,7 +20,7 @@ app.directive('eventEmitter', function ($state, ModalFactory, $interval) {
         aMessage.response = true
         ModalFactory.submitResponse(1, aMessage.socketMsg, aMessage.category, aMessage.afterEffect)
         ModalFactory.markRead(aMessage)
-        $interval(ModalFactory.nextModal(aMessage), 10, 1)
+        ModalFactory.nextModal(aMessage)
       }
 
       scope.denyMessage = function (aMessage) {
@@ -28,7 +28,7 @@ app.directive('eventEmitter', function ($state, ModalFactory, $interval) {
         aMessage.response = false
         ModalFactory.submitResponse(0, aMessage.socketMsg, aMessage.category, aMessage.afterEffect)
         ModalFactory.markRead(aMessage)
-        $interval(ModalFactory.nextModal(aMessage), 10, 1)
+        ModalFactory.nextModal(aMessage)
       }
 
       scope.submitAnswer = function (aMessage, aResponse) {
@@ -38,7 +38,7 @@ app.directive('eventEmitter', function ($state, ModalFactory, $interval) {
         console.log('Response is: ', aMessage.response)
         ModalFactory.submitResponse(aResponse, aMessage.socketMsg, aMessage.category, aMessage.afterEffect)
         ModalFactory.markRead(aMessage)
-        $interval(ModalFactory.nextModal(aMessage), 10, 1)
+        ModalFactory.nextModal(aMessage)
       }
     }
   }

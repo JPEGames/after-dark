@@ -5,6 +5,16 @@ app.directive('upgradeRow', function ($state, ModalFactory) {
     scope: {
       data: '='
     },
-    link: function (scope) {}
+    link: function (scope) {
+      scope.submitAnswer = function (aMessage, aResponse) {
+        console.log('Recieved response to variadic.')
+        aMessage.response = aResponse
+        console.log('MESSAGE: ', aMessage)
+        console.log('Response is: ', aMessage.response)
+        ModalFactory.submitResponse(aResponse, aMessage.socketMsg, aMessage.category, aMessage.afterEffect)
+        ModalFactory.markRead(aMessage)
+        ModalFactory.nextModal(aMessage)
+      }
+    }
   }
 })

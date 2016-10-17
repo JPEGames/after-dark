@@ -19,16 +19,13 @@ app.directive('characterOverview', function (AuthService, $state, $rootScope, Ch
           scope.myStats = CharOverFactory.statConverter(myStats)
         })
 
-      // <---- SET RESOURCES IN CHARACTER OVERVIEW ---->
+      // <---- SET RESOURCES && MONEY IN CHARACTER OVERVIEW ---->
       CharOverFactory.resourceGenerator()
         .then(resourceArray => {
-          console.log('RESOURCES IN CHARACTER OVERVIEW: ', resourceArray)
           scope.myResources = resourceArray
+          scope.myMoney = CharOverFactory.getMoney()
+          console.log('RESOURCES IN STAT VIEW: ', scope.myResources)
         })
-
-      // scope.myResources = CharOverFactory.getResources()
-
-      scope.myMoney = CharOverFactory.getMoney()
 
       scope.goToWasteland = function () {
         ModalFactory.leaveBunker()

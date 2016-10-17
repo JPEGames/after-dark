@@ -1,4 +1,4 @@
-app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory, NavbarFactory) {
+app.controller('ModalController', function ($scope, $interval, $rootScope, ModalFactory, NavbarFactory, CharOverFactory) {
   $scope.mode = 'inventory'
   $scope.default = 'inventory'
   $scope.castData = {}
@@ -6,14 +6,23 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   $scope.upgrades = ModalFactory.getUpgrades()
 
   console.group('Modal Controller')
+  CharOverFactory.resourceGenerator()
+    .then(resources => {
+      console.warn('RESOURCES: ', resources)
+      // $scope.resources = resources
+    })
+
   // LISTENING FOR FACTORY
   // Event driven modal. Only a few events right now.
+
+  // <----- WILL UPDATE INVENTORY AFTER CLICKING ON RESOURCES ---->
   $scope.$on('updateInventory', function (event, data) {
     console.log('updating inventory!!!')
     let newInventory = []
     for (let resource in data) {
       newInventory.push(data[ resource ])
     }
+    // this gets passed into modal.html (inventory directive)
     $scope.resources = newInventory
     console.log('SCOPE RESOURCES: ', $scope.resources)
   })
@@ -25,9 +34,16 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     console.log('Detected Change!')
     console.log('Mode is now: ', $scope.mode)
     if (data) {
+      // TODO: THIS WAS ADDED TO MODIFY CAST DATA STUFF
+      // originally should just be $scope.mode = data.newMode, $scope.castData = data.newContent
       $scope.castData = data.newContent
       console.log('DATA: ', data)
       if (data.forceOpen) {
+        if (data.newContent.forceEventType) {
+          console.log('Forcing Event Type')
+          $scope.mode = data.newContent.forceEventType
+          console.log('Mode forced to: ', $scope.mode)
+        }
         console.log('Modal Open forced by Modal Change.')
         $interval(ModalFactory.openModal, 10, 1)
       }
@@ -46,6 +62,8 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // Kind of ridiculous - but just for visual cue - mark message read and remove
   // from front end. Will obvisouly require promises
   $scope.$on('messageRead', function (event, aMessage) {
+    // TODO: THIS WAS ADDED TO MODIFY CAST DATA STUFF
+    // $scope.castData = null
     ModalFactory.deleteMessage(aMessage)
     $scope.messages = ModalFactory.getMessages()
   })
@@ -74,7 +92,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   $scope.resources = [
     {
       title: 'Metal',
-      source: '/pimages/ore.png',
+      source: '/pimages/metal.png',
       pquantity: 0,
       pmax: 100,
       bquantity: 0,

@@ -16,45 +16,54 @@ function makeMenu (userId) {
         id: 998,
         status: 'neutral',
         exitType: 'load',
-        options: [ { title: 'water', action: 0, create: () => new Upgrade('water', bunker.waterCapacity, userId) },
-          { title: 'air', action: 1, create: () => new Upgrade('air', bunker.airCapacity, userId) },
-          { title: 'electricity', action: 2, create: () => new Upgrade('electricity', bunker.electricityCapacity, userId) },
-          { title: 'metal', action: 3, create: () => new Upgrade('metal', bunker.metalCapacity, userId) } ],
+        options: [
+          new Upgrade('water', bunker.waterCapacity / 500, userId, 500),
+          new Upgrade('air', bunker.airCapacity / 500, userId, 500),
+          new Upgrade('electricity', bunker.electricityCapacity / 500, userId, 500),
+          new Upgrade('metal', bunker.metalCapacity / 500, userId, 500)
+        ],
         next: 'Calculating optimal upgrades',
         socketMsg: true,
-        category: 'upgrade'
+        category: 'upgrade',
+        forceEventType: 'upgrades'
       }
     })
 }
 
 // upgrade object class
 class Upgrade {
-  constructor (category, level, userId, type = 'capacity') {
+  constructor (category, level, userId, levelDivisor, type = 'capacity') {
     this.title = `${category} ${type} upgrade ${level}`
     this.description = `This increases your ${category} ${type}`
     this.source = `/pimages/${category}.png`
     this.status = 'neutral'
     this.exitType = 'load'
-    this.costs = makeCosts(category, level)
-    this.benefits = [ { type, category, benefit: 'times', quantity: level } ]
+    this.costs = makeCosts(category, level, type)
+    this.benefits = [ { type, category, benefit: 'plus', quantity: levelDivisor } ]
     this.next = ''
     this.eventType = 'variadic'
-    this.options = [
-      { title: 'purchase', action: 0, create: () => checkPurchase(userId, category, type) },
-      { title: 'back', action: 1, create: () => makeMenu(userId) }
-    ]
     this.category = 'upgrade'
     this.socketMsg = true
+    // this property is necessary in order to call changeModal('upgrades')
+    // even though 'serverRes' listener uses changeModal('message') by default
+    this.forceEventType = 'upgrades'
+    // THIS IS FOR THE BUY OPTION!!!!
+    this.action = 0
+    this.create = () => checkPurchase(userId, category, type, levelDivisor)
   }
 }
 
 // Helper Methods
-// if upgrade type is metal -> cost is 20 * lvl for every other element
+// if element to be upgraded is metal -> cost is 20 * lvl for every other element
 // otherwise, costs are dependent on every resource except for resource being upgraded
-function makeCosts (category, level) {
+function makeCosts (category, level, upgradeType) {
+  let baseCost = 20
+  if (upgradeType === 'capacity') {
+    baseCost = 250
+  }
   return category === 'metal'
-    ? [ 'water', 'air', 'electricity' ].map(type => new Cost(type, 20 * level))
-    : [ new Cost('metal', 20 * level), ...(otherTypes(category).map(other => new Cost(other, 15 * level))) ]
+    ? [ 'water', 'air', 'electricity' ].map(type => new Cost(type, baseCost * level))
+    : [ new Cost('metal', baseCost * level), ...(otherTypes(category).map(other => new Cost(other, baseCost * level))) ]
 }
 
 class Cost {
@@ -68,26 +77,44 @@ function otherTypes (type) {
 }
 
 // Logic for when a user makes a purchase, directs to one of two actions
-function checkPurchase (userId, category, type = 'capacity') {
-  console.log('CHECKING USER PURCHASE~~~~~')
-  console.log('CATEGORY: ', category)
+function checkPurchase (userId, category, type = 'capacity', levelDivisor) {
   return Bunker.findOne({ where: { userId } })
     .then(bunker => {
-      console.log('UPGRADE TYPE: ', type)
-      let level = bunker[ `${category}${type.substring(0, 1).toUpperCase()}${type.substring(1)}` ]
-      console.log('LEVEL: ', level)
-      let costs = makeCosts(category, level)
+      let upgradeCategory = `${category}${type.substring(0, 1).toUpperCase()}${type.substring(1)}`
+      let level = bunker[ upgradeCategory ] / levelDivisor
+      let costs = makeCosts(category, level, type)
       return costs.every(costObj => bunker[ costObj.type ] >= costObj.quantity)
-        ? purchaseSuccess(userId, costs, bunker)
+        ? purchaseSuccess(userId, costs, bunker, upgradeCategory)
         : purchaseFailure(userId)
     })
 }
 
 // Subtracts the resources,  and then does nothing for now, ends the generator chain
-function purchaseSuccess (userId, costs, bunker) {
-  console.log('PURCHASE SUCCESS')
+function purchaseSuccess (userId, costs, bunker, upgradeCategory) {
+  // TODO: put actual upgrade to capacity here!
+  // deduct appropriate resource amount for upgrade
   costs.forEach(costObj => bunker.subtract(costObj.type, costObj.quantity))
-  return bunker.save().then(() => undefined)
+  // increase appropriate upgrade field in bunker instance
+  bunker.upgradeCapacity(upgradeCategory)
+  return bunker.save().then(() => {
+    return {
+      title: 'It seems you have enough resources for your upgrade!',
+      description: 'Please place your upgrade in the appropriate space in the bunker.',
+      eventType: 'confirm',
+      source: '',
+      type: 'general',
+      id: 1000,
+      status: 'success',
+      exitType: 'immediate',
+      // this has to go on a confirm event object because the generator needs
+      // options array with create property in the first object returning undefined
+      // in order to resolve
+      options: [ {create: undefined} ],
+      socketMsg: true,
+      category: 'upgrade',
+      afterEffect: 'allowBunkerUpgrade'
+    }
+  })
 }
 
 // informs the user that the purchase failed and then either restarts process or exits
@@ -101,12 +128,13 @@ function purchaseFailure (userId) {
     type: 'general',
     id: 998,
     status: 'neutral',
-    exitType: 'load',
-    options: [ { title: 'Browse More', action: 0, create: () => makeMenu(userId) }, { title: 'Exit', action: 1, create: undefined } ],
+    exitType: 'immediate',
+    options: [ { title: 'Exit', action: 0, create: undefined } ],
     next: 'Calculating optimal upgrades',
     socketMsg: true,
     category: 'upgrade'
   }
 }
+// { title: 'Browse More', action: 0, create: () => makeMenu(userId) },
 
 module.exports = makeMenu

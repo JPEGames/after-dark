@@ -1,8 +1,6 @@
 app.factory('CharOverFactory', function ($http, $rootScope, AuthService, BunkerStateFactory, EventFactory) {
   // <---- GLOBALS FOR CHARACTER INFORMATION --->
   let charStats
-  let charResources
-
   let testResources = [
     {
       title: 'Metal',

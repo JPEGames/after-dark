@@ -66,7 +66,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
     gameAR.load.image('bunker', '/pimages/vault.png')
     gameAR.load.image('metal', '/pimages/ore.png')
     gameAR.load.image('water', '/pimages/water.png')
-    gameAR.load.image('air', '/pimages/oxygen.png')
+    gameAR.load.image('air', '/pimages/air.png')
     gameAR.load.image('electricity', '/pimages/electricity.png')
     gameAR.load.image('rat attack', '/pimages/rat-attack.png')
   }
@@ -302,6 +302,14 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
   }
 
   scope.$on('updateAR', (event, data) => {
+    const points = data.locations
+    const rats = _.remove(points, obj => obj.type === 'rat attack')
+    rats.forEach(ratPoint => {
+      console.log(ratPoint)
+      if (ratPoint.pos.x < 0.75 && ratPoint.pos.x > 0.25 && ratPoint.pos.y < 0.75 && ratPoint.pos.y > 0.25) {
+        scope.$emit('fight', {type: 'rat attack', id: ratPoint.id, dangerLvl: 1})
+      }
+    })
     clearMarkers()
     deleteClouds()
     createACloudGrid(mapToGrid(data.visited))

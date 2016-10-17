@@ -40,8 +40,9 @@ app.controller('GameController', function ($scope, $rootScope, ModalFactory, $lo
   }
 
   // <---- LISTENERS FOR BUNKER VIEW EVENTS ---->
+
+  // <---- DEPOSITING RESOURCES FROM BACKPACK TO BUNKER ---->
   $scope.$on('saveResource_Phaser', function (event, data) {
-    console.log('GOT PHASER SAVE RESOURCE MSG!')
     // ModalFactory.changeModal('message', {
     //   newContent: {
     //     title: 'Deposit Resources',
@@ -65,9 +66,11 @@ app.controller('GameController', function ($scope, $rootScope, ModalFactory, $lo
     $rootScope.socket.emit('saveResources_Client')
   })
 
-  // $scope.$on('test', function () {
-  //   console.log('RECIEVED TEST!')
-  // })
+  // <---- BRING UP UPGRADE MENU ----->
+  $scope.$on('startUpgrade_Phaser', function (event, data) {
+    console.log('GOT START UPGRADE FROM PHASER~~')
+    $rootScope.socket.emit('purchaseUpgrades')
+  })
 
   // removes erroneous 'second' game view on page refresh
   $scope.$on('$destroy', () => {

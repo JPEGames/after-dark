@@ -215,7 +215,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
         scope.$emit('fight', { type: sprite[ 'markerType' ], id: sprite[ 'id' ], dangerLvl: 1 })
         console.log('SPRITE ID FOR RATTATA: ', sprite[ 'id' ])
       } else {
-        scope.$emit('gameEvent', { type: sprite[ 'markerType' ], id: sprite[ 'id' ] })
+        scope.$emit('gameEvent', {type: sprite[ 'markerType' ], id: sprite[ 'id' ]})
       }
     } else {
       console.warn('Click too close to eachother.')

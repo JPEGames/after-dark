@@ -9,11 +9,11 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   CharOverFactory.resourceGenerator()
     .then(resources => {
       console.warn('RESOURCES: ', resources)
-      // $scope.resources = resources
+    // $scope.resources = resources
     })
 
   // LISTENING FOR FACTORY
-  // Event driven modal. Only a few events right now.
+    // Event driven modal. Only a few events right now.
 
   // <----- WILL UPDATE INVENTORY AFTER CLICKING ON RESOURCES ---->
   $scope.$on('updateInventory', function (event, data) {
@@ -30,22 +30,39 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // I want to change what 'mode' the modal is portraying at given moment.
   // A queue manager will have to handle this event.
   $scope.$on('modeChange', function (event, data) {
-    $scope.mode = data.newMode
-    console.log('Detected Change!')
-    console.log('Mode is now: ', $scope.mode)
-    if (data) {
-      // TODO: THIS WAS ADDED TO MODIFY CAST DATA STUFF
-      // originally should just be $scope.mode = data.newMode, $scope.castData = data.newContent
-      $scope.castData = data.newContent
-      console.log('DATA: ', data)
-      if (data.forceOpen) {
-        if (data.newContent.forceEventType) {
-          console.log('Forcing Event Type')
-          $scope.mode = data.newContent.forceEventType
-          console.log('Mode forced to: ', $scope.mode)
+    let tempLength = 0
+    for (let keys in $scope.castData) {
+      if ($scope.castData.hasOwnProperty(keys)) {
+        tempLength++
+      }
+    }
+
+    console.log('castData keys - ' + tempLength)
+    // If I am already in a mode, and get information about the next mode, what occurs here?
+    if (tempLength > 0 && $scope.mode !== 'loading') {
+      // This would mean that castData has not been dealt with:
+      // 1. Add this data as a new message in the factory.
+      // 2. Make sure getMessages is operating properly.
+      // 3. Ensure that the loading mode does not get in the way of accepting a new message.
+      console.log('Detected unresolved castData, adding message onto event queue.')
+      // Store the mode that this event requested.
+      if (data) {
+        console.log('Next Message: ', data.newContent)
+        console.log('Unresolved message: ', $scope.castData)
+        data.newContent.nextMode = data.newMode
+        ModalFactory.addMessage(data.newContent)
+      }
+    } else {
+      $scope.mode = data.newMode
+      console.log('Detected Change!')
+      console.log('Mode is now: ', $scope.mode)
+      if (data) {
+        $scope.castData = data.newContent
+        console.log('DATA: ', data)
+        if (data.forceOpen) {
+          console.log('Modal Open forced by Modal Change.')
+          $interval(ModalFactory.openModal, 10, 1)
         }
-        console.log('Modal Open forced by Modal Change.')
-        $interval(ModalFactory.openModal, 10, 1)
       }
     }
   })
@@ -62,14 +79,19 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // Kind of ridiculous - but just for visual cue - mark message read and remove
   // from front end. Will obvisouly require promises
   $scope.$on('messageRead', function (event, aMessage) {
-    // TODO: THIS WAS ADDED TO MODIFY CAST DATA STUFF
-    // $scope.castData = null
-    ModalFactory.deleteMessage(aMessage)
+    $scope.castData = {}
     $scope.messages = ModalFactory.getMessages()
+    if ($scope.messages.length > 0) {
+      ModalFactory.deleteMessage(aMessage)
+      $scope.messages = ModalFactory.getMessages()
+    } else {
+      $scope.messages = ModalFactory.getMessages()
+    }
   })
 
   $scope.$on('startLoad', function (event, loadData) {
     $scope.mode = 'loading'
+    // Loading counts as cast data...
     $scope.castData = loadData
   })
 

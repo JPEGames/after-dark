@@ -184,19 +184,32 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       return testMessages
     },
     deleteMessage: function (aMessage) {
-      let indexToRemove = null
+      let removedMessages = 0
+      let indexesToRemove = []
       testMessages.forEach(function (mes, index) {
         if (mes.id === aMessage.id) {
-          indexToRemove = index
+          console.log(mes.id + ' vs. ' + aMessage.id)
+          console.log('Matched up message to delete', mes)
+          indexesToRemove.push(mes.id)
         }
       })
-      if (indexToRemove !== null) {
-        testMessages.splice(indexToRemove, 1)
-        console.log('Removed Message!')
-      } else {
-        console.log('Could not find message to remove.')
-        console.log(aMessage)
-      }
+      console.log('Pre filter messages: ')
+      console.log(testMessages)
+      testMessages = testMessages.filter(function (elem) {
+        let tempBool = true
+        for (let i = 0; i < indexesToRemove.length; i++) {
+          if (indexesToRemove[i] === elem.id) {
+            console.log('Match @ index ' + i + ' between ' + indexesToRemove[i] + ' and ' + elem.id)
+            removedMessages++
+            tempBool = false
+            break
+          }
+        }
+        return tempBool
+      })
+      console.log('Post filter messages:')
+      console.log(testMessages)
+      console.log('Removed ' + removedMessages + ' messages.')
     },
     lastMessage: function () {
       if (testMessages.length < 1) {
@@ -216,10 +229,21 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
     },
     addMessage: function (message) {
       console.log('Adding message: ', message)
-      testMessages.push(message)
+      let tempMessages = testMessages.slice()
+      tempMessages.push(message)
+      console.log('Dupe Temp Array: ', tempMessages)
+      tempMessages = _.uniq(tempMessages)
       // TODO: this temporarily takes care of double addMessage call
-      testMessages = _.uniq(testMessages)
-      console.log('Test messages: ', testMessages)
+      testMessages = tempMessages
+      console.log('Final Msg Array: ', testMessages)
+    },
+    setMessages: function (messageArr) {
+      console.log('Setting messages!')
+      if (this.lastMessage()) {
+        testMessages = messageArr
+      } else {
+        testMessages.concat(messageArr)
+      }
     },
     updateInventory: function (newInventory) {
       $rootScope.$broadcast('updateInventory', newInventory)
@@ -234,17 +258,15 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       return testUpgrades
     },
     nextModal: function (aMessage) {
-      console.error('************TEST MESSAGES LENGTH: ', testMessages.length)
-      if (aMessage.exitType === 'load' && testMessages.length === 0) {
-        console.log('~~~~~CALLING START LOADING~~~~~~~')
-        this.startLoading({ title: aMessage.next })
+      if (aMessage.exitType === 'load') {
+        this.startLoading({title: aMessage.next})
       } else {
         if (this.lastMessage()) {
           this.resetModal()
           this.closeModal()
         } else {
-          if (aMessage.exitType) {
-            if (aMessage.exitType === 'immediate' && !testMessages.length) {
+          if (aMessage.exitType && this.lastMessage()) {
+            if (aMessage.exitType === 'immediate') {
               this.resetModal()
               this.closeModal()
             } else {

@@ -51,6 +51,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
   let randCount = 180
   let randFrequency = 180
   let randOn = true
+  let clickTimer = 0
   // Stores an array of sprite objects for clouds so that I can delete them at a later time.
   let cloudArray = []
 
@@ -95,6 +96,9 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
 
   // What happens every 1/60th a second?
   function update () {
+    if (clickTimer < 15) {
+      clickTimer++
+    }
     // Increase counter for recreating clouds for shitty animation effect that needs work.
     // randCount++
     // If the counter is above the set timer...
@@ -203,13 +207,18 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
 
   // Listener on pressing a marker.
   function markerPress (sprite, pointer) {
-    console.log('ON PRESS TYPE: ', sprite['markerType'])
-    // send event type and id upon click
-    if (sprite['markerType'] === 'rat attack') {
-      scope.$emit('fight', {type: sprite['markerType'], id: sprite['id'], dangerLvl: 1})
-      console.log('SPRITE ID FOR RATTATA: ', sprite['id'])
+    if (clickTimer >= 15) {
+      clickTimer = 0
+      console.log('ON PRESS TYPE: ', sprite[ 'markerType' ])
+      // send event type and id upon click
+      if (sprite[ 'markerType' ] === 'rat attack') {
+        scope.$emit('fight', { type: sprite[ 'markerType' ], id: sprite[ 'id' ], dangerLvl: 1 })
+        console.log('SPRITE ID FOR RATTATA: ', sprite[ 'id' ])
+      } else {
+        scope.$emit('gameEvent', { type: sprite[ 'markerType' ], id: sprite[ 'id' ] })
+      }
     } else {
-      scope.$emit('gameEvent', {type: sprite['markerType'], id: sprite['id']})
+      console.warn('Click too close to eachother.')
     }
   }
 

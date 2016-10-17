@@ -8,12 +8,14 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   console.group('Modal Controller')
   CharOverFactory.resourceGenerator()
     .then(resources => {
-      console.log('RESOURCES: ', resources)
-      $scope.resources = resources
+      console.warn('RESOURCES: ', resources)
+      // $scope.resources = resources
     })
 
   // LISTENING FOR FACTORY
   // Event driven modal. Only a few events right now.
+
+  // <----- WILL UPDATE INVENTORY AFTER CLICKING ON RESOURCES ---->
   $scope.$on('updateInventory', function (event, data) {
     console.log('updating inventory!!!')
     let newInventory = []
@@ -28,11 +30,18 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // I want to change what 'mode' the modal is portraying at given moment.
   // A queue manager will have to handle this event.
   $scope.$on('modeChange', function (event, data) {
-    $scope.mode = data.newMode
     console.log('Detected Change!')
     console.log('Mode is now: ', $scope.mode)
     if (data) {
-      $scope.castData = data.newContent
+      // TODO: THIS WAS ADDED TO MODIFY CAST DATA STUFF
+      // originally should just be $scope.mode = data.newMode, $scope.castData = data.newContent
+      if (Object.keys($scope.castData).length) {
+        console.log('CAST DATA LENGTH GREATER THAN ZERO ~~~~~~~~~')
+        ModalFactory.addMessage(data.newContent)
+      } else {
+        $scope.mode = data.newMode
+        $scope.castData = data.newContent
+      }
       console.log('DATA: ', data)
       if (data.forceOpen) {
         if (data.newContent.forceEventType) {
@@ -58,6 +67,8 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // Kind of ridiculous - but just for visual cue - mark message read and remove
   // from front end. Will obvisouly require promises
   $scope.$on('messageRead', function (event, aMessage) {
+    // TODO: THIS WAS ADDED TO MODIFY CAST DATA STUFF
+    $scope.castData = null
     ModalFactory.deleteMessage(aMessage)
     $scope.messages = ModalFactory.getMessages()
   })

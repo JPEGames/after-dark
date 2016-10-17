@@ -233,7 +233,9 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       return testUpgrades
     },
     nextModal: function (aMessage) {
-      if (aMessage.exitType === 'load') {
+      console.error('************TEST MESSAGES LENGTH: ', testMessages.length)
+      if (aMessage.exitType === 'load' && testMessages.length === 0) {
+        console.log('~~~~~CALLING START LOADING~~~~~~~')
         this.startLoading({ title: aMessage.next })
       } else {
         if (this.lastMessage()) {
@@ -241,7 +243,7 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
           this.closeModal()
         } else {
           if (aMessage.exitType) {
-            if (aMessage.exitType === 'immediate') {
+            if (aMessage.exitType === 'immediate' && !testMessages.length) {
               this.resetModal()
               this.closeModal()
             } else {

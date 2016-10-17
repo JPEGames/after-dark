@@ -7,32 +7,32 @@ app.directive('eventEmitter', function ($state, ModalFactory) {
       content: '='
     },
     link: function (scope) {
-      function nextModal (aMessage) {
-        if (aMessage.exitType === 'load') {
-          ModalFactory.startLoading({title: aMessage.next})
-        } else {
-          if (ModalFactory.lastMessage()) {
-            ModalFactory.resetModal()
-            ModalFactory.closeModal()
-          } else {
-            if (aMessage.exitType) {
-              if (aMessage.exitType === 'immediate') {
-                ModalFactory.resetModal()
-                ModalFactory.closeModal()
-              } else {
-                ModalFactory.changeModal('notify', {})
-              }
-            } else {
-              ModalFactory.changeModal('notify', {})
-            }
-          }
-        }
-      }
+      // function nextModal (aMessage) {
+      //   if (aMessage.exitType === 'load') {
+      //     ModalFactory.startLoading({title: aMessage.next})
+      //   } else {
+      //     if (ModalFactory.lastMessage()) {
+      //       ModalFactory.resetModal()
+      //       ModalFactory.closeModal()
+      //     } else {
+      //       if (aMessage.exitType) {
+      //         if (aMessage.exitType === 'immediate') {
+      //           ModalFactory.resetModal()
+      //           ModalFactory.closeModal()
+      //         } else {
+      //           ModalFactory.changeModal('notify', {})
+      //         }
+      //       } else {
+      //         ModalFactory.changeModal('notify', {})
+      //       }
+      //     }
+      //   }
+      // }
       // Should also mark as read and remove from list.
       scope.exitMessage = function (aMessage) {
         ModalFactory.submitResponse(0, aMessage.socketMsg, aMessage.category, aMessage.afterEffect)
         ModalFactory.markRead(aMessage)
-        nextModal(aMessage)
+        ModalFactory.nextModal(aMessage)
       }
 
       scope.confirmMessage = function (aMessage) {
@@ -41,7 +41,7 @@ app.directive('eventEmitter', function ($state, ModalFactory) {
         aMessage.response = true
         ModalFactory.submitResponse(1, aMessage.socketMsg, aMessage.category, aMessage.afterEffect)
         ModalFactory.markRead(aMessage)
-        nextModal(aMessage)
+        ModalFactory.nextModal(aMessage)
       }
 
       scope.denyMessage = function (aMessage) {
@@ -49,7 +49,7 @@ app.directive('eventEmitter', function ($state, ModalFactory) {
         aMessage.response = false
         ModalFactory.submitResponse(0, aMessage.socketMsg, aMessage.category, aMessage.afterEffect)
         ModalFactory.markRead(aMessage)
-        nextModal(aMessage)
+        ModalFactory.nextModal(aMessage)
       }
 
       scope.submitAnswer = function (aMessage, aResponse) {
@@ -59,7 +59,7 @@ app.directive('eventEmitter', function ($state, ModalFactory) {
         console.log('Response is: ', aMessage.response)
         ModalFactory.submitResponse(aResponse, aMessage.socketMsg, aMessage.category, aMessage.afterEffect)
         ModalFactory.markRead(aMessage)
-        nextModal(aMessage)
+        ModalFactory.nextModal(aMessage)
       }
     }
   }

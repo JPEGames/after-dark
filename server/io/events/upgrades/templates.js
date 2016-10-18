@@ -42,6 +42,7 @@ class Upgrade {
     this.costs = makeCosts(category, level, type)
     this.benefits = [ { type, category, benefit: 'plus', quantity: levelDivisor } ]
     this.next = ''
+    // TODO: THIS MIGHT BE BAD
     // this.id = 998
     this.eventType = 'variadic'
     this.category = 'upgrade'

@@ -167,53 +167,16 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   // Needs to be removed later - ELIOT
   $rootScope.socket.emit('loading', currentUser)
 
-  $rootScope.socket.on('send_metal', function (event) {
+  // <----- LISTENER FOR RESOURCE OBJECTS BEING SENT FROM SOCKET ------>
+  $rootScope.socket.on('sendResource_server', function (event) {
+    console.log('sendResource_server getting sent from socket!!!!!')
     let eventObj = event.event
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
+    console.warn('EVENT OBJECT BEING ADDED', eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
       // TODO: this is hacky - implement loading!
-      // $timeout(ModalFactory.openModal(), 1000)
-      ModalFactory.setMarker(thisMarker)
-      $timeout(NavbarFactory.createExp(50), 1000)
-    }
-  })
-
-  $rootScope.socket.on('send_electricity', function (event) {
-    let eventObj = event.event
-    let thisMarker = { id: event.markerId, type: event.markerType }
-    ModalFactory.addMessage(eventObj)
-    if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
-      // TODO: this is hacky - implement loading!
-      // $timeout(ModalFactory.openModal(), 1000)
-      ModalFactory.setMarker(thisMarker)
-      $timeout(NavbarFactory.createExp(50), 1000)
-    }
-  })
-
-  $rootScope.socket.on('send_water', function (event) {
-    let eventObj = event.event
-    let thisMarker = { id: event.markerId, type: event.markerType }
-    ModalFactory.addMessage(eventObj)
-    if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
-      // TODO: this is hacky - implement loading!
-      // $timeout(ModalFactory.openModal(), 1000)
-      ModalFactory.setMarker(thisMarker)
-      $timeout(NavbarFactory.createExp(50), 1000)
-    }
-  })
-
-  $rootScope.socket.on('send_air', function (event) {
-    let eventObj = event.event
-    let thisMarker = { id: event.markerId, type: event.markerType }
-    ModalFactory.addMessage(eventObj)
-    if (ModalFactory.getMessages().length > 0) {
-      ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
-      // TODO: this is hacky - implement loading!
-      // $timeout(ModalFactory.openModal(), 1000)
       ModalFactory.setMarker(thisMarker)
       $timeout(NavbarFactory.createExp(50), 1000)
     }

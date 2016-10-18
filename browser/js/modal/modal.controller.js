@@ -5,11 +5,10 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   $scope.messages = ModalFactory.getMessages()
   $scope.upgrades = ModalFactory.getUpgrades()
 
-  console.group('Modal Controller')
   CharOverFactory.resourceGenerator()
     .then(resources => {
-      console.warn('RESOURCES: ', resources)
-    // $scope.resources = resources
+      console.warn('RESOURCES after state change: ', resources)
+      $scope.resources = resources
     })
 
   // LISTENING FOR FACTORY
@@ -17,14 +16,13 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
 
   // <----- WILL UPDATE INVENTORY AFTER CLICKING ON RESOURCES ---->
   $scope.$on('updateInventory', function (event, data) {
-    console.log('updating inventory!!!')
     let newInventory = []
     for (let resource in data) {
       newInventory.push(data[ resource ])
     }
     // this gets passed into modal.html (inventory directive)
     $scope.resources = newInventory
-    console.log('SCOPE RESOURCES: ', $scope.resources)
+    console.log('$scope.resources after backpack update: ', $scope.resources)
   })
 
   // I want to change what 'mode' the modal is portraying at given moment.
@@ -69,11 +67,13 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
 
   // Set the modal back to its default in 1 second (currently, inventory)
   $scope.$on('modeReset', function (event, data) {
-    if (!data) {
-      resetVars()
-    } else {
-      $interval(resetVars, 1000, 1)
-    }
+    console.error('RESET MODAL')
+    // resetVars()
+    // if (!data) {
+    //   resetVars()
+    // } else {
+    //   $interval(resetVars, 1000, 1)
+    // }
   })
 
   // Kind of ridiculous - but just for visual cue - mark message read and remove
@@ -82,6 +82,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     $scope.castData = {}
     $scope.messages = ModalFactory.getMessages()
     if ($scope.messages.length > 0) {
+      console.error('ABOUT TO DELETE: ', aMessage)
       ModalFactory.deleteMessage(aMessage)
       $scope.messages = ModalFactory.getMessages()
     } else {
@@ -122,7 +123,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       myProgress: { 'width': 0 + '%' }
     },
     {
-      title: 'H2O',
+      title: 'Water',
       source: '/pimages/water.png',
       pquantity: 0,
       pmax: 100,
@@ -131,7 +132,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       myProgress: { 'width': 0 + '%' }
     },
     {
-      title: 'O2',
+      title: 'Air',
       source: '/pimages/air.png',
       pquantity: 0,
       pmax: 100,
@@ -153,5 +154,4 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // if ($scope.messages.length > 0) {
   //   ModalFactory.openModal()
   // }
-  console.groupEnd('Modal Controller')
 })

@@ -17,10 +17,10 @@ function makeMenu (userId) {
         status: 'neutral',
         exitType: 'load',
         options: [
-          new Upgrade('water', bunker.waterCapacity / 500, userId, 500),
-          new Upgrade('air', bunker.airCapacity / 500, userId, 500),
-          new Upgrade('electricity', bunker.electricityCapacity / 500, userId, 500),
-          new Upgrade('metal', bunker.metalCapacity / 500, userId, 500)
+          new Upgrade('water', bunker.waterCapacity / 500, userId, 500, 0),
+          new Upgrade('air', bunker.airCapacity / 500, userId, 500, 1),
+          new Upgrade('electricity', bunker.electricityCapacity / 500, userId, 500, 2),
+          new Upgrade('metal', bunker.metalCapacity / 500, userId, 500, 3)
         ],
         next: 'Calculating optimal upgrades',
         socketMsg: true,
@@ -32,15 +32,16 @@ function makeMenu (userId) {
 
 // upgrade object class
 class Upgrade {
-  constructor (category, level, userId, levelDivisor, type = 'capacity') {
+  constructor (category, level, userId, levelDivisor, actionId, type = 'capacity') {
     this.title = `${category} ${type} upgrade ${level}`
     this.description = `This increases your ${category} ${type}`
     this.source = `/pimages/${category}.png`
     this.status = 'neutral'
-    this.exitType = 'load'
+    this.exitType = 'immediate'
     this.costs = makeCosts(category, level, type)
     this.benefits = [ { type, category, benefit: 'plus', quantity: levelDivisor } ]
     this.next = ''
+    // this.id = 998
     this.eventType = 'variadic'
     this.category = 'upgrade'
     this.socketMsg = true
@@ -48,7 +49,7 @@ class Upgrade {
     // even though 'serverRes' listener uses changeModal('message') by default
     this.forceEventType = 'upgrades'
     // THIS IS FOR THE BUY OPTION!!!!
-    this.action = 0
+    this.action = actionId
     this.create = () => checkPurchase(userId, category, type, levelDivisor)
   }
 }
@@ -83,6 +84,7 @@ function checkPurchase (userId, category, type = 'capacity', levelDivisor) {
       let upgradeCategory = `${category}${type.substring(0, 1).toUpperCase()}${type.substring(1)}`
       let level = bunker[ upgradeCategory ] / levelDivisor
       let costs = makeCosts(category, level, type)
+      console.log('COSTS: ', costs)
       return costs.every(costObj => bunker[ costObj.type ] >= costObj.quantity)
         ? purchaseSuccess(userId, costs, bunker, upgradeCategory)
         : purchaseFailure(userId)
@@ -91,7 +93,6 @@ function checkPurchase (userId, category, type = 'capacity', levelDivisor) {
 
 // Subtracts the resources,  and then does nothing for now, ends the generator chain
 function purchaseSuccess (userId, costs, bunker, upgradeCategory) {
-  // TODO: put actual upgrade to capacity here!
   // deduct appropriate resource amount for upgrade
   costs.forEach(costObj => bunker.subtract(costObj.type, costObj.quantity))
   // increase appropriate upgrade field in bunker instance
@@ -103,7 +104,7 @@ function purchaseSuccess (userId, costs, bunker, upgradeCategory) {
       eventType: 'confirm',
       source: '',
       type: 'general',
-      id: 1000,
+      id: 998,
       status: 'success',
       exitType: 'immediate',
       // this has to go on a confirm event object because the generator needs
@@ -123,14 +124,14 @@ function purchaseFailure (userId) {
   return {
     title: 'Nice Try...',
     description: `You don't have enough resources`,
-    eventType: 'variadic',
+    eventType: 'confirm',
     source: '/pimages/message.png',
     type: 'general',
     id: 998,
     status: 'neutral',
     exitType: 'immediate',
     options: [ { title: 'Exit', action: 0, create: undefined } ],
-    next: 'Calculating optimal upgrades',
+    // next: 'Calculating optimal upgrades',
     socketMsg: true,
     category: 'upgrade'
   }

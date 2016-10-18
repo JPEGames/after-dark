@@ -212,14 +212,6 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       console.log('Removed ' + removedMessages + ' messages.')
       if (testMessages.length === 0) {
         console.error('CLOSING MODAL! NO MORE TEST MESSAGES!')
-        // this.changeModal('message', {
-        //   newContent: {
-        //     title: 'Socket Error',
-        //     exitType: 'immediate',
-        //     eventType: 'confirm'
-        //   },
-        //   forceOpen: true
-        // })
       }
     },
     lastMessage: function () {
@@ -272,21 +264,16 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       if (aMessage.exitType === 'load') {
         this.startLoading({ title: aMessage.next })
       } else {
-        if (this.lastMessage()) {
-          console.warn('CALLING LAST MESSAGE IN NEXT MODAL')
-          this.resetModal()
-          this.closeModal()
-        } else {
-          if (aMessage.exitType && this.lastMessage()) {
-            if (aMessage.exitType === 'immediate') {
-              this.resetModal()
-              this.closeModal()
-            } else {
-              this.changeModal('notify', {})
-            }
+        if (aMessage.exitType && this.lastMessage()) {
+          if (aMessage.exitType === 'immediate') {
+            console.warn('EXIT TYPE IS IMMEDIATE AND LAST MESSAGE IN NEXT MODAL')
+            this.resetModal()
+            this.closeModal()
           } else {
             this.changeModal('notify', {})
           }
+        } else {
+          this.changeModal('notify', {})
         }
       }
     }

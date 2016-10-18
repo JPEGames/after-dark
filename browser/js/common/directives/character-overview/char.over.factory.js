@@ -132,11 +132,11 @@ app.factory('CharOverFactory', function ($http, $rootScope, AuthService, BunkerS
           bunkerResources = { air, electricity, metal, water }
           bunkerCapacities = { airCapacity, electricityCapacity, metalCapacity, waterCapacity }
           // TODO: implement this in $$ spot in overview
-          console.log('MONEY~~~', {money})
-          console.log(money)
+          // console.log('MONEY~~~', {money})
+          // console.log(money)
           totalMoney = money
-          console.log('BUNKER RESOURCES: ', bunkerResources)
-          console.log('BUNKER MONEY!', totalMoney)
+          // console.log('BUNKER RESOURCES: ', bunkerResources)
+          // console.log('BUNKER MONEY!', totalMoney)
           return EventFactory.getBackpack()
         })
         .then(backpack => {
@@ -145,6 +145,7 @@ app.factory('CharOverFactory', function ($http, $rootScope, AuthService, BunkerS
           return Object.keys(bunkerResources).map(resource => {
             return {
               title: `${resource.substring(0, 1).toUpperCase()}${resource.substring(1)}`,
+              source: `pimages/${resource}.png`,
               bquantity: bunkerResources[ resource ],
               bmax: bunkerCapacities[ `${resource}Capacity` ],
               myBProgress: { 'width': `${bunkerResources[ resource ] / bunkerCapacities[ `${resource}Capacity` ] * 100}%` },

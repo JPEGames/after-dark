@@ -47,7 +47,7 @@ module.exports = db.define('character', {
         : this.strength
     },
     level: function () {
-      return this.experience
+      return this.experience < 2000 ? 1 : Math.floor(Math.log2(this.experience / 1000))
     }
   },
   hooks: {

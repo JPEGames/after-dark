@@ -149,7 +149,7 @@ class FloorUpgrade {
       { type: 'metal', quantity: 4000 },
       { type: 'electricity', quantity: 2000 },
       { type: 'water', quantity: 2000 },
-      { type: 'oxygen', quantity: 2000 }
+      { type: 'air', quantity: 2000 }
     ]
     this.benefits = []
     this.next = ''
@@ -168,8 +168,10 @@ class FloorUpgrade {
 
 function checkFloorPurchase (userId, costs) {
   console.log('CALLING CHECK FLOOR PURCHASE~~~~')
+  console.log('COSTS: ', costs)
   return Bunker.findOne({ where: { userId } })
     .then(bunker => {
+      console.log('BUNKER: ', bunker)
       return costs.every(costObj => bunker[ costObj.type ] >= costObj.quantity)
         ? floorPurchaseSuccess(userId, costs, bunker)
         : purchaseFailure(userId)
@@ -195,7 +197,7 @@ function floorPurchaseSuccess (userId, costs, bunker) {
       options: [ { create: undefined } ],
       socketMsg: true,
       category: 'upgrade',
-      afterEffect: 'allowBunkerUpgrade'
+      afterEffect: 'allowFloorUpgrade'
     }
   })
 }

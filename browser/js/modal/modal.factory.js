@@ -249,7 +249,7 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       }
     },
     updateInventory: function (newInventory) {
-      $rootScope.$broadcast('dupdateInventory', newInventory)
+      $rootScope.$broadcast('updateInventory', newInventory)
     },
     enterBunker: function () {
       goToBunker = true
@@ -264,21 +264,16 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       if (aMessage.exitType === 'load') {
         this.startLoading({ title: aMessage.next })
       } else {
-        if (this.lastMessage()) {
-          console.warn('CALLING LAST MESSAGE IN NEXT MODAL')
-          this.resetModal()
-          this.closeModal()
-        } else {
-          if (aMessage.exitType && this.lastMessage()) {
-            if (aMessage.exitType === 'immediate') {
-              this.resetModal()
-              this.closeModal()
-            } else {
-              this.changeModal('notify', {})
-            }
+        if (aMessage.exitType && this.lastMessage()) {
+          if (aMessage.exitType === 'immediate') {
+            console.warn('EXIT TYPE IS IMMEDIATE AND LAST MESSAGE IN NEXT MODAL')
+            this.resetModal()
+            this.closeModal()
           } else {
             this.changeModal('notify', {})
           }
+        } else {
+          this.changeModal('notify', {})
         }
       }
     }

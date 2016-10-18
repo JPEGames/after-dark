@@ -67,11 +67,13 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
 
   // Set the modal back to its default in 1 second (currently, inventory)
   $scope.$on('modeReset', function (event, data) {
-    if (!data) {
-      resetVars()
-    } else {
-      $interval(resetVars, 1000, 1)
-    }
+    console.error('RESET MODAL')
+    // resetVars()
+    // if (!data) {
+    //   resetVars()
+    // } else {
+    //   $interval(resetVars, 1000, 1)
+    // }
   })
 
   // Kind of ridiculous - but just for visual cue - mark message read and remove

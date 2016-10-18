@@ -14,6 +14,7 @@ function putResourcesInBunker (userId) {
       }
       return Bunker.findOne({ where: { userId } })
         .then(bunker => {
+          // TODO: THIS IS BUGGY ATM
           return bunker.update(resources)
         })
         .then(() => {

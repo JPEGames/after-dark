@@ -41,7 +41,7 @@ class Upgrade {
     this.costs = makeCosts(category, level, type)
     this.benefits = [ { type, category, benefit: 'plus', quantity: levelDivisor } ]
     this.next = ''
-    this.id = 1000
+    // this.id = 998
     this.eventType = 'variadic'
     this.category = 'upgrade'
     this.socketMsg = true
@@ -93,7 +93,6 @@ function checkPurchase (userId, category, type = 'capacity', levelDivisor) {
 
 // Subtracts the resources,  and then does nothing for now, ends the generator chain
 function purchaseSuccess (userId, costs, bunker, upgradeCategory) {
-  // TODO: put actual upgrade to capacity here!
   // deduct appropriate resource amount for upgrade
   costs.forEach(costObj => bunker.subtract(costObj.type, costObj.quantity))
   // increase appropriate upgrade field in bunker instance

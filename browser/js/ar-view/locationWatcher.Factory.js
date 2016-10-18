@@ -1,7 +1,7 @@
 /* eslint no-debugger: "off" */
 app.factory('LocationWatcherFactory', function (ArFactory, GeoFireFactory, leafletData, DistanceFactory, $rootScope, GridFactory, $http, $interval) {
   /* GLOBALS */
-  const mapReloadDistance = 100 // distance moved (meters) before panning map to new center
+  const mapReloadDistance = 10 // distance moved (meters) before panning map to new center
   const dataReloadDistance = 1000 // distance moved before making GeoFire query for bunkers + other markers...
   let center
   let lastFetchedCenter // this is the last center used to make a GeoFire query

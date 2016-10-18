@@ -4,7 +4,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
   let ratCount = 0
   const centerShift = 20
   const gameAR = new Phaser.Game(width, height, Phaser.CANVAS, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
-
+  const bunkerID = scope.$parent.$parent.bunkerId
   // Deals with canvas glitch involving invincible phaser instance.
   scope.$on('$destroy', () => {
     gameAR.destroy()
@@ -189,7 +189,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
   }
 
   function spaceMarker (x, y) {
-    let spacing = 30
+    let spacing = 15
     markerArray.forEach(a => {
       let horizDir = Math.random() < 0.5 ? -1 : 1
       let vertDir = Math.random() < 0.5 ? -1 : 1
@@ -207,7 +207,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
       // send event type and id upon click
       if (sprite[ 'markerType' ] === 'rat attack') {
         scope.$emit('fight', { type: sprite[ 'markerType' ], id: sprite[ 'id' ], dangerLvl: 1 })
-        // console.log('SPRITE ID FOR RATTATA: ', sprite[ 'id' ])
+      // console.log('SPRITE ID FOR RATTATA: ', sprite[ 'id' ])
       } else {
         scope.$emit('gameEvent', {type: sprite[ 'markerType' ], id: sprite[ 'id' ]})
       }
@@ -228,8 +228,6 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
     let shift = 0.0
     let width = Math.floor(scope.width / wFact)
     let height = Math.floor(scope.height / hFact)
-    // console.log('Clouds h: ' + height + ' w: ' + width)
-
     let matrix = Array.from(Array(height + 1), (a, i) => Array.from(Array(width + 1), (b, j) => {
       return {
         cloud: true,
@@ -304,14 +302,13 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
     const rats = _.remove(points, obj => obj.type === 'rat attack')
     let ratEvents = []
     rats.forEach(ratPoint => {
-      // console.log(ratPoint)
       if (ratPoint.pos.x < 0.75 && ratPoint.pos.x > 0.25 && ratPoint.pos.y < 0.75 && ratPoint.pos.y > 0.25) {
         ratEvents.push({type: 'rat attack', id: ratPoint.id, dangerLvl: 1})
         console.error('ADDING EM RATS UP!', ratEvents.length)
-        // scope.$emit('fight', {type: 'rat attack', id: ratPoint.id, dangerLvl: 1})
+      // scope.$emit('fight', {type: 'rat attack', id: ratPoint.id, dangerLvl: 1})
       }
     })
-    // TODO: this is hacky, but may have to do for now, will only emit once!
+    _.remove(points, point => point.type === 'bunker' && point.id !== '' + bunkerID) // /TAKE THIS OUT FOR MULTIPLAYER
     if (ratEvents.length) {
       console.error('EMITTING RAT FIGHT EVENT FROM PHASER~~~~~')
       scope.$emit('fight', ratEvents[0])
@@ -340,6 +337,7 @@ app.directive('arCanvas', function ($injector, $window, $interval, ModalFactory)
         zoom: 12,
         autodiscover: true
       }
+      console.log(scope)
       scope.width = $window.innerWidth
       scope.height = $window.innerHeight
       if (scope.data) {

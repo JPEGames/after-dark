@@ -10,10 +10,9 @@ app.controller('NavbarController', function ($state, $scope, AuthService, hasCha
     $scope.hasBunker = false
   } else {
     $scope.hasBunker = true
+    $scope.bunkerId = hasBunker.id
   }
 
   NavbarFactory.setter($scope.hasCharacter, $scope.hasBunker)
-  console.log('hasCharacter:', $scope.hasCharacter)
-  console.log('hasBunker:', $scope.hasBunker)
   $state.go('master.navbar.home')
 })

@@ -5,7 +5,6 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   $scope.messages = ModalFactory.getMessages()
   $scope.upgrades = ModalFactory.getUpgrades()
 
-  console.group('Modal Controller')
   CharOverFactory.resourceGenerator()
     .then(resources => {
       console.warn('RESOURCES after state change: ', resources)
@@ -81,6 +80,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
     $scope.castData = {}
     $scope.messages = ModalFactory.getMessages()
     if ($scope.messages.length > 0) {
+      console.error('ABOUT TO DELETE: ', aMessage)
       ModalFactory.deleteMessage(aMessage)
       $scope.messages = ModalFactory.getMessages()
     } else {
@@ -152,5 +152,4 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   // if ($scope.messages.length > 0) {
   //   ModalFactory.openModal()
   // }
-  console.groupEnd('Modal Controller')
 })

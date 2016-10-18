@@ -249,7 +249,7 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       }
     },
     updateInventory: function (newInventory) {
-      $rootScope.$broadcast('updateInventory', newInventory)
+      $rootScope.$broadcast('dupdateInventory', newInventory)
     },
     enterBunker: function () {
       goToBunker = true

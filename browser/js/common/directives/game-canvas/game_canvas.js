@@ -58,7 +58,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     game.load.image('touch', 'pimages/touch.png')
     game.load.image('touch_segment', 'pimages/touch_segment.png')
     game.load.image('compass', 'pimages/compass.png')
-    game.load.image('background', 'pimages/wasteland-city.jpg')
+    game.load.image('background', 'pimages/wasteland-city.png')
     game.load.spritesheet('player', 'pimages/astronaut-sheet.png', 35, 51)
   }
   // Set bg color behind all elements in this frame
@@ -126,7 +126,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
 
     var bgimage = game.add.image(0, 0, 'background')
     bgimage.width = game.width
-    bgimage.height = 160
+    bgimage.height = 128
     map = game.add.tilemap('map')
     map.addTilesetImage('bunkerv2', 'tiles')
     map.addTilesetImage('sewer_tileset', 'tiles2')

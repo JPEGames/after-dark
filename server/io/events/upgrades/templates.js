@@ -84,7 +84,6 @@ function checkPurchase (userId, category, type = 'capacity', levelDivisor) {
       let upgradeCategory = `${category}${type.substring(0, 1).toUpperCase()}${type.substring(1)}`
       let level = bunker[ upgradeCategory ] / levelDivisor
       let costs = makeCosts(category, level, type)
-      console.log('COSTS: ', costs)
       return costs.every(costObj => bunker[ costObj.type ] >= costObj.quantity)
         ? purchaseSuccess(userId, costs, bunker, upgradeCategory)
         : purchaseFailure(userId)

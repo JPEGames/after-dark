@@ -22,7 +22,7 @@ app.directive('characterOverview', function (AuthService, $state, $rootScope, Ch
           scope.myExp = relativeExp
           scope.myExpPer = `${(relativeExp / levelExp * 100).toFixed(1)}%`
           scope.myStats = CharOverFactory.statConverter(myStats)
-          scope.myProgress = {'width': ``}
+          scope.myProgress = {'width': `${scope.myExpPer}`}
         })
 
       // <---- SET RESOURCES && MONEY IN CHARACTER OVERVIEW ---->

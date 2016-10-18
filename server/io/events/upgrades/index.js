@@ -18,7 +18,6 @@ module.exports = function (socket) {
       })
     //
     socket.on('upgrade_response', function (resData) {
-      console.log('GETTING UPGRADE RESPONSES FROM CLIENT')
       if (!iterator.done) {
         console.log('RES DATA CHOICE: ', resData.choice)
         let nextConstructor = lastEvent.options[ resData.choice ].create

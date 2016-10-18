@@ -1,6 +1,7 @@
 window.createGameAR = function (ele, scope, players, mapId, injector, $interval, ModalFactory) {
   let height = scope.height
   let width = scope.width
+  let ratCount = 0
   const centerShift = 20
   const gameAR = new Phaser.Game(width, height, Phaser.CANVAS, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
 
@@ -158,10 +159,6 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
 
   // HELPER FUNCTION FOR addAMarker()
   function markerSetter (markerType, id, xCoord, yCoord) {
-    // let imageType
-    console.log('MARKER TYPE: ', markerType)
-    // TODO: THIS IS TEMPORARY! should be just imageType = markerType
-    // markerType !== 'bunker' ? imageType = 'ore' : imageType = markerType
     let sprite = new Phaser.Sprite(gameAR, xCoord - centerShift, yCoord - centerShift, markerType)
     sprite['markerType'] = markerType
     sprite['id'] = id
@@ -173,10 +170,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
     let tempSprite
     let [x, y] = [xCoord, yCoord]
     tempSprite = markerSetter(type, id, x, y)
-    // console.log('Attempting to add marker!')
-    // console.log(type)
     tempSprite['markerType'] = type
-    // console.log('SPRITE AFTER TYPE: ', tempSprite['markerType'])
     markerLayer.add(tempSprite)
     if (type === 'bunker') {
       tempSprite.scale.setTo(width, height)
@@ -209,11 +203,11 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
   function markerPress (sprite, pointer) {
     if (clickTimer >= 15) {
       clickTimer = 0
-      console.log('ON PRESS TYPE: ', sprite[ 'markerType' ])
+      // console.log('ON PRESS TYPE: ', sprite[ 'markerType' ])
       // send event type and id upon click
       if (sprite[ 'markerType' ] === 'rat attack') {
         scope.$emit('fight', { type: sprite[ 'markerType' ], id: sprite[ 'id' ], dangerLvl: 1 })
-        console.log('SPRITE ID FOR RATTATA: ', sprite[ 'id' ])
+        // console.log('SPRITE ID FOR RATTATA: ', sprite[ 'id' ])
       } else {
         scope.$emit('gameEvent', {type: sprite[ 'markerType' ], id: sprite[ 'id' ]})
       }
@@ -234,8 +228,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
     let shift = 0.0
     let width = Math.floor(scope.width / wFact)
     let height = Math.floor(scope.height / hFact)
-
-    console.log('Clouds h: ' + height + ' w: ' + width)
+    // console.log('Clouds h: ' + height + ' w: ' + width)
 
     let matrix = Array.from(Array(height + 1), (a, i) => Array.from(Array(width + 1), (b, j) => {
       return {
@@ -245,18 +238,14 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
       }
     }))
 
-    console.log('Here!')
-    console.log(matrix)
-
     if (pointsArr) {
       pointsArr.forEach((elem, index) => {
         let xGrid = Math.floor(width * (elem.x + shift))
         let yGrid = Math.floor(height * (elem.y + shift))
-        console.log('X: ' + xGrid, 'Y: ' + yGrid)
+        // console.log('X: ' + xGrid, 'Y: ' + yGrid)
         matrix[yGrid][xGrid].cloud = false
       })
     }
-
     return matrix
   }
 
@@ -270,7 +259,6 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
 
   // Create a cloud grid.
   function createACloudGrid (aMatrix) {
-    console.log('CREATING CLOUDS')
     aMatrix.forEach(function (aRow) {
       aRow.forEach(function (aCloud) {
         if (aCloud.cloud) {
@@ -311,14 +299,23 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
   }
 
   scope.$on('updateAR', (event, data) => {
+    console.error('UPDATE PHASER GETTING CALLED!!!!!!!')
     const points = data.locations
     const rats = _.remove(points, obj => obj.type === 'rat attack')
+    let ratEvents = []
     rats.forEach(ratPoint => {
-      console.log(ratPoint)
+      // console.log(ratPoint)
       if (ratPoint.pos.x < 0.75 && ratPoint.pos.x > 0.25 && ratPoint.pos.y < 0.75 && ratPoint.pos.y > 0.25) {
-        scope.$emit('fight', {type: 'rat attack', id: ratPoint.id, dangerLvl: 1})
+        ratEvents.push({type: 'rat attack', id: ratPoint.id, dangerLvl: 1})
+        console.error('ADDING EM RATS UP!', ratEvents.length)
+        // scope.$emit('fight', {type: 'rat attack', id: ratPoint.id, dangerLvl: 1})
       }
     })
+    // TODO: this is hacky, but may have to do for now, will only emit once!
+    if (ratEvents.length) {
+      console.error('EMITTING RAT FIGHT EVENT FROM PHASER~~~~~')
+      scope.$emit('fight', ratEvents[0])
+    }
     clearMarkers()
     deleteClouds()
     createACloudGrid(mapToGrid(data.visited))

@@ -212,14 +212,6 @@ app.factory('ModalFactory', function ($state, $http, $rootScope) {
       console.log('Removed ' + removedMessages + ' messages.')
       if (testMessages.length === 0) {
         console.error('CLOSING MODAL! NO MORE TEST MESSAGES!')
-        // this.changeModal('message', {
-        //   newContent: {
-        //     title: 'Socket Error',
-        //     exitType: 'immediate',
-        //     eventType: 'confirm'
-        //   },
-        //   forceOpen: true
-        // })
       }
     },
     lastMessage: function () {

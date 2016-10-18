@@ -8,8 +8,8 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
   console.group('Modal Controller')
   CharOverFactory.resourceGenerator()
     .then(resources => {
-      console.warn('RESOURCES: ', resources)
-    // $scope.resources = resources
+      console.warn('RESOURCES after state change: ', resources)
+      $scope.resources = resources
     })
 
   // LISTENING FOR FACTORY
@@ -17,14 +17,13 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
 
   // <----- WILL UPDATE INVENTORY AFTER CLICKING ON RESOURCES ---->
   $scope.$on('updateInventory', function (event, data) {
-    console.log('updating inventory!!!')
     let newInventory = []
     for (let resource in data) {
       newInventory.push(data[ resource ])
     }
     // this gets passed into modal.html (inventory directive)
     $scope.resources = newInventory
-    console.log('SCOPE RESOURCES: ', $scope.resources)
+    console.log('$scope.resources after backpack update: ', $scope.resources)
   })
 
   // I want to change what 'mode' the modal is portraying at given moment.
@@ -122,7 +121,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       myProgress: { 'width': 0 + '%' }
     },
     {
-      title: 'H2O',
+      title: 'Water',
       source: '/pimages/water.png',
       pquantity: 0,
       pmax: 100,
@@ -131,7 +130,7 @@ app.controller('ModalController', function ($scope, $interval, $rootScope, Modal
       myProgress: { 'width': 0 + '%' }
     },
     {
-      title: 'O2',
+      title: 'Air',
       source: '/pimages/air.png',
       pquantity: 0,
       pmax: 100,

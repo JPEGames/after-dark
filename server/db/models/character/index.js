@@ -47,7 +47,15 @@ module.exports = db.define('character', {
         : this.strength
     },
     level: function () {
-      return this.experience < 2000 ? 1 : Math.floor(Math.log2(this.experience / 1000))
+      return this.experience < 2000 ? 1 : Math.floor(Math.log2(this.experience / 1000)) + 1
+    },
+    levelExp: function () {
+      return this.experience > 2000 ? Math.pow(2, this.level) * 1000 : 2000
+    },
+    relativeExp: function () {
+      return this.experience > 2000
+        ? this.experience - _.range(1, this.level).map(num => Math.pow(2, num) * 1000).reduce((prev, curr) => prev + curr)
+        : this.experience
     }
   },
   hooks: {

@@ -3,11 +3,11 @@ app.controller('CharOverviewController', function ($scope, $state, NavbarFactory
   // right now its a mix.
   $scope.myChar = myCharacter
   console.log($scope.myChar)
-  $scope.myLevel = 1
-  $scope.myExpPer = '10%'
-  $scope.myMaxExp = 100
-  $scope.myExp = 10
-  $scope.myProgress = {'width': $scope.myExpPer}
+  // $scope.myLevel = 1
+  // $scope.myExpPer = '10%'
+  // $scope.myMaxExp = 100
+  // $scope.myExp = 10
+  // $scope.myProgress = {'width': $scope.myExpPer}
   let nameSplit = $scope.myChar.perk.split('')
   nameSplit[0] = nameSplit[0].toUpperCase()
   nameSplit = nameSplit.join('')

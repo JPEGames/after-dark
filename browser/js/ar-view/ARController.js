@@ -179,10 +179,7 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
       // TODO: this is hacky - implement loading!
       ModalFactory.setMarker(thisMarker)
       $timeout(NavbarFactory.createExp(50), 1000)
-      return CharOverFactory.changeExp(50)
-        .then(result => {
-          console.warn('RESULT IN ARCONTROLLER: ', result)
-        })
+      CharOverFactory.changeExp(50)
     }
   })
 

@@ -1,4 +1,4 @@
-app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory, BunkerStateFactory, NavbarFactory) {
+app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory, BunkerStateFactory, NavbarFactory, CharOverFactory) {
   let templateObjs = {
     'metal': {
       title: 'Metal',
@@ -81,8 +81,6 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
   // move clicked resource to user backpack
   $scope.$on('gameEvent', (event, data) => {
     let payload
-    console.log('received data: ', data)
-    console.log('current user: ', currentUser)
     if (data[ 'type' ] === 'bunker') {
       BunkerStateFactory.getBunkerUser(data.id)
         .then(bunkerUser => {
@@ -169,16 +167,16 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
 
   // <----- LISTENER FOR RESOURCE OBJECTS BEING SENT FROM SOCKET ------>
   $rootScope.socket.on('sendResource_server', function (event) {
-    console.log('sendResource_server getting sent from socket!!!!!')
+    // console.log('sendResource_server getting sent from socket!!!!!')
     let eventObj = event.event
     let thisMarker = { id: event.markerId, type: event.markerType }
     ModalFactory.addMessage(eventObj)
-    console.warn('EVENT OBJECT BEING ADDED', eventObj)
     if (ModalFactory.getMessages().length > 0) {
       ModalFactory.changeModal('message', { newContent: eventObj, forceOpen: true })
       // TODO: this is hacky - implement loading!
       ModalFactory.setMarker(thisMarker)
       $timeout(NavbarFactory.createExp(50), 1000)
+      CharOverFactory.changeExp(50)
     }
   })
 

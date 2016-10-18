@@ -14,9 +14,15 @@ app.directive('characterOverview', function (AuthService, $state, $rootScope, Ch
       // <---- SET STATS IN CHARACTER OVERVIEW ---->
       CharOverFactory.getCharacter()
         .then(character => {
-          let { endurance, intelligence, luck, perception, strength, tinkering } = character
+          let { endurance, intelligence, luck,
+            perception, strength, tinkering, experience, level, levelExp, relativeExp } = character
           let myStats = { strength, endurance, intelligence, luck, tinkering, perception }
+          scope.myLevel = level
+          scope.myMaxExp = levelExp
+          scope.myExp = relativeExp
+          scope.myExpPer = `${(relativeExp / levelExp * 100).toFixed(1)}%`
           scope.myStats = CharOverFactory.statConverter(myStats)
+          scope.myProgress = {'width': `${scope.myExpPer}`}
         })
 
       // <---- SET RESOURCES && MONEY IN CHARACTER OVERVIEW ---->

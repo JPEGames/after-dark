@@ -34,6 +34,10 @@ module.exports = db.define('character', {
   tinkering: {
     type: Sequelize.INTEGER,
     defaultValue: 1
+  },
+  experience: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
   }
 }, {
   getterMethods: {
@@ -41,11 +45,21 @@ module.exports = db.define('character', {
       return this.perk === 'soldier'
         ? this.strength * 2
         : this.strength
+    },
+    level: function () {
+      return this.experience < 2000 ? 1 : Math.floor(Math.log2(this.experience / 1000)) + 1
+    },
+    levelExp: function () {
+      return this.experience > 2000 ? Math.pow(2, this.level) * 1000 : 2000
+    },
+    relativeExp: function () {
+      return this.experience > 2000
+        ? this.experience - _.range(1, this.level).map(num => Math.pow(2, num) * 1000).reduce((prev, curr) => prev + curr)
+        : this.experience
     }
   },
   hooks: {
     beforeCreate: function (character) {
-      console.log('character!', character.perk)
       if (character.perk === 'soldier') {
         // <--- STRONG ATTRIBUTES --->
         character.strength = _.sample(_.range(7, 11))

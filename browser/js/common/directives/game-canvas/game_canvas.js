@@ -43,6 +43,10 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
     setCurrentUpgrade(upgradeObj)
   })
 
+  scope.$on('allowFloorUpgrade', function (event, data) {
+    buildAFloor(basicFloor)
+  })
+
   // destroys game instance on refresh...is this what we want??!?
   scope.$on('$destroy', () => {
     game.destroy()
@@ -368,6 +372,7 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
 
   // Saves entire maps state.
   function saveBunker () {
+    console.warn('SAVING BUNKER~~~~~~~')
     // The object we will be sending to DB.
     let saveObj = {
       bg: [],
@@ -614,6 +619,8 @@ window.createGame = function (ele, scope, $interval, bunker, injector, MenuFacto
       currentFloors = currentFloors + 1
       doorSwitch = !doorSwitch
       console.log('Completed floor build.')
+      // TODO: is this supposed to be here???
+      MenuFactory.saveBunker(saveBunker())
     } else {
       console.log('Reached Max Floor Capacity.')
     }

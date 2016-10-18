@@ -3,7 +3,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
   let width = scope.width
   const centerShift = 20
   const gameAR = new Phaser.Game(width, height, Phaser.CANVAS, 'ar-canvas', { preload: preload, create: create, update: update, render: render }, true)
-
+  const bunkerID = scope.$parent.$parent.bunkerId
   // Deals with canvas glitch involving invincible phaser instance.
   scope.$on('$destroy', () => {
     gameAR.destroy()
@@ -195,7 +195,7 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
   }
 
   function spaceMarker (x, y) {
-    let spacing = 30
+    let spacing = 15
     markerArray.forEach(a => {
       let horizDir = Math.random() < 0.5 ? -1 : 1
       let vertDir = Math.random() < 0.5 ? -1 : 1
@@ -235,8 +235,6 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
     let width = Math.floor(scope.width / wFact)
     let height = Math.floor(scope.height / hFact)
 
-    console.log('Clouds h: ' + height + ' w: ' + width)
-
     let matrix = Array.from(Array(height + 1), (a, i) => Array.from(Array(width + 1), (b, j) => {
       return {
         cloud: true,
@@ -244,9 +242,6 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
         y: scope.height * (i / height)
       }
     }))
-
-    console.log('Here!')
-    console.log(matrix)
 
     if (pointsArr) {
       pointsArr.forEach((elem, index) => {
@@ -270,7 +265,6 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
 
   // Create a cloud grid.
   function createACloudGrid (aMatrix) {
-    console.log('CREATING CLOUDS')
     aMatrix.forEach(function (aRow) {
       aRow.forEach(function (aCloud) {
         if (aCloud.cloud) {
@@ -314,11 +308,11 @@ window.createGameAR = function (ele, scope, players, mapId, injector, $interval,
     const points = data.locations
     const rats = _.remove(points, obj => obj.type === 'rat attack')
     rats.forEach(ratPoint => {
-      console.log(ratPoint)
       if (ratPoint.pos.x < 0.75 && ratPoint.pos.x > 0.25 && ratPoint.pos.y < 0.75 && ratPoint.pos.y > 0.25) {
         scope.$emit('fight', {type: 'rat attack', id: ratPoint.id, dangerLvl: 1})
       }
     })
+    _.remove(points, point => point.type === 'bunker' && point.id !== '' + bunkerID) // /TAKE THIS OUT FOR MULTIPLAYER
     clearMarkers()
     deleteClouds()
     createACloudGrid(mapToGrid(data.visited))
@@ -343,6 +337,7 @@ app.directive('arCanvas', function ($injector, $window, $interval, ModalFactory)
         zoom: 12,
         autodiscover: true
       }
+      console.log(scope)
       scope.width = $window.innerWidth
       scope.height = $window.innerHeight
       if (scope.data) {

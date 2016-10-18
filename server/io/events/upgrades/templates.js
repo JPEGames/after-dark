@@ -20,7 +20,8 @@ function makeMenu (userId) {
           new Upgrade('water', bunker.waterCapacity / 500, userId, 500, 0),
           new Upgrade('air', bunker.airCapacity / 500, userId, 500, 1),
           new Upgrade('electricity', bunker.electricityCapacity / 500, userId, 500, 2),
-          new Upgrade('metal', bunker.metalCapacity / 500, userId, 500, 3)
+          new Upgrade('metal', bunker.metalCapacity / 500, userId, 500, 3),
+          new FloorUpgrade(userId, 4)
         ],
         next: 'Calculating optimal upgrades',
         socketMsg: true,
@@ -109,7 +110,7 @@ function purchaseSuccess (userId, costs, bunker, upgradeCategory) {
       // this has to go on a confirm event object because the generator needs
       // options array with create property in the first object returning undefined
       // in order to resolve
-      options: [ {create: undefined} ],
+      options: [ { create: undefined } ],
       socketMsg: true,
       category: 'upgrade',
       afterEffect: 'allowBunkerUpgrade'
@@ -136,5 +137,67 @@ function purchaseFailure (userId) {
   }
 }
 // { title: 'Browse More', action: 0, create: () => makeMenu(userId) },
+
+class FloorUpgrade {
+  constructor (userId, actionId) {
+    this.title = 'Add a new floor'
+    this.description = 'This adds a new floor to your bunker'
+    this.source = ``
+    this.status = 'neutral'
+    this.exitType = 'immediate'
+    this.costs = [
+      { type: 'metal', quantity: 4000 },
+      { type: 'electricity', quantity: 2000 },
+      { type: 'water', quantity: 2000 },
+      { type: 'oxygen', quantity: 2000 }
+    ]
+    this.benefits = []
+    this.next = ''
+    // this.id = 998
+    this.eventType = 'variadic'
+    this.category = 'upgrade'
+    this.socketMsg = true
+    // this property is necessary in order to call changeModal('upgrades')
+    // even though 'serverRes' listener uses changeModal('message') by default
+    this.forceEventType = 'upgrades'
+    // THIS IS FOR THE BUY OPTION!!!!
+    this.action = actionId
+    this.create = () => checkFloorPurchase(userId, this.costs)
+  }
+}
+
+function checkFloorPurchase (userId, costs) {
+  console.log('CALLING CHECK FLOOR PURCHASE~~~~')
+  return Bunker.findOne({ where: { userId } })
+    .then(bunker => {
+      return costs.every(costObj => bunker[ costObj.type ] >= costObj.quantity)
+        ? floorPurchaseSuccess(userId, costs, bunker)
+        : purchaseFailure(userId)
+    })
+}
+
+function floorPurchaseSuccess (userId, costs, bunker) {
+  console.log('CALLING FLOOR PURCHASE SUCCESS!')
+  costs.forEach(costObj => bunker.subtract(costObj.type, costObj.quantity))
+  return bunker.save().then(() => {
+    return {
+      title: 'It seems you have enough resources for your upgrade!',
+      description: 'Please place your upgrade in the appropriate space in the bunker.',
+      eventType: 'confirm',
+      source: '',
+      type: 'general',
+      id: 998,
+      status: 'success',
+      exitType: 'immediate',
+      // this has to go on a confirm event object because the generator needs
+      // options array with create property in the first object returning undefined
+      // in order to resolve
+      options: [ { create: undefined } ],
+      socketMsg: true,
+      category: 'upgrade',
+      afterEffect: 'allowBunkerUpgrade'
+    }
+  })
+}
 
 module.exports = makeMenu

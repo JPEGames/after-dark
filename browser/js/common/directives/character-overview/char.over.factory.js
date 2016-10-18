@@ -91,6 +91,18 @@ app.factory('CharOverFactory', function ($http, $rootScope, AuthService, BunkerS
     setStats: function (newStats) {
       testStats = newStats
     },
+    changeExp: function (experience) {
+      return this.getCharacter()
+        .then(character => {
+          character.experience += experience
+          console.log('UPDATED CHARACTER EXPERIENCE~~~~', character)
+          return $http.put(`/api/characters/${character.userId}`, character)
+        })
+        .then(res => {
+          console.log('RES DATA FOR CHANGE XP: ', res.data)
+          return res.data
+        })
+    },
     getResources: function () {
       return testResources
     },

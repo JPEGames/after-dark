@@ -34,6 +34,10 @@ module.exports = db.define('character', {
   tinkering: {
     type: Sequelize.INTEGER,
     defaultValue: 1
+  },
+  experience: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
   }
 }, {
   getterMethods: {
@@ -41,11 +45,13 @@ module.exports = db.define('character', {
       return this.perk === 'soldier'
         ? this.strength * 2
         : this.strength
+    },
+    level: function () {
+      return this.experience
     }
   },
   hooks: {
     beforeCreate: function (character) {
-      console.log('character!', character.perk)
       if (character.perk === 'soldier') {
         // <--- STRONG ATTRIBUTES --->
         character.strength = _.sample(_.range(7, 11))

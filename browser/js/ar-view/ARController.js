@@ -1,4 +1,4 @@
-app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory, BunkerStateFactory, NavbarFactory) {
+app.controller('ARController', function ($timeout, $rootScope, $window, $scope, $localStorage, $state, showAR, GameViewFactory, ArFactory, LocationWatcherFactory, EventFactory, currentUser, ModalFactory, BunkerStateFactory, NavbarFactory, CharOverFactory) {
   let templateObjs = {
     'metal': {
       title: 'Metal',
@@ -179,6 +179,10 @@ app.controller('ARController', function ($timeout, $rootScope, $window, $scope, 
       // TODO: this is hacky - implement loading!
       ModalFactory.setMarker(thisMarker)
       $timeout(NavbarFactory.createExp(50), 1000)
+      return CharOverFactory.changeExp(50)
+        .then(result => {
+          console.warn('RESULT IN ARCONTROLLER: ', result)
+        })
     }
   })
 

@@ -87,5 +87,24 @@ module.exports = function (getIO) {
       })
       .catch(next)
   })
+  router.put('/depositResources/:id', function (req, res, next) {
+    Bunker.findOne({
+      userId: req.requestedUser.id
+    })
+      .then(userBunker => {
+        if (!userBunker) {
+          let err = new Error('bunker not found')
+          err.status = 404
+          next(err)
+        } else {
+          return userBunker.update(req.body)
+        }
+      })
+      .then((updatedBunker) => {
+        console.log('updated bunker: ', updatedBunker)
+        res.sendStatus(204)
+      })
+      .catch(next)
+  })
   return router
 }

@@ -35,7 +35,7 @@ module.exports = function (config) {
     exclude: excludeFiles,
     reporters: ['mocha', 'coverage'],
     ngHtml2JsPreprocessor: {
-        stripPrefix: 'browser/'
+      stripPrefix: 'browser/'
     },
     preprocessors: {
       'browser/js/**/*.html': ['ng-html2js']

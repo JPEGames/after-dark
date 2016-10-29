@@ -10,14 +10,14 @@
       </div>
     </div>
     <div ng-show="content.type === 'resource'" style="text-align:center;">
+      <div style="display: inline-block; margin-left: 1em">
+        <h2> {{content.quantity}}  X</h2>
+      </div>
       <div style="display: inline-block">
         <img ng-src="{{content.source}}" style="height: 10em; margin-top: 3em; margin-bottom: 3em; margin-left: 1em">
       </div>
       <div style="display: inline-block; margin-left: 1em">
-        <h2> X </h2>
-      </div>
-      <div style="display: inline-block; margin-left: 1em">
-        <h2> {{content.quantity}} </h2>
+      <h2> units </h2>
       </div>
     </div>
   </div>

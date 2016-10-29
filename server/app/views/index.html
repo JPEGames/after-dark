@@ -38,6 +38,11 @@
                 text-align: center; margin-top: -1.25em; z-index: 100000; transition: top 0.5s ease-in-out 0.5s; pointer-events: none">
                 <h1>After Dark</h1>
             </div>
+            <!-- MARS HERE -->
+            <div id="WelImage" style="position: absolute; text-align: center; top: 20em; z-index: 100000; width: 100%;
+            transition: opacity 1.0s ease-in-out 1.0s; display: inline-block; pointer-events: none">
+                <img style="height: 20em; width: 20em" src="/pimages/Mars.png">
+            </div>
             <modal></modal>
             <div id="master" class="col-xs-12" ui-view>
             </div>
@@ -45,11 +50,22 @@
         >
     </body>
     <script>
+    window.mouseXY = {
+        x: 0,
+        y: 0
+    }
     $(function() {
     $('#WelText').css('top','0');
     });
+    $(function() {
+        $('#WelImage').css('opacity', '0')
+    })
     $('#modal').on('show', function () {
     $('.modal-body',this).css({width:'auto',height:'auto', 'max-height':'100%', 'transition':'height 1s, transform 1s'});
     });
+    $('body').mousemove(function(event) {
+        window.mouseXY.x = event.clientX
+        window.mouseXY.y = event.clientY
+    })
     </script>
 </html>

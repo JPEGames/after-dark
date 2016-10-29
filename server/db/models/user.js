@@ -4,7 +4,6 @@ const _ = require('lodash')
 const Sequelize = require('sequelize')
 const db = require('../_db')
 const GameState = require('./gamestate')
-const Bunker = require('./bunker')
 const Backpack = require('./backpack')
 const Promise = require('sequelize').Promise
 

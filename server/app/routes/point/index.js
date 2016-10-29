@@ -15,9 +15,11 @@ module.exports = function (getIO) {
         if (!foundPoint) {
           let err = new Error('does not exist')
           err.status = 404
-          next(404)
+          next(err)
         } else {
+          // console.log(foundPoint)
           const FBkey = req.body.type + '_' + req.params.id
+          // console.log(FBkey)
           return geofireRef.remove(FBkey)
         }
       })

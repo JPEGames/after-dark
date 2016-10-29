@@ -30,9 +30,6 @@ module.exports = db.define('backpack', {
       max: 100
     }
   },
-  information: {
-    type: Sequelize.JSONB
-  },
   metal: {
     type: Sequelize.INTEGER,
     defaultValue: 0,

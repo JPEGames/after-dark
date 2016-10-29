@@ -6,7 +6,7 @@ let geofireRef = new GeoFire(firebaseRef.child('locations'))
 
 module.exports = db.define('bunker', {
   savedBunkerState: {
-    type: Sequelize.JSONB,
+    type: Sequelize.JSON,
     allowNull: true,
     defaultValue: {}
   },

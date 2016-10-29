@@ -25,7 +25,7 @@ module.exports = function (getIO) {
     })
       .then(userCharacter => {
         if (!userCharacter) {
-          res.send({foundCharacter: false})
+          res.send({ foundCharacter: false })
         } else {
           res.send(userCharacter)
         }
@@ -40,5 +40,27 @@ module.exports = function (getIO) {
       })
       .catch(next)
   })
+
+  router.put('/:id', function (req, res, next) {
+    Character.findOne({
+      where: {
+        userId: req.requestedUser.id
+      }
+    })
+        .then(userCharacter => {
+          if (!userCharacter) {
+            let err = new Error('character not found')
+            err.status = 404
+            next(err)
+          } else {
+            return userCharacter.update(req.body)
+              .then(updatedCharacter => {
+                console.log('updated character!', updatedCharacter)
+                res.send(updatedCharacter)
+              })
+          }
+        })
+  }
+  )
   return router
 }

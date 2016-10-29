@@ -1,8 +1,5 @@
 const Sequelize = require('sequelize')
 const db = require('../../_db')
-const GeoFire = require('geofire')
-const firebaseRef = require('../../firebase')
-let geofireRef = new GeoFire(firebaseRef.child('locations'))
 
 module.exports = db.define('bunker', {
   savedBunkerState: {
@@ -20,19 +17,23 @@ module.exports = db.define('bunker', {
   },
   money: {
     type: Sequelize.INTEGER,
-    defaultValue: 0
+    defaultValue: 500
+  },
+  metal: {
+    type: Sequelize.INTEGER,
+    defaultValue: 50
   },
   air: {
     type: Sequelize.INTEGER,
-    defaultValue: 0
+    defaultValue: 50
   },
   electricity: {
     type: Sequelize.INTEGER,
-    defaultValue: 0
+    defaultValue: 50
   },
   water: {
     type: Sequelize.INTEGER,
-    defaultValue: 0
+    defaultValue: 50
   },
   airProduction: {
     type: Sequelize.INTEGER,
@@ -48,15 +49,19 @@ module.exports = db.define('bunker', {
   },
   airCapacity: {
     type: Sequelize.INTEGER,
-    defaultValue: 1
+    defaultValue: 1000
   },
   electricityCapacity: {
     type: Sequelize.INTEGER,
-    defaultValue: 1
+    defaultValue: 1000
   },
   waterCapacity: {
     type: Sequelize.INTEGER,
-    defaultValue: 1
+    defaultValue: 1000
+  },
+  metalCapacity: {
+    type: Sequelize.INTEGER,
+    defaultValue: 1000
   },
   maxCpu: {
     type: Sequelize.INTEGER,
@@ -69,5 +74,16 @@ module.exports = db.define('bunker', {
   cpuAllocation: {
     type: Sequelize.ARRAY(Sequelize.DECIMAL),
     defaultValue: [ 0.25, 0.25, 0.25, 0.25 ]
+  }
+}, {
+  instanceMethods: {
+    subtract: function (type, amount) {
+      this[type] -= amount
+      return this
+    },
+    upgradeCapacity: function (type) {
+      this[type] += 500
+      return this
+    }
   }
 })

@@ -1,6 +1,7 @@
 <div id="myInventory">
   <div class="modal-header" style="text-align: center">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <div style="float: left; position: absolute"><h4><span style="color: #4CAF50">{{myMoney | currency}}</span></h4></div>
+    <button type="button" class="close" ng-click="closeInventory()" aria-label="Close">
     <span aria-hidden="true">&times;</span>
     </button>
     <h3 class="modal-title" id="myModalLabel">Inventory</h3>
@@ -9,6 +10,6 @@
     <inv-row ng-repeat="item in inventory" data="item" style="max-height: 8em"></inv-row>
   </div>
   <div class="modal-footer">
-    <button type="button" style="display: block; margin: 0 auto" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="button" style="display: block; margin: 0 auto" class="btn btn-secondary" ng-click="closeInventory()">Close</button>
   </div>
 </div>

@@ -6,27 +6,27 @@ describe('BunkerStateFactory', function () {
   var $httpBackend
   var BunkerStateFactory = null
 
-  let geofireStub, fbStub;
+  let geofireStub, fbStub
   beforeEach(inject(function (FbFactory) {
     geofireStub = sinon.stub(window, 'GeoFire', function () {
       return {
         set: function () {}
-      };
-    });
+      }
+    })
     fbStub = sinon.stub(FbFactory, 'getFirebaseRef', function () {
       return {
         child: function () {
-          return [{}];
+          return [{}]
         },
         hiJustin: true
-      };
-    });
-  }));
+      }
+    })
+  }))
 
   afterEach(function () {
-    fbStub.restore();
-    geofireStub.restore();
-  });
+    fbStub.restore()
+    geofireStub.restore()
+  })
 
   beforeEach(inject(function (_BunkerStateFactory_, _$httpBackend_) {
     BunkerStateFactory = _BunkerStateFactory_
@@ -38,11 +38,8 @@ describe('BunkerStateFactory', function () {
   })
 
   describe('getBunkerState', function () {
-
     it('should make a GET request to /api/bunkerstate/(userId)', function () {
 
     })
-
   })
-
 })

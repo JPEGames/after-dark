@@ -1,0 +1,24 @@
+<div ng-class="{'notifySuccess': data.status === 'success', 'notifyDanger': data.status === 'danger', 'notifyNeutral': data.status === 'neutral'}" style="width: 100%; float: left; margin-bottom: 1em">
+	<div style="width: 15%; max-width: 5em; text-align: center; float: left">
+		<h4 style="margin-left: 0.2em; color: black; line-height: 1.25em"> {{data.title}} </h4>
+		<div style="height: 5em; margin-top: 0.1em; margin-bottom: 0.1em;">
+			<img ng-src="{{data.source}}" style="width: 100%; height: 100%; margin-left: 0.2em">
+		</div>
+	</div>
+	<div style="width: 60%; max-width: 60%; margin-top: 0.5em; margin-left: 1.5em; float: left">
+		<h5> {{data.description}} </h5>
+		<ul style="display: inline-block">
+		<li ng-repeat="cost in data.costs"><span>{{cost.quantity}}</span> <span>{{cost.type}}</span></li>
+		</ul>
+		<ul style="display: inline-block">
+		<li ng-repeat="benefit in data.benefits"><span>{{benefit.category}} {{benefit.type}}</span> <span>{{benefit.benefit}} {{benefit.quantity}}</span></li>
+		</ul>
+	</div>
+	<div>
+		<button class="btn btn-success" style="margin-top: 3.5em; float: right; margin-right: 0.5em" ng-click="submitAnswer(data, data.action)">
+		BUY
+		</button>
+	</div>
+</div>
+</div>
+<hr style="margin: 0; clear: both">

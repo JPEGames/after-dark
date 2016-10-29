@@ -1,4 +1,4 @@
-app.directive('inventory', function ($state, ModalFactory) {
+app.directive('inventory', function ($state, CharOverFactory, ModalFactory, NavbarFactory) {
   return {
     restrict: 'E',
     templateUrl: 'js/modal/components/inventory/inventory.html',
@@ -10,6 +10,7 @@ app.directive('inventory', function ($state, ModalFactory) {
       scope.closeInventory = function () {
         ModalFactory.closeModal()
       }
+      scope.myMoney = CharOverFactory.getMoney()
     }
   }
 })

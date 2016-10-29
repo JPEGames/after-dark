@@ -1,6 +1,6 @@
 // testing for phaser
 
-window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
+window.createGame = function (ele, scope, $interval, bunker, injector, MenuFactory, ModalFactory) {
   let height = scope.height
   // let width = parseInt(ele.css('width'), 10)
   var game = new Phaser.Game(960, height, Phaser.CANVAS, 'game-canvas', { preload: preload, create: create, update: update, render: render })
@@ -36,6 +36,17 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     MenuFactory.saveBunker(saveBunker())
   })
 
+  // happens at the end of upgrade purchase chain to allow user to
+  // physically click + put down an upgrade
+  scope.$on('allowBunkerUpgrade', function (event, data) {
+    console.log('FINALLY ALLOWING BUNKER UPGRADE')
+    setCurrentUpgrade(upgradeObj)
+  })
+
+  scope.$on('allowFloorUpgrade', function (event, data) {
+    buildAFloor(basicFloor)
+  })
+
   // destroys game instance on refresh...is this what we want??!?
   scope.$on('$destroy', () => {
     game.destroy()
@@ -51,7 +62,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     game.load.image('touch', 'pimages/touch.png')
     game.load.image('touch_segment', 'pimages/touch_segment.png')
     game.load.image('compass', 'pimages/compass.png')
-    game.load.spritesheet('player', 'pimages/dude.png', 32, 48)
+    game.load.image('background', 'pimages/wasteland-city.png')
+    game.load.spritesheet('player', 'pimages/astronaut-sheet.png', 35, 51)
   }
   // Set bg color behind all elements in this frame
   // Load my tilemap - a json that can be found in assets - that is essentially a matrix of png elements
@@ -66,19 +78,29 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   var camVelY = 0
   var camMaxSpeed = 80
   var map
-  var layer, layer2, layer3, layer4, layer5
+  var layer, layer2, layer3, layer4, layer5, bglayer
   var tile
   var log
   var touchJoy = true
 
-  var buildTime = true
+  // Controls timing of building an upgrade.
+  var buildTime = false
   var buildHere = false
-  var upgradeHeight = 2
-  var upgradeWidth = 2
-  var upgradePieces = [[99, 99], [99, 99]]
+  // Vars controlling specifics of deploying an upgrade.
+  var upgradeHeight = 0
+  var upgradeWidth = 0
+  var upgradePieces = []
   var upgradeData = {}
-  var upgradeAction = 'test'
+  var upgradeAction = ''
   var upgradeActions = []
+  // A sample object for an upgrade.
+  var upgradeObj = {
+    height: 2,
+    width: 2,
+    pieces: [[98, 99], [91, 92]],
+    data: {},
+    action: 'test'
+  }
 
   var curMouseTileX, curMouseTileY, lastMouseTileX, lastMouseTileY
 
@@ -93,6 +115,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   // var totalLayers = 4
   var doorSwitch = true
   var testSave
+  var currentAction = 'default'
   // declare semi globals - figure it out
 
   function create () {
@@ -105,6 +128,9 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     game.physics.startSystem(Phaser.Physics.ARCADE)
     // Multiple systems of physics, this is the simplest.
 
+    var bgimage = game.add.image(0, 0, 'background')
+    bgimage.width = game.width
+    bgimage.height = 128
     map = game.add.tilemap('map')
     map.addTilesetImage('bunkerv2', 'tiles')
     map.addTilesetImage('sewer_tileset', 'tiles2')
@@ -168,7 +194,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     game.inputEnabled = true
 
     // TODO: PUT ANY FUNCTION HERE - will activate on any click of wall
-    game.input.onDown.add(buildUpgrade, this)
+    game.input.onDown.add(curPressFunction, this)
     // OKAY - input enabled is 1/2 things for touch enabled. May not work yet.
     // game.input = mouse
     // onDown = event
@@ -194,8 +220,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     player.body.checkCollision.left = true
     // I follow the rules of walls to the left
 
-    player.animations.add('left', [0, 1, 2, 3], 10, true)
-    player.animations.add('right', [5, 6, 7, 8], 10, true)
+    player.animations.add('left', [1, 2, 3], 10, true)
+    player.animations.add('right', [4, 5, 6], 10, true)
     // Name animation, what frames is this animation, at what FPS, do I idle otherwise?
 
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
@@ -221,6 +247,9 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       clearBunker()
       loadBunker(bunker.savedBunkerState)
     }
+
+    // ELIOT - will close modal no matter what - likely want a better iteration of this.
+    ModalFactory.closeModal()
   // Alias keys - didnt work otherwise, dont ask.
   }
 
@@ -255,7 +284,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
           player.animations.stop()
           // otherwise, standstill
 
-          player.frame = 4
+          player.frame = 0
         // at this frame
         }
       }
@@ -292,12 +321,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     }
   }
 
-  function render () {
-    game.debug.cameraInfo(game.camera, 32, 32)
-    // Show camera info
-    game.debug.text('Tile Info: ' + log, 32, 570)
-  // Show selected tile
-  }
+  function render () {}
 
   // Move player down.
   function moveDown () {
@@ -335,15 +359,20 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
     game.paused = false
   }
 
-  function exitBunker () {
-    if (useKey.isDown && useTimer > 30) {
+  function exitBunker (aPress) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
       console.log('Attempting to exit vault.')
+      scope.leaveBunker()
     }
+  }
+  function pressExit () {
+    exitBunker(true)
   }
 
   // Saves entire maps state.
   function saveBunker () {
+    console.warn('SAVING BUNKER~~~~~~~')
     // The object we will be sending to DB.
     let saveObj = {
       bg: [],
@@ -590,6 +619,8 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       currentFloors = currentFloors + 1
       doorSwitch = !doorSwitch
       console.log('Completed floor build.')
+      // TODO: is this supposed to be here???
+      MenuFactory.saveBunker(saveBunker())
     } else {
       console.log('Reached Max Floor Capacity.')
     }
@@ -629,7 +660,18 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 
     if (tile === null) {
       // map.putTile(95, x, y, layer5)
-      console.log('Placed tile.')
+      console.log('Could not get tile on layer5, checking layer3')
+      x = layer3.getTileX(game.input.activePointer.worldX)
+      y = layer5.getTileY(game.input.activePointer.worldY)
+      tile = map.getTile(x, y, layer3)
+      if (tile === null) {
+        console.log('Could not find tile on layer3 either.')
+        return false
+      } else {
+        log = tile.index
+        console.log({x: x, y: y, index: tile.index})
+        return {x: x, y: y, index: tile.index}
+      }
     } else {
       log = tile.index
       console.log({x: x, y: y, index: tile.index})
@@ -744,12 +786,14 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   }
 
   // Set global upgrade variables to proper vars.
-  function setCurrentUpgrade (myWidth, myHeight, myPieces, myAction, myData) {
-    upgradeHeight = myHeight
-    upgradeWidth = myWidth
-    upgradePieces = myPieces
-    upgradeAction = myAction
-    upgradeData = myData
+  function setCurrentUpgrade (anUpgrade) {
+    upgradeHeight = anUpgrade.height
+    upgradeWidth = anUpgrade.width
+    upgradePieces = anUpgrade.pieces
+    upgradeAction = anUpgrade.action
+    upgradeData = anUpgrade.data
+    currentAction = 'upgrade'
+    buildTime = true
   }
 
   // Build an upgrade
@@ -775,6 +819,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
       console.log('Build Completed!')
       buildTime = false
       buildHere = false
+      currentAction = 'default'
       MenuFactory.saveBunker(saveBunker())
       marker.destroy()
     } else {
@@ -792,27 +837,87 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
   }
 
   // Starter computers, not sure how pertinent these will be.
-  function compOne () {
-    if (useKey.isDown && useTimer > 30) {
+  function compOne (aPress) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
       useTimer = 0
-      console.log('Computer One Activated.')
+      scope.$emit('startUpgrade_Phaser')
+      // ModalFactory.changeModal('upgrades', {forceOpen: true})
+      console.log('Upgrade Computer Activated.')
+    }
+  }
+  function pressOne () {
+    compOne(true)
+  }
+
+  function compTwo (aPress) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
+      useTimer = 0
+      scope.$emit('saveResource_Phaser')
+      // ModalFactory.changeModal('message', {
+      //   newContent: {
+      //     title: 'Deposit Resources',
+      //     description: 'Would you like to deposit your resources in your bunkers cache for use in upgrading your equipment?',
+      //     eventType: 'yes/no',
+      //     source: '/pimages/message.png',
+      //     type: 'general',
+      //     id: 998,
+      //     status: 'neutral',
+      //     exitType: 'load',
+      //     next: 'New Storage'
+      //   },
+      //   forceOpen: true
+      // })
+      console.log('Deposit Computer Activated.')
+    }
+  }
+  function pressTwo () {
+    compTwo(true)
+  }
+
+  function compThree (aPress) {
+    if ((useKey.isDown || aPress === true) && useTimer > 30) {
+      useTimer = 0
+      console.log('Market Computer Activated.')
+    }
+  }
+  function pressThree () {
+    compThree(true)
+  }
+
+  function tileMousePress () {
+    let curTile = getTileProperties()
+    let foundTile = false
+    if (curTile.index === 93) {
+      foundTile = true
+      pressOne()
+    }
+    if (curTile.index === 94) {
+      foundTile = true
+      pressTwo()
+    }
+    if (curTile.index === 95) {
+      foundTile = true
+      pressThree()
+    }
+    if (curTile.index === 82) {
+      foundTile = true
+      pressExit()
+    }
+    if (!foundTile) {
+      console.log('Was not a pressable tile.')
     }
   }
 
-  function compTwo () {
-    if (useKey.isDown && useTimer > 30) {
-      useTimer = 0
-      console.log('Computer Two Activited')
+  function curPressFunction () {
+    if (currentAction === 'default') {
+      console.log('curPress ran default')
+      tileMousePress()
+    }
+    if (currentAction === 'upgrade') {
+      console.log('curPress ran upgrade')
+      buildUpgrade()
     }
   }
-
-  function compThree () {
-    if (useKey.isDown && useTimer > 30) {
-      useTimer = 0
-      console.log('Computer Three Activated')
-    }
-  }
-
   // Turns a function into a function that is listened to.
   function returnKeyListener (emitWord, emitData) {
     console.log('keylistener returned')
@@ -835,7 +940,7 @@ window.createGame = function (ele, scope, bunker, injector, MenuFactory) {
 }
 
 // custom directive to link phaser object to angular
-app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, AuthService) {
+app.directive('gameCanvas', function ($window, $injector, $interval, $http, MenuFactory, AuthService, ModalFactory) {
   return {
     scope: {
       data: '=',
@@ -846,8 +951,28 @@ app.directive('gameCanvas', function ($window, $injector, $http, MenuFactory, Au
       // condition for state transition into game view
       scope.height = $window.innerHeight
 
+      scope.leaveBunker = function () {
+        console.log('Isolate scope leave bunker running!')
+        MenuFactory.toggleBunkerSave()
+        ModalFactory.leaveBunker()
+        ModalFactory.changeModal('message', {
+          newContent: {
+            title: `Leave Bunker?`,
+            description: `Would you like to exit the safety of you vault and venture out into the great wastes of earth?`,
+            eventType: 'yes/no',
+            source: '/pimages/vault.png',
+            type: 'general',
+            id: '11',
+            status: 'neutral',
+            exitType: 'load',
+            next: 'the Wasteland'
+          }
+        })
+        $interval(ModalFactory.openModal, 10, 1)
+      }
+
       if (scope.data) {
-        window.createGame(ele, scope, scope.bunker, $injector, MenuFactory)
+        window.createGame(ele, scope, $interval, scope.bunker, $injector, MenuFactory, ModalFactory)
       }
     }
   }

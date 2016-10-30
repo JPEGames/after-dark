@@ -18,7 +18,7 @@ var options = {
 }
 
 var app = require('./app')(db, getIO)
-var PORT = process.env.PORT || 1337
+var PORT = 1337
 var server = https.createServer(options)
 
 var createApplication = function () {

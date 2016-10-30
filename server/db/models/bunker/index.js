@@ -3,7 +3,7 @@ const db = require('../../_db')
 
 module.exports = db.define('bunker', {
   savedBunkerState: {
-    type: Sequelize.JSONB,
+    type: Sequelize.JSON,
     allowNull: true,
     defaultValue: {}
   },

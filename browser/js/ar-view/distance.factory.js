@@ -45,5 +45,5 @@ app.factory('DistanceFactory', function (GeoFireFactory) {
   function metersToLatitudeDegrees (distance, longitude) {
     return distance / 111320 // may perfect later, for now, this is precise enough
   }
-  return { greaterThanXM, convertToMeters, metersToLongitudeDegrees, metersToLatitudeDegrees}
+  return {greaterThanXM, convertToMeters, metersToLongitudeDegrees, metersToLatitudeDegrees}
 })

@@ -11,7 +11,7 @@ enjoyed on both mobile and desktop.
 #### Real-time geolocation
 
 Feel like you are roaming the streets of Manhattan, but only much more alone,
-with real-time location tracking.
+with real-time location tracking. 
 
 ## Usage
 

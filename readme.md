@@ -13,8 +13,8 @@ enjoyed on both mobile and desktop.
 #### Dynamic Tile-mapping
 
 Floors, resource enhancing modules, defensive weapons, you name it - players with
-enough resources can choose to add any amount of upgrades to their bunker, so long as there 
-is space. 
+enough resources can choose to add any amount of upgrades to their bunker, so long as there
+is space.
 
 ### Map View
 
@@ -33,12 +33,33 @@ PhaserJS, along with the GeoFire/Firebase API, were used to achieve the 'fog of 
 ## Usage
 
 #### Setting up your character and bunker
-
 Players can select one of three different characters
-<img src='./assets/screenshots/Login/character_select.png'/ width='250'>
-<img src='./assets/screenshots/Login/bunker_location.png'/ width='250'>
-<img src='./assets/screenshots/Login/character_overview.png'/ width='250'>
-#### 
+* Miner
+* Scientist
+* Soldier
+
+<br>
+<img src='./assets/screenshots/Login/character_select.png'/ width='400'>
+
+**Character Overview**
+
+Displays:
+* *Current experience and level*
+* *Resources* (money, water, air, electricity, metal)
+* *Character stats* (these affect event outcomes)
+
+<br>
+<img src='./assets/screenshots/Login/character_overview.png'/ width='400'>
+
+
+
+<br>
+
+
+
+<img src='./assets/screenshots/Login/bunker_location.png'/ width='400'>
+
+####
 
 ## Technologies Used
 
@@ -52,6 +73,7 @@ Players can select one of three different characters
 * Sequelize ORM
 * Firebase API
 * Geofire API
+* PostGreSQL
 
 ## Contributors
 * Pierre Baize

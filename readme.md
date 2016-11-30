@@ -33,7 +33,9 @@ PhaserJS, along with the GeoFire/Firebase API, were used to achieve the 'fog of 
 ## Usage
 
 #### Setting up your character and bunker
-
+<img src='./assets/screenshots/Login/character_select.png'/ width='250'>
+<img src='./assets/screenshots/Login/bunker_location.png'/ width='250'>
+<img src='./assets/screenshots/Login/character_overview.png'/ width='250'>
 #### 
 
 ## Technologies Used

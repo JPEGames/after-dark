@@ -41,6 +41,7 @@ app.factory('DistanceFactory', function (GeoFireFactory) {
       return Math.min(360, distance / deltaDeg)
     }
   }
+
   function metersToLatitudeDegrees (distance, longitude) {
     return distance / 111320 // may perfect later, for now, this is precise enough
   }

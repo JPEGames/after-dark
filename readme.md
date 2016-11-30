@@ -10,11 +10,17 @@ enjoyed on both mobile and desktop.
 
 ### Bunker View
 
+<img src="./assets/screenshots/Bunker/bunker_onefloor.png"/>
+
 #### Dynamic Tile-mapping
 
 Floors, resource enhancing modules, defensive weapons, you name it - players with
 enough resources can choose to add any amount of upgrades to their bunker, so long as there
 is space.
+
+#### Mobile Joystick
+
+Through the PhaserJS plugin Touch Control, players can move around their bunker freely on mobile.
 
 ### Map View
 
@@ -32,7 +38,7 @@ PhaserJS, along with the GeoFire/Firebase API, were used to achieve the 'fog of 
 
 ## Usage
 
-#### Setting up your character and bunker
+#### I. Setting up your character and bunker
 Players can select one of three different characters
 * Miner
 * Scientist
@@ -51,13 +57,14 @@ Displays:
 <br>
 <img src='./assets/screenshots/Login/character_overview.png'/ width='400'>
 
+***Bunker Placement***
 
+Clicking the 'I'm Ready!' button will cause a bunker to be placed on your
+physical location, which is reflected by an icon on the Map View.
 
 <br>
-
-
-
 <img src='./assets/screenshots/Login/bunker_location.png'/ width='400'>
+
 
 ####
 

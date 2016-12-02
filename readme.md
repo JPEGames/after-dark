@@ -18,9 +18,19 @@ Floors, resource enhancing modules, defensive weapons, you name it - players wit
 enough resources can choose to add any amount of upgrades to their bunker, so long as there
 is space.
 
-#### Mobile Joystick
+### Mobile Friendly
+
+#### Touch-Enabled Joystick
 
 Through the PhaserJS plugin Touch Control, players can move around their bunker freely on mobile.
+
+#### Window Resizing
+
+The game will adapt to any screen you choose to play on.
+
+#### GPS Anywhere
+
+The game will use whatever location service is most appropriate for your current device.
 
 ### Map View
 
